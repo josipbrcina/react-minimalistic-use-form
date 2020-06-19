@@ -1,7 +1,7 @@
-import { getInitialState, reducer, STATE_ACTIONS } from '../state';
 import {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
+import { getInitialState, reducer, STATE_ACTIONS } from '../state';
 import { eventTypes, htmlAttributes, htmlInputTypes } from '../enums';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
@@ -147,7 +147,6 @@ export const useForm = ({
           setNativeValue({ element, value: checked, attributeToUpdate: htmlAttributes.checked });
           element.dispatchEvent(new window.InputEvent(eventTypes.click, { bubbles: true }));
         }
-
 
         element.dispatchEvent(new window.InputEvent(eventTypes.input, { bubbles: true }));
         element.dispatchEvent(new window.InputEvent(eventTypes.change, { bubbles: true }));
