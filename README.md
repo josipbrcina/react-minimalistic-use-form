@@ -1,7 +1,7 @@
 # react-minimalistic-use-form 
 ![version][version-badge]
 
-[version-badge]: https://img.shields.io/badge/version-0.1.0-blue.svg
+[version-badge]: https://img.shields.io/badge/version-1.0.0-blue.svg
 Minimalistic react hook for handling forms without tears.
 
 React-minimalistic-use-form provides minimalistic way to handle forms in react.

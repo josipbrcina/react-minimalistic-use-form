@@ -13,7 +13,7 @@ export default {
       format: 'es',
     },
   ],
-  external: Object.keys(pkg.devDependencies),
+  external: Object.keys(pkg.dependencies),
   plugins: [
     babel({
       babelHelpers: 'bundled',

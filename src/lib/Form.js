@@ -2,12 +2,13 @@ import React from 'react';
 import {
   shape, arrayOf, oneOfType, object, func, node,
 } from 'prop-types';
-import noop from 'lodash/noop';
 
 const handlers = {
   onChange: 'onChange',
   onBlur: 'onBlur',
 };
+
+const noop = () => {};
 
 export const Form = ({
   children, bindUseForm, ...props
