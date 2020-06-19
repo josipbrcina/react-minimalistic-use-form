@@ -1,4 +1,6 @@
 # react-minimalistic-use-form 
+![version][version-badge]
+
 [version-badge]: https://img.shields.io/badge/version-0.1.0-blue.svg
 Minimalistic react hook for handling forms without tears.
 
@@ -274,9 +276,10 @@ Form accepts all html5 form attributes along with some required:
 * Native html5 form validation
 * Form validation on input or on submit
 
-#### Planned upcoming features
+#### Planned upcoming features and TODO's
 + Display errors next to input fields out-of-the-box
 + Custom validation
++ Test coverage
 
 #### Current supported form fields
 + input
