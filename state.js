@@ -1,6 +1,6 @@
 import { elementTypes } from '@client/hook/useForm/enums';
 
-const getInitialErrors = initialValues => Object.keys(initialValues).reduce((acc, fieldName) => {
+const getInitialErrorsState = initialValues => Object.keys(initialValues).reduce((acc, fieldName) => {
   acc[fieldName] = {};
   return acc;
 }, {});
@@ -59,7 +59,7 @@ export const reducer = (state, action) => {
         ...state,
         values: state.overriddenInitialValues,
         isFormValid: state.initialIsFormValid,
-        errors: getInitialErrors(state.overriddenInitialValues),
+        errors: getInitialErrorsState(state.overriddenInitialValues),
       };
     }
     case STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES: {
@@ -68,7 +68,7 @@ export const reducer = (state, action) => {
         ...state,
         values: overriddenInitialValues,
         overriddenInitialValues,
-        errors: getInitialErrors(overriddenInitialValues),
+        errors: getInitialErrorsState(overriddenInitialValues),
       };
     }
     default:
