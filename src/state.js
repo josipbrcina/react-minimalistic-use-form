@@ -1,4 +1,4 @@
-import { htmlInputTypes } from '@client/hook/useForm/enums';
+import { htmlInputTypes } from './enums';
 
 const getInitialErrorsState = initialValues => Object.keys(initialValues).reduce((acc, fieldName) => {
   acc[fieldName] = {};

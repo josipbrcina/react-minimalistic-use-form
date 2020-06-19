@@ -1,0 +1,92 @@
+{
+  "name": "react-minimalistic-use-form",
+  "version": "1.0.0",
+  "description": "Minimalistic react hook for handling forms without tears",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "lint": "esw --ext .jsx --ext .js --color",
+    "lint:fix": "npm run lint --fix",
+    "prepare": "npm run build",
+    "prerelease": "npm run lint:fix && npm run build",
+    "release": "npm publish",
+    "start": "start-storybook -p 4444",
+  },
+  "dependencies": {
+    "lodash": "latest",
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "@rollup/plugin-alias": "^2.2.0",
+    "@rollup/plugin-babel": "^5.0.3",
+    "@rollup/plugin-url": "^4.0.0",
+    "@storybook/addon-notes": "^5.2.8",
+    "@storybook/react": "^5.2.8",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "babel-preset-react-app": "^9.0.2",
+    "core-js": "^2.6.9",
+    "cross-env": "^6.0.3",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-react-app": "^5.0.2",
+    "eslint-plugin-flowtype": "^4.5.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "eslint-watch": "^6.0.1",
+    "npm-run-all": "^4.1.5",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-app-polyfill": "^1.0.4",
+    "react-dom": "^16.12.0",
+    "react-syntax-highlighter": "^11.0.2",
+    "rollup": "^2.10.2",
+    "webpack": "^4.41.2",
+    "webpack-blocks": "^2.0.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josipbrcina/react-minimalistic-use-form.git"
+  },
+  "keywords": [
+    "react",
+    "useForm",
+    "hook",
+    "form",
+    "validation",
+    "state"
+  ],
+  "author": "Josip Brcina",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/josipbrcina/react-minimalistic-use-form/issues"
+  },
+  "homepage": "https://github.com/josipbrcina/react-minimalistic-use-form#readme"
+}

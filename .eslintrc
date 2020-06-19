@@ -1,0 +1,40 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb"
+  ],
+  "plugins": [
+    "react-hooks"
+  ],
+  "rules": {
+    "max-len": "off",
+    "arrow-parens": "off",
+    "camelcase": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "import/extensions": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "no-restricted-syntax": "off",
+    "react/no-typos": "off",
+    "no-underscore-dangle": "off",
+    "no-confusing-arrow": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "react/jsx-fragments": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/state-in-constructor": "off"
+  },
+  "globals": {
+    "fetch": true,
+    "AbortController": true,
+    "document": true,
+    "navigator": true,
+    "window": true,
+    "expect": true,
+    "describe": true,
+    "test": true,
+    "jest": true,
+    "afterEach": true
+  }
+}

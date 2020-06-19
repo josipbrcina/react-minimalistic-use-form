@@ -1,0 +1,10 @@
+.git
+.npmrc
+build
+node_modules
+scripts
+.storybook
+dist
+node_modules
+coverage
+
