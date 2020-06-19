@@ -17,7 +17,7 @@ const validityDefaultErrorMessages = {
   stepMismatch: ({ step }) => `Please enter a valid value. Number must have step of ${step}`,
   tooLong: ({ maxLength, value }) => `Please lengthen this text to ${maxLength} characters or less (you are currently using ${value} character).`,
   tooShort: ({ minLength, value }) => `Please lengthen this text to ${minLength} characters or more (you are currently using ${value} character).`,
-  typeMismatch: () => 'Type mismatch.',
+  typeMismatch: ({ type }) => `Type mismatch. Must be type of "${type}".`,
   valueMissing: () => 'Please fill in this field.',
 };
 
