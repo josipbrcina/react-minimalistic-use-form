@@ -4,10 +4,10 @@ import {
 } from 'react';
 import { eventTypes, htmlAttributes, elementTypes } from '@client/hook/useForm/enums';
 
-export const IS_DIRTY_CLASS_NAME = 'is-dirty';
-export const ERROR_CLASS_NAME = 'has-error';
-export const ELEMENT_TAG_NAME_SELECT = 'SELECT';
-export const CHECKBOX_DEFAULT_VALUE = 'on';
+const IS_DIRTY_CLASS_NAME = 'is-dirty';
+const ERROR_CLASS_NAME = 'has-error';
+const ELEMENT_TAG_NAME_SELECT = 'SELECT';
+const CHECKBOX_DEFAULT_VALUE = 'on';
 const formElements = ['text', 'email', 'password', 'checkbox', 'radio', 'number', 'textarea'];
 const validityDefaultErrorMessages = {
   badInput: () => 'Invalid input',
