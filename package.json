@@ -16,7 +16,7 @@
     "prepare": "npm run build",
     "prerelease": "npm run lint:fix && npm run build",
     "release": "npm publish",
-    "start": "start-storybook -p 4444",
+    "start": "start-storybook -p 4444"
   },
   "dependencies": {
     "lodash": "latest",
