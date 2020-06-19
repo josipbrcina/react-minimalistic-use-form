@@ -1,4 +1,4 @@
-export const elementTypes = {
+export const htmlInputTypes = {
   checkbox: 'checkbox',
   radio: 'radio',
   textarea: 'textarea',

@@ -2,7 +2,7 @@ import { getInitialState, reducer, STATE_ACTIONS } from '@client/hook/useForm/st
 import {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
-import { eventTypes, htmlAttributes, elementTypes } from '@client/hook/useForm/enums';
+import { eventTypes, htmlAttributes, htmlInputTypes } from '@client/hook/useForm/enums';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -142,8 +142,8 @@ const useForm = ({
 
         setNativeValue({ element, value: overriddenInitialValues[name] });
 
-        if (type === elementTypes.checkbox || type === elementTypes.radio) {
-          const checked = type === elementTypes.radio ? value === overriddenInitialValues[name] : overriddenInitialValues[name] === true;
+        if (type === htmlInputTypes.checkbox || type === htmlInputTypes.radio) {
+          const checked = type === htmlInputTypes.radio ? value === overriddenInitialValues[name] : overriddenInitialValues[name] === true;
           setNativeValue({ element, value: checked, attributeToUpdate: htmlAttributes.checked });
           element.dispatchEvent(new window.InputEvent(eventTypes.click, { bubbles: true }));
         }
@@ -210,7 +210,7 @@ const useForm = ({
   const getElementInitialValue = useCallback(({ name, type, value }) => {
     let elementInitialValue = value;
     const hasInitialValue = name in state.initialValues;
-    const isCheckbox = type === elementTypes.checkbox;
+    const isCheckbox = type === htmlInputTypes.checkbox;
     const isDefaultNativeHtmlCheckboxValue = value === CHECKBOX_DEFAULT_VALUE;
 
     if (isCheckbox && hasInitialValue === true) {
@@ -236,7 +236,7 @@ const useForm = ({
     getFormElements(form)
       .forEach(element => {
         const elementInitialValue = getElementInitialValue(element);
-        const shouldOverrideInitialValue = element.type !== elementTypes.radio || (element.type === elementTypes.radio && element.checked === true);
+        const shouldOverrideInitialValue = element.type !== htmlInputTypes.radio || (element.type === htmlInputTypes.radio && element.checked === true);
 
         if (shouldOverrideInitialValue) {
           initialValuesToOverride[element.name] = elementInitialValue;
@@ -245,7 +245,7 @@ const useForm = ({
         // eslint-disable-next-line no-param-reassign
         element.value = elementInitialValue;
 
-        if (element.type === elementTypes.checkbox) {
+        if (element.type === htmlInputTypes.checkbox) {
           // eslint-disable-next-line no-param-reassign
           element.checked = elementInitialValue === true;
         }
@@ -254,7 +254,7 @@ const useForm = ({
     const updatedInitialValues = { ...state.initialValues, ...initialValuesToOverride };
 
     // Set proper initial <checked> attribute for radio buttons
-    [...form.elements].filter(element => element.type === elementTypes.radio)
+    [...form.elements].filter(element => element.type === htmlInputTypes.radio)
       .forEach(element => {
         // eslint-disable-next-line no-param-reassign
         element.checked = element.value === updatedInitialValues[element.name];

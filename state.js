@@ -1,4 +1,4 @@
-import { elementTypes } from '@client/hook/useForm/enums';
+import { htmlInputTypes } from '@client/hook/useForm/enums';
 
 const getInitialErrorsState = initialValues => Object.keys(initialValues).reduce((acc, fieldName) => {
   acc[fieldName] = {};
@@ -33,7 +33,7 @@ export const reducer = (state, action) => {
         ...state,
         values: {
           ...state.values,
-          [name]: elementType === elementTypes.checkbox ? checked : value,
+          [name]: elementType === htmlInputTypes.checkbox ? checked : value,
         },
       };
     }
