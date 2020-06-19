@@ -1,82 +1,69 @@
-import React from "react";
-import { shape, arrayOf, oneOfType, object, func, node } from "prop-types";
-import noop from "lodash/noop";
+import React from 'react';
+import {
+  shape, arrayOf, oneOfType, object, func, node,
+} from 'prop-types';
+import noop from 'lodash/noop';
 
 const handlers = {
-  onChange: "onChange",
-  onBlur: "onBlur"
+  onChange: 'onChange',
+  onBlur: 'onBlur',
 };
 
-export const Form = ({ children, bindUseForm, ...props }) => {
+export const Form = ({
+  children, bindUseForm, ...props
+}) => {
   if (bindUseForm === undefined) {
-    throw new Error("Form is missing bindUseForm prop.");
+    throw new Error('Form is missing bindUseForm prop.');
   }
 
-  const _getEventHandler = ({
-    callback = noop,
-    handler = handlers.onChange
-  }) => event => {
+  const _getEventHandler = ({ callback = noop, handler = handlers.onChange }) => event => {
     bindUseForm[handler](event);
     callback(event);
   };
 
-  const addEventHandlersRecursively = sourceElements =>
-    React.Children.map(sourceElements, child => {
-      // If it's invalid react element element doesn't have props so no need to clone it
-      if (React.isValidElement(child) === false) {
-        return child;
-      }
+  const addEventHandlersRecursively = sourceElements => React.Children.map(sourceElements, child => {
+    // If it's invalid react element element doesn't have props so no need to clone it
+    if (React.isValidElement(child) === false) {
+      return child;
+    }
 
-      const {
-        children: childChildren,
-        onChange: childOnChange,
-        onBlur: childOnBlur,
-        ...childProps
-      } = child.props;
+    const {
+      children: childChildren, onChange: childOnChange, onBlur: childOnBlur, ...childProps
+    } = child.props;
 
-      const isInputField = "name" in childProps && "id" in childProps;
+    const isInputField = 'name' in childProps && 'id' in childProps;
 
-      const cloneElementProps = {
-        ...childProps,
-        ...(isInputField
-          ? {
-              onChange: _getEventHandler({ callback: childOnChange }),
-              onBlur: _getEventHandler({
-                callback: childOnBlur,
-                handler: handlers.onBlur
-              })
-            }
-          : {})
-      };
+    const cloneElementProps = {
+      ...childProps,
+      ...(isInputField
+        ? {
+          onChange: _getEventHandler({ callback: childOnChange }),
+          onBlur: _getEventHandler({ callback: childOnBlur, handler: handlers.onBlur }),
+        }
+        : {}),
+    };
 
-      return React.cloneElement(
-        child,
-        cloneElementProps,
-        childChildren === undefined
-          ? undefined
-          : addEventHandlersRecursively(childChildren)
-      );
-    });
+    return React.cloneElement(child, cloneElementProps, childChildren === undefined ? undefined : addEventHandlersRecursively(childChildren));
+  });
 
   const formElements = addEventHandlersRecursively(children);
 
-  return (
-    <form {...props} ref={bindUseForm.formRef}>
-      {formElements}
-    </form>
-  );
+  return <form {...props} ref={bindUseForm.formRef}>{formElements}</form>;
 };
 
 Form.defaultProps = {
-  children: []
+  children: [],
 };
 
 Form.propTypes = {
-  children: oneOfType([arrayOf(node), node]),
+  children: oneOfType([
+    arrayOf(node),
+    node,
+  ]),
   bindUseForm: shape({
     formRef: object,
     onChange: func,
     onInput: func,
-    oBlur: func
-  }).isRequired
+    oBlur: func,
+  }).isRequired,
 };
