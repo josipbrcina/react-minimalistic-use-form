@@ -1,6 +1,6 @@
 {
   "name": "react-minimalistic-use-form",
-  "version": "1.0.1",
+  "version": "1.0.2-beta.1",
   "description": "Minimalistic react hook for handling forms without tears",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -18,12 +18,9 @@
     "release": "npm publish",
     "start": "start-storybook -p 4444"
   },
-  "dependencies": {
-    "prop-types": "^15.7.2"
-  },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": ">=16.13.1",
+    "react-dom": ">=16.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
@@ -86,9 +83,10 @@
     "hook",
     "form",
     "validation",
-    "state"
+    "state",
+    "forms"
   ],
-  "author": "Josip Brcina",
+  "author": "Josip Brčina",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/josipbrcina/react-minimalistic-use-form/issues"

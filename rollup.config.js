@@ -25,9 +25,7 @@ export default [
       resolve({
         preferBuiltins: true,
       }),
-      external({
-        includeDependencies: true,
-      }),
+      external(),
       url(),
       json(),
       babel({
@@ -36,7 +34,7 @@ export default [
           '@babel/plugin-proposal-optional-chaining',
           '@babel/plugin-syntax-dynamic-import',
           '@babel/plugin-proposal-class-properties',
-          'babel-plugin-transform-react-remove-prop-types',
+          ['babel-plugin-transform-react-remove-prop-types', { removeImport: true }],
         ],
         exclude: 'node_modules/**',
       }),
