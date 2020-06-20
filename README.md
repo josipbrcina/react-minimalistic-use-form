@@ -1,14 +1,14 @@
 - [react-minimalistic-use-form](#react-minimalistic-use-form)
-    + [INSTALLATION](#installation)
-  * [Supported validation rules:](#supported-validation-rules-)
-    + [Example usage](#example-usage)
-          + [EXPLICIT FORM CONTROL](#explicit-form-control)
-          + [IMPLICIT FORM CONTROL](#implicit-form-control)
-    + [Custom controlled inputs](#custom-controlled-inputs)
+    + [Installation](#installation)
+  * [Supported validation rules](#supported-validation-rules-)
+  + [Example usage](#example-usage)
+     - [EXPLICIT FORM CONTROL](#explicit-form-control)
+     - [IMPLICIT FORM CONTROL](#implicit-form-control)
+     - [Custom controlled inputs](#custom-controlled-inputs)
   * [API](#api)
       - [useForm](#useform)
       - [Form](#form)
-    + [FEATURES](#features)
+  + [Features](#features)
       - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo-s)
       - [Current supported form fields](#current-supported-form-fields)
 
@@ -29,14 +29,14 @@ It automatically adds or removes error class name to input field if field is val
 Form can be explicitly controlled by manually attaching event handlers or implicitly by combining `useForm` hook 
 and `<Form />` component where Form component will bind values and event handlers automatically for you!
 
-### INSTALLATION
+### Installation
 
 + NPM `npm i react-minimalistic-use-form`
 
 + YARN `yarn add react-minimalistic-use-form`
 
 
-## Supported validation rules:
+### Supported validation rules:
 + valid – Is `true` when the field passes validation.
 + valueMissing – Is `true` when the field is empty but `required`.
 + typeMismatch – Is `true` when the field type is `email` or `url` but the entered value is `not` the `correct type`.
@@ -332,7 +332,7 @@ Form accepts all html5 form attributes along with one required:
 |`bindUseForm`          | Object - contains formRef and eventHandlers | object *required  |
  
 
-### FEATURES
+### Features
 * Form state management
 * Native html5 form validation
 * Form validation on input or on submit
