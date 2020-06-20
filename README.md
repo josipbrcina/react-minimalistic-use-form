@@ -1,6 +1,6 @@
 - [react-minimalistic-use-form](#react-minimalistic-use-form)
     + [Installation](#installation)
-  * [Supported validation rules](#supported-validation-rules-)
+  * [Supported validation rules](#supported-validation-rules)
   + [Example usage](#example-usage)
      - [EXPLICIT FORM CONTROL](#explicit-form-control)
      - [IMPLICIT FORM CONTROL](#implicit-form-control)
@@ -36,7 +36,7 @@ and `<Form />` component where Form component will bind values and event handler
 + YARN `yarn add react-minimalistic-use-form`
 
 
-### Supported validation rules:
+### Supported validation rules
 + valid – Is `true` when the field passes validation.
 + valueMissing – Is `true` when the field is empty but `required`.
 + typeMismatch – Is `true` when the field type is `email` or `url` but the entered value is `not` the `correct type`.
