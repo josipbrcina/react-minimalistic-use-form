@@ -144,8 +144,8 @@ Form component needs `bindUseForm` prop from useForm hook otherwise an Error wil
 Form will automatically bind input values
 and `onChange`, `onBlur` eventHandlers that will handle form validation properly.
 
-**NOTE**: Form iput elements must have `id` and `name` attributes set otherwise `Form` will not consider it as input value
-and will not attach needed event handlers
+**NOTE**: Form input elements must have `id` and `name` attributes set, otherwise `Form` will not consider it as an 
+input value, hence it won't attach needed event handlers.
 
 Either using just useForm hook or in a combination with Form component, useForm hook will handle validation automatically
 for you. Optionally `validateOnInput` or `validateOnSubmit` can be configured.
