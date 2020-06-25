@@ -104,7 +104,7 @@ export function useFormHook() {
 
       <div className="d-flex flex-col mb-10">
         <label htmlFor="date" className="d-flex flex-align-center">Date</label>
-        <input className="input" type="date" id="date" name="date" value={values.date} onChange={_onChange} onBlur={onBlur} required />
+        <input className="input" type="date" id="date" name="date" value={values.date} onChange={onChange} onBlur={onBlur} required />
         {renderFieldErrors(errors.date)}
       </div>
 
