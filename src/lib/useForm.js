@@ -1,6 +1,7 @@
 import {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
+import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { getInitialState, reducer, STATE_ACTIONS } from '../state';
 import { eventTypes, htmlAttributes, htmlInputTypes } from '../enums';
 
@@ -8,7 +9,7 @@ const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
 const ELEMENT_TAG_NAME_SELECT = 'SELECT';
 const CHECKBOX_DEFAULT_VALUE = 'on';
-const formElements = ['text', 'email', 'password', 'checkbox', 'radio', 'number', 'textarea'];
+const formElements = ['text', 'email', 'password', 'checkbox', 'radio', 'number', 'textarea', 'date'];
 const validityDefaultErrorMessages = {
   badInput: () => 'Invalid input',
   patternMismatch: ({ pattern }) => `Please match the format requested : "${pattern}"`,
@@ -39,7 +40,10 @@ export const useForm = ({
   };
 
   const getFormElements = form => [...form.elements]
-    .filter(element => formElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
+    .filter(element => {
+      console.log(element.type)
+      return formElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT
+    });
 
   const validateForm = useCallback(() => {
     const { current: form } = formRef;
@@ -218,6 +222,8 @@ export const useForm = ({
       elementInitialValue = isDefaultNativeHtmlCheckboxValue ? false : Boolean(elementInitialValue);
     } else if (!isCheckbox && hasInitialValue === true) {
       elementInitialValue = Boolean(value) === false ? state.initialValues[name] : elementInitialValue;
+    } else if (!isCheckbox && hasInitialValue === false) {
+      elementInitialValue = type === htmlInputTypes.date ? getDefaultDateValue() : elementInitialValue;
     }
 
     return elementInitialValue;
@@ -234,6 +240,7 @@ export const useForm = ({
 
     getFormElements(form)
       .forEach(element => {
+        console.log(element.tagName)
         const elementInitialValue = getElementInitialValue(element);
         const shouldOverrideInitialValue = element.type !== htmlInputTypes.radio || (element.type === htmlInputTypes.radio && element.checked === true);
 

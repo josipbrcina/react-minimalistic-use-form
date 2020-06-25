@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from './useForm';
 import '../style.css';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
@@ -11,7 +11,7 @@ export default {
 export function useFormHook() {
   const {
     values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
-  } = useForm({ initialValues: { email: '' } });
+  } = useForm({ initialValues: { email: '', date: '1986-12-28' } });
 
   const submitValues = ({
     // eslint-disable-next-line no-shadow
@@ -100,6 +100,12 @@ export function useFormHook() {
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
         </select>
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="date" className="d-flex flex-align-center">Date</label>
+        <input className="input" type="date" id="date" name="date" value={values.date} onChange={_onChange} onBlur={onBlur} required />
+        {renderFieldErrors(errors.date)}
       </div>
 
       <div className="d-flex flex-col mt-10">

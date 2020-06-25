@@ -103,6 +103,12 @@ export function FormComponent() {
         </select>
       </div>
 
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="date" className="d-flex flex-align-center">Date</label>
+        <input className="input" type="date" id="date" name="date" required />
+        {renderFieldErrors(errors.date)}
+      </div>
+
       <div className="d-flex flex-col mt-10">
         <button className="button" type="button" onClick={resetForm}>Clear</button>
         <button className="button mt-5" type="submit" disabled={isFormValid === false}>Submit</button>

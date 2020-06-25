@@ -2,6 +2,7 @@ export const htmlInputTypes = {
   checkbox: 'checkbox',
   radio: 'radio',
   textarea: 'textarea',
+  date: 'date',
 };
 
 export const htmlAttributes = {
