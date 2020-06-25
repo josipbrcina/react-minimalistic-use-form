@@ -179,7 +179,7 @@ Either using just useForm hook or in a combination with Form component, useForm 
 for you. Optionally `validateOnInput (boolean)` or `validateOnSubmit (boolean)` can be configured.
 
 In first case, on user input, useForm will automatically validate that field, update `errors` object properly and
-it will toggle error className to input field. To provide best user experience once input field is blurred,
+it will toggle error className to input field. To provide the best user experience once input field is blurred,
 useForm onBlur eventHandler will set className `is-dirty` (default value can be configured) and it will
 trigger input validation. If field has validity: `false` an error className `has-error` (default value, can be configured) 
 will be attached to input field. As soon as field validity is valid, error class is removed from the field.

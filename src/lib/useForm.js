@@ -272,6 +272,8 @@ export const useForm = ({
     formRef, onBlur, onChange,
   }), [formRef, onChange, onBlur]);
 
+  console.log('FORM_REF', formRef)
+
   return {
     resetForm,
     onChange,

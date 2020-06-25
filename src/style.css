@@ -1,0 +1,57 @@
+.text-error {
+  color: #d7241d;
+}
+
+.has-error {
+  border-color: #d7241d !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.input {
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #E7D3D4;
+}
+
+.button {
+  height: 24px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid blue;
+}
+
+.button:hover {
+  cursor: pointer;
+  border: 2px solid blue;
+}
+
+.form {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
