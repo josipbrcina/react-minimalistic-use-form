@@ -1,15 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
 import { useForm } from './useForm';
 import { Form } from './Form';
 import '../style.css';
-
-const renderFieldErrors = (errors = {}) => Object.values(errors).map((error, index) => (
-  // eslint-disable-next-line react/no-array-index-key
-  <span key={index} className="text-error">
-    {error}
-    <br />
-  </span>
-));
+import { renderFieldErrors } from '../utils/renderFieldErrors';
 
 export default {
   title: 'Form component',
