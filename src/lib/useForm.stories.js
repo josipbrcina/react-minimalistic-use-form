@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from './useForm';
 import '../style.css';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
@@ -136,6 +136,15 @@ export function useFormHook() {
         </label>
         <input className="input" type="tel" id="tel" name="tel" value={values.tel} onChange={onChange} onBlur={onBlur} required minLength={6} />
         {renderFieldErrors(errors.tel)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="color" className="d-flex flex-align-center">
+          Color
+          <sup>*</sup>
+        </label>
+        <input className="input" type="color" id="color" name="color" value={values.color} onChange={onChange} onBlur={onBlur} required minLength={6} />
+        {renderFieldErrors(errors.color)}
       </div>
 
       <div className="d-flex flex-col mt-10">

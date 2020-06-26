@@ -359,3 +359,4 @@ Form accepts all html5 form attributes along with one required:
   * date
   * search
   * url
+  * color

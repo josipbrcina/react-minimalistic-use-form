@@ -53,9 +53,7 @@ export const useForm = ({
   };
 
   const getFormElements = form => [...form.elements]
-    .filter(element => {
-      return supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT;
-    });
+    .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
 
   const validateForm = useCallback(() => {
     const { current: form } = formRef;
