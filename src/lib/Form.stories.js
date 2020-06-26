@@ -49,6 +49,24 @@ export function FormComponent() {
       </div>
 
       <div className="d-flex flex-col mb-10">
+        <label htmlFor="search" className="d-flex flex-align-center">
+          Search
+          <sup>*</sup>
+        </label>
+        <input className="input" type="search" id="search" name="search" required />
+        {renderFieldErrors(errors.search)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="url" className="d-flex flex-align-center">
+          Url
+          <sup>*</sup>
+        </label>
+        <input className="input" type="url" id="url" name="url" required />
+        {renderFieldErrors(errors.url)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
         <label htmlFor="number">
           Number
           <sup>*</sup>
@@ -104,9 +122,21 @@ export function FormComponent() {
       </div>
 
       <div className="d-flex flex-col mb-10">
-        <label htmlFor="date" className="d-flex flex-align-center">Date</label>
+        <label htmlFor="date" className="d-flex flex-align-center">
+          Date
+          <sup>*</sup>
+        </label>
         <input className="input" type="date" id="date" name="date" required />
         {renderFieldErrors(errors.date)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="tel" className="d-flex flex-align-center">
+          Tel
+          <sup>*</sup>
+        </label>
+        <input className="input" type="tel" id="tel" name="tel" required minLength={6} />
+        {renderFieldErrors(errors.tel)}
       </div>
 
       <div className="d-flex flex-col mt-10">

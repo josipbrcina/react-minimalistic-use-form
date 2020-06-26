@@ -11,7 +11,7 @@ export default {
 export function useFormHook() {
   const {
     values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
-  } = useForm({ initialValues: { email: '', date: '1986-12-28' } });
+  } = useForm({ initialValues: { email: '', date: '1986-12-28', tel: '491761110093' } });
 
   const submitValues = ({
     // eslint-disable-next-line no-shadow
@@ -45,6 +45,24 @@ export function useFormHook() {
         </label>
         <input className="input" type="text" id="text" name="text" value={values.text} onChange={onChange} onBlur={onBlur} required />
         {renderFieldErrors(errors.text)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="search" className="d-flex flex-align-center">
+          Search
+          <sup>*</sup>
+        </label>
+        <input className="input" type="search" id="search" name="search" value={values.search} onChange={onChange} onBlur={onBlur} required />
+        {renderFieldErrors(errors.search)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="url" className="d-flex flex-align-center">
+          Url
+          <sup>*</sup>
+        </label>
+        <input className="input" type="url" id="url" name="url" value={values.url} onChange={onChange} onBlur={onBlur} required />
+        {renderFieldErrors(errors.url)}
       </div>
 
       <div className="d-flex flex-col mb-10">
@@ -103,9 +121,21 @@ export function useFormHook() {
       </div>
 
       <div className="d-flex flex-col mb-10">
-        <label htmlFor="date" className="d-flex flex-align-center">Date</label>
+        <label htmlFor="date" className="d-flex flex-align-center">
+          Date
+          <sup>*</sup>
+        </label>
         <input className="input" type="date" id="date" name="date" value={values.date} onChange={onChange} onBlur={onBlur} required />
         {renderFieldErrors(errors.date)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="tel" className="d-flex flex-align-center">
+          Tel
+          <sup>*</sup>
+        </label>
+        <input className="input" type="tel" id="tel" name="tel" value={values.tel} onChange={onChange} onBlur={onBlur} required minLength={6} />
+        {renderFieldErrors(errors.tel)}
       </div>
 
       <div className="d-flex flex-col mt-10">
