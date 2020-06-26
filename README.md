@@ -13,7 +13,7 @@
       - [Current supported form fields](#current-supported-form-fields)
 
 # react-minimalistic-use-form 
-![version](https://img.shields.io/badge/version-1.1.3-blue.svg)
+![version](https://img.shields.io/badge/version-1.1.4-blue.svg)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
 
