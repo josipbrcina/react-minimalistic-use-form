@@ -88,7 +88,7 @@ return {
        <div className="d-flex flex-row">
           <div className="col-12 mt-3">
             <label htmlFor="field2" className="m-0 mb-1 p-0">Field2</label>
-            <input id="field2" name="field2" type="text" value={values.field2} onChange={onChange} onBlur={onBlur} />
+            <input id="field2" name="field2" type="text" minLength="5" required value={values.field2} onChange={onChange} onBlur={onBlur} />
             {errros.field2 && Object.values(errors.field2).map((error, index) => (
               <span key={index} className="text-error">
                 {error}
@@ -148,7 +148,7 @@ return {
        <div className="d-flex flex-row">
           <div className="col-12 mt-3">
             <label htmlFor="field2" className="m-0 mb-1 p-0">Field2</label>
-            <input id="field2" name="field1" type="text" required minLength={4} />
+            <input id="field2" name="field2" type="text" required minLength={4} />
             {errros.field2 && Object.values(errors.field2).map((error, index) => (
               <span key={index} className="text-error">
                 {error}
@@ -236,7 +236,7 @@ return {
        <div className="d-flex flex-row">
           <div className="col-12 mt-3">
             <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
-            <input id="field1" name="field1" type="email" value={controlledField1} onChange={onChange} onBlur={_onBlur} />
+            <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} onBlur={_onBlur} />
           </div>
         </div>
 
@@ -277,7 +277,7 @@ return {
        <div className="d-flex flex-row">
           <div className="col-12 mt-3">
             <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
-            <input id="field1" name="field1" type="email" value={controlledField1} onChange={onChange} />
+            <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} />
           </div>
         </div>
 
