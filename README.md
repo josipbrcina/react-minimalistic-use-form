@@ -13,7 +13,7 @@
       - [Current supported form fields](#current-supported-form-fields)
 
 # react-minimalistic-use-form 
-![version](https://img.shields.io/badge/version-1.0.2-blue.svg)
+![version](https://img.shields.io/badge/version-1.1.2-blue.svg)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
 
@@ -355,4 +355,7 @@ Form accepts all html5 form attributes along with one required:
   * checkbox
   * radio
   * select
-
+  * tel
+  * date
+  * search
+  * url

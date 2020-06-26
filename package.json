@@ -1,6 +1,6 @@
 {
   "name": "react-minimalistic-use-form",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Minimalistic react hook for handling forms without tears",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
