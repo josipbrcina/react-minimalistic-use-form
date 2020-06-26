@@ -23,7 +23,7 @@ React-minimalistic-use-form provides minimalistic way to handle forms in react.
 It takes care of form state and validation. Validation is based on [html5 form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation).
 It uses [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation) and
 validates form based on input `validity`.
-This library has absolutely **ZERO DEPENDENCIES**, it's lightweight and yet so powerful!
+This library has just peer dependencies `"react": ">=16.13.1"`, `"react-dom": ">=16.13.1"` and absolutely **ZERO OTHER DEPENDENCIES**, it's lightweight and yet so powerful! 
 
 It provides ability to validate form fields on user input or on form submit.
 It automatically adds or removes error class name to input field if field is valid or not.  
