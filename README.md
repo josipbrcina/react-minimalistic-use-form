@@ -340,11 +340,6 @@ Form accepts all html5 form attributes along with one required:
 * Automatically adds error and "dirty" CSS class names
 * Scroll to error
 
-#### Planned upcoming features and TODO's
-+ Display errors next to input fields out-of-the-box
-+ Custom validation
-+ Test coverage
-
 #### Current supported form fields
 + input
   * text
@@ -360,3 +355,8 @@ Form accepts all html5 form attributes along with one required:
   * search
   * url
   * color
+
+#### Planned upcoming features and TODO's
++ Display errors next to input fields out-of-the-box
++ Custom validation
++ Test coverage
