@@ -227,7 +227,7 @@ export const useForm = ({
     const isDefaultNativeHtmlCheckboxValue = value === CHECKBOX_DEFAULT_VALUE;
 
     if (isCheckbox && hasInitialValue === true) {
-      elementInitialValue = isDefaultNativeHtmlCheckboxValue ? state.initialValues[name] : Boolean(elementInitialValue);
+      elementInitialValue = isDefaultNativeHtmlCheckboxValue ? state.initialValues[name] : elementInitialValue === 'true';
     } else if (isCheckbox && hasInitialValue === false) {
       elementInitialValue = isDefaultNativeHtmlCheckboxValue ? false : Boolean(elementInitialValue);
     } else if (!isCheckbox && hasInitialValue === true) {
