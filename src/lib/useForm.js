@@ -9,7 +9,7 @@ const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
 const ELEMENT_TAG_NAME_SELECT = 'SELECT';
 const CHECKBOX_DEFAULT_VALUE = 'on';
-const formElements = ['text', 'email', 'password', 'checkbox', 'radio', 'number', 'textarea', 'date'];
+const supportedFormElements = ['text', 'email', 'password', 'checkbox', 'radio', 'number', 'textarea', 'date', 'tel'];
 const validityDefaultErrorMessages = {
   badInput: () => 'Invalid input',
   patternMismatch: ({ pattern }) => `Please match the format requested : "${pattern}"`,
@@ -41,8 +41,8 @@ export const useForm = ({
 
   const getFormElements = form => [...form.elements]
     .filter(element => {
-      console.log(element.type)
-      return formElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT
+      console.log(element.type);
+      return supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT;
     });
 
   const validateForm = useCallback(() => {
@@ -240,7 +240,7 @@ export const useForm = ({
 
     getFormElements(form)
       .forEach(element => {
-        console.log(element.tagName)
+        console.log(element.tagName);
         const elementInitialValue = getElementInitialValue(element);
         const shouldOverrideInitialValue = element.type !== htmlInputTypes.radio || (element.type === htmlInputTypes.radio && element.checked === true);
 
