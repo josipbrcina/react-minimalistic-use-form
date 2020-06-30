@@ -37,5 +37,8 @@
     "test": true,
     "jest": true,
     "afterEach": true
+  },
+  "env": {
+    "jest": true
   }
 }

@@ -62,6 +62,7 @@ Form.propTypes = {
     node,
   ]),
   bindUseForm: shape({
+    // eslint-disable-next-line react/forbid-prop-types
     formRef: object,
     onChange: func,
     onInput: func,
