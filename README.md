@@ -9,13 +9,15 @@
       - [useForm](#useform)
       - [Form](#form)
   + [Features](#features)
-      - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo-s)
       - [Current supported form fields](#current-supported-form-fields)
+      - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo-s)
 
-# react-minimalistic-use-form 
-![version](https://img.shields.io/badge/version-1.1.4-blue.svg)
+# react-minimalistic-use-form
+![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
+
+[version-badge]: https://img.shields.io/badge/version-1.1.4-blue.svg
 
 Minimalistic react hook for handling forms without tears.
 
