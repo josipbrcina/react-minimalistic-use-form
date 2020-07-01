@@ -4,7 +4,7 @@ import { renderFieldErrors } from '../utils/renderFieldErrors';
 
 export const FormWithUseForm = props => {
   const {
-    values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
+    values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm, validateForm
   } = useForm({ ...props });
 
   const submitValues = ({
@@ -19,7 +19,8 @@ export const FormWithUseForm = props => {
     <form onSubmit={onSubmit(submitValues)} noValidate ref={formRef} className="d-flex flex-col form">
       <div className="d-flex flex-col mb-10">
         <label htmlFor="email">
-          <input className="input" type="email" id="email" name="email" value={values.email} onChange={onChange} onBlur={onBlur} required />
+          Email
+          <input className="input" type="email" id="email" name="email" value={values.email} onChange={onChange} onBlur={onBlur} />
         </label>
         {renderFieldErrors(errors.email)}
       </div>
@@ -43,6 +44,31 @@ export const FormWithUseForm = props => {
       </div>
 
       <div className="d-flex flex-col mb-10">
+        <label htmlFor="pattern">
+          Text Pattern
+          <sup>*</sup>
+          <input className="input" type="pattern" id="pattern" name="pattern" value={values.pattern} onChange={onChange} onBlur={onBlur} pattern="^A\d+\.\d+$" />
+        </label>
+        {renderFieldErrors(errors.pattern)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="min_length_3">
+          Text Min length 3
+          <input className="input" type="text" id="min_length_3" name="min_length_3" value={values.min_length_3} onChange={onChange} onBlur={onBlur} minLength={3} />
+        </label>
+        {renderFieldErrors(errors.min_length_3)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="max_length_3">
+          Text Max length 3
+          <input className="input" type="text" id="max_length_3" name="max_length_3" value={values.max_length_3} onChange={onChange} onBlur={onBlur} maxLength={3} />
+        </label>
+        {renderFieldErrors(errors.max_length_3)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
         <label htmlFor="search" className="d-flex flex-align-center">
           Search
           <sup>*</sup>
@@ -62,11 +88,29 @@ export const FormWithUseForm = props => {
 
       <div className="d-flex flex-col mb-10">
         <label htmlFor="number">
-          Number
+          Number With Step
           <sup>*</sup>
-          <input className="input" type="number" id="number" name="number" value={values.number} onChange={onChange} onBlur={onBlur} required />
+          <input className="input" type="number" id="number" name="number" value={values.number} onChange={onChange} onBlur={onBlur} step="0.01" />
         </label>
         {renderFieldErrors(errors.number)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="number_min_3">
+          Number Min 3
+          <sup>*</sup>
+          <input className="input" type="number" id="number_min_3" name="number_min_3" value={values.number_min_3} onChange={onChange} onBlur={onBlur} min={3} />
+        </label>
+        {renderFieldErrors(errors.number_min_3)}
+      </div>
+
+      <div className="d-flex flex-col mb-10">
+        <label htmlFor="number_max_3">
+          Number Max 3
+          <sup>*</sup>
+          <input className="input" type="number" id="number_max_3" name="number_max_3" value={values.number_max_3} onChange={onChange} onBlur={onBlur} max={3} />
+        </label>
+        {renderFieldErrors(errors.number_max_3)}
       </div>
 
       <div className="d-flex flex-col mb-10">
@@ -142,8 +186,13 @@ export const FormWithUseForm = props => {
         {renderFieldErrors(errors.color)}
       </div>
 
+      <div id="values" values={values} />
+      <div id="errors" errors={errors} />
+      <div id="isFormValid" isFormValid={isFormValid} />
+
       <div className="d-flex flex-col mt-10">
-        <button className="button" type="button" onClick={resetForm}>Clear</button>
+        <button id="resetForm" className="button" type="button" onClick={resetForm}>Clear</button>
+        <button id="validateForm" className="button" type="button" onClick={validateForm}>Validate Form</button>
         <button className="button mt-5" type="submit" disabled={isFormValid === false}>Submit</button>
       </div>
     </form>

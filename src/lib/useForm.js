@@ -170,15 +170,23 @@ export const useForm = ({
   };
 
   const onChange = useCallback(({ target }) => {
+    const {
+      name, value, type, checked, classList,
+    } = target;
     // Input is dirty - checking for validity live...
     if (validateOnInput === true) {
-      if (target.classList.contains(isFieldDirtyClassName) === true) {
+      if (classList.contains(isFieldDirtyClassName) === true) {
         updateError(target);
       }
       validateForm();
     }
 
-    dispatch({ type: STATE_ACTIONS.SET_FIELD_VALUE, payload: target });
+    dispatch({
+      type: STATE_ACTIONS.SET_FIELD_VALUE,
+      payload: {
+        name, type, checked, value,
+      },
+    });
   }, [isFieldDirtyClassName, updateError, validateForm, validateOnInput]);
 
   const onBlur = useCallback(({ target }) => {
