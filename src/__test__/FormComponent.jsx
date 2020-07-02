@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, useForm } from '../lib';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 
-export const FormComponent = props => {
+export const FormComponent = ({ onSubmit: _onSubmit, addBindUseForm, ...props }) => {
   const {
     values, errors, isFormValid, onSubmit, bindUseForm, resetForm, validateForm,
   } = useForm({ ...props });
@@ -12,11 +13,13 @@ export const FormComponent = props => {
     event, errors, values, isFormValid,
   }) => {
     event.preventDefault();
-    console.log({ errors, values, isFormValid });
+    _onSubmit({
+      event, errors, values, isFormValid,
+    });
   };
 
   return (
-    <Form onSubmit={onSubmit(submitValues)} noValidate bindUseForm={bindUseForm} className="d-flex flex-col form">
+    <Form onSubmit={onSubmit(submitValues)} noValidate {...(addBindUseForm ? { bindUseForm } : {})} className="d-flex flex-col form">
       <div className="d-flex flex-col mb-10">
         <label htmlFor="email">
           Email
@@ -197,4 +200,14 @@ export const FormComponent = props => {
       </div>
     </Form>
   );
+};
+
+FormComponent.defaultProps = {
+  onSubmit: () => {},
+  addBindUseForm: true,
+};
+
+FormComponent.propTypes = {
+  onSubmit: PropTypes.func,
+  addBindUseForm: PropTypes.bool,
 };

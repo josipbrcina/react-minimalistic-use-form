@@ -1,10 +1,27 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { ErrorBoundary } from './ErrorBoundary';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormComponent } from './FormComponent';
 import {
   ElementClassList, ERROR_CLASS_NAME, IS_DIRTY_CLASS_NAME, initialValues, ElementValidity,
 } from '../__mock__/mockData';
+
+describe('Form Component - Exception', () => {
+  it('Should throw Form is missing bindUseForm prop error', () => {
+    const consoleSpy = jest.spyOn(console, 'error');
+    consoleSpy.mockImplementation(() => {});
+
+    const spy = jest.fn();
+    const wrapper = mount(<ErrorBoundary spy={spy}><FormComponent initialValues={initialValues} addBindUseForm={false} /></ErrorBoundary>);
+
+    expect(wrapper.state()).toHaveProperty('hasError', true);
+    expect(spy).toBeCalledTimes(1);
+    expect(spy.mock.calls[0][0]).toEqual('Form is missing bindUseForm prop.');
+
+    consoleSpy.mockRestore();
+  });
+});
 
 describe('FormComponent - Default values should be provided INITIAL VALUES', () => {
   it('Should set properly provided initial values', () => {
@@ -262,6 +279,35 @@ describe('FormComponent - ResetForm', () => {
 });
 
 describe('FormComponent - Input field validation', () => {
+  it('Should scroll to error on input', () => {
+    const sut = mount(<FormComponent scrollToError />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const textInput = sut.find('#password');
+    textInput.simulate('blur');
+
+    expect(textInput.instance().scrollIntoView).toBeCalled();
+  });
+
+  it('Should NOT scroll to error on input', () => {
+    const sut = mount(<FormComponent scrollToError validateOnInput={false} />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const textInput = sut.find('#password');
+    textInput.simulate('blur');
+
+    expect(textInput.instance().scrollIntoView).toBeCalledTimes(0);
+  });
+
+  it('Should scroll to error on submit', () => {
+    const sut = mount(<FormComponent scrollToError validateOnInput={false} validateOnSubmit />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.props().disabled = false;
+    submitButton.simulate('submit');
+    const textInput = sut.find('#password');
+
+    expect(textInput.instance().scrollIntoView).toBeCalled();
+  });
+
   it('Should validate field for required constraint', () => {
     const sut = mount(<FormComponent />);
     const getElement = selector => sut.find(selector);

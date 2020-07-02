@@ -5,6 +5,23 @@ import { FormWithUseForm } from './form';
 import {
   ElementClassList, ElementValidity, IS_DIRTY_CLASS_NAME, ERROR_CLASS_NAME, initialValues,
 } from '../__mock__/mockData';
+import { ErrorBoundary } from './ErrorBoundary';
+
+describe('form with useForm - Exception', () => {
+  it('Should throw no form ref error', () => {
+    const consoleSpy = jest.spyOn(console, 'error');
+    consoleSpy.mockImplementation(() => {});
+
+    const spy = jest.fn();
+    const wrapper = mount(<ErrorBoundary spy={spy}><FormWithUseForm initialValues={initialValues} addFormRef={false} /></ErrorBoundary>);
+
+    expect(wrapper.state()).toHaveProperty('hasError', true);
+    expect(spy).toBeCalledTimes(1);
+    expect(spy.mock.calls[0][0]).toEqual('formRef is empty! useForm "formRef" needs to be attached to form element');
+
+    consoleSpy.mockRestore();
+  });
+});
 
 describe('form with useForm - Default values should be provided INITIAL VALUES', () => {
   it('Should set properly provided initial values', () => {
@@ -258,6 +275,35 @@ describe('form with useForm - ResetForm', () => {
 });
 
 describe('form with useForm - Input field validation', () => {
+  it('Should scroll to error on input', () => {
+    const sut = mount(<FormWithUseForm scrollToError />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const textInput = sut.find('#password');
+    textInput.simulate('blur');
+
+    expect(textInput.instance().scrollIntoView).toBeCalled();
+  });
+
+  it('Should NOT scroll to error on input', () => {
+    const sut = mount(<FormWithUseForm scrollToError validateOnInput={false} />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const textInput = sut.find('#password');
+    textInput.simulate('blur');
+
+    expect(textInput.instance().scrollIntoView).toBeCalledTimes(0);
+  });
+
+  it('Should scroll to error on submit', () => {
+    const sut = mount(<FormWithUseForm scrollToError validateOnInput={false} validateOnSubmit />);
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.props().disabled = false;
+    submitButton.simulate('submit');
+    const textInput = sut.find('#password');
+
+    expect(textInput.instance().scrollIntoView).toBeCalled();
+  });
+
   it('Should validate field for required constraint', () => {
     const sut = mount(<FormWithUseForm />);
     const getElement = selector => sut.find(selector);
