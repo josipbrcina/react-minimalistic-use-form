@@ -293,8 +293,8 @@ export const useForm = ({
   }, [bindInitialValues]);
 
   const bindUseForm = useMemo(() => ({
-    formRef, onBlur, onChange,
-  }), [formRef, onChange, onBlur]);
+    formRef, onBlur, onChange, values: state.values,
+  }), [formRef, onChange, onBlur, state.values]);
 
   return {
     resetForm,

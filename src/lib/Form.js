@@ -40,6 +40,7 @@ export const Form = ({
         ? {
           onChange: _getEventHandler({ callback: childOnChange }),
           onBlur: _getEventHandler({ callback: childOnBlur, handler: handlers.onBlur }),
+          value: bindUseForm.values[childProps.name] === undefined ? '' : bindUseForm.values[childProps.name],
         }
         : {}),
     };
