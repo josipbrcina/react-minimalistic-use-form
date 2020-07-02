@@ -16,8 +16,12 @@
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
+![](coverage-badges/badge-branches.svg)
+![](coverage-badges/badge-functions.svg)
+![](coverage-badges/badge-lines.svg)
+![](coverage-badges/badge-statements.svg)
 
-[version-badge]: https://img.shields.io/badge/version-1.1.4-blue.svg
+[version-badge]: https://img.shields.io/badge/version-1.1.5-blue.svg
 
 Minimalistic react hook for handling forms without tears.
 
@@ -361,4 +365,3 @@ Form accepts all html5 form attributes along with one required:
 #### Planned upcoming features and TODO's
 + Display errors next to input fields out-of-the-box
 + Custom validation
-+ Test coverage
