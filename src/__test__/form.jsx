@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from '../lib';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
-import { withErrorBoundary } from './ErrorBoundary';
 
 export const FormWithUseForm = ({ onSubmit: _onSubmit, addFormRef, ...props }) => {
   const {

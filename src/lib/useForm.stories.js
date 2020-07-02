@@ -18,6 +18,7 @@ export function useFormHook() {
     event, errors, values, isFormValid,
   }) => {
     event.preventDefault();
+    // eslint-disable-next-line no-console
     console.log({ errors, values, isFormValid });
   };
 

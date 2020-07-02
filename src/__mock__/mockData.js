@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 export class ElementClassList {
   constructor() {
     this.classList = [];

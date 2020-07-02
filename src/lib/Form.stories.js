@@ -19,6 +19,7 @@ export function FormComponent() {
     event, errors, values, isFormValid,
   }) => {
     event.preventDefault();
+    // eslint-disable-next-line no-console
     console.log({ errors, values, isFormValid });
   };
 

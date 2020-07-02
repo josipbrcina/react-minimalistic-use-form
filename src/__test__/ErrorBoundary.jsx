@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export class ErrorBoundary extends Component {
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     return {
       hasError: true,
     };
@@ -13,7 +13,7 @@ export class ErrorBoundary extends Component {
     this.state = { hasError: false };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error) {
     const { spy } = this.props;
     spy(error.message);
   }
