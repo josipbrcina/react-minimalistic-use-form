@@ -31,7 +31,7 @@ export class ElementValidity {
     tooShort = false,
     typeMismatch = false,
     valueMissing = false,
-  }) {
+  } = {}) {
     this.valid = valid;
     this.badInput = badInput;
     this.patternMismatch = patternMismatch;
@@ -45,7 +45,6 @@ export class ElementValidity {
   }
 
   setValidity({ name, value }) {
-    if (this[name] === undefined) throw new Error('Invalid validity name provided!');
     this[name] = value;
   }
 }

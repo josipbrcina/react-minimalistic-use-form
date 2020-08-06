@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { setNativeValue } from '../lib/useForm';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormWithUseForm } from './form';
 import {
@@ -304,6 +305,26 @@ describe('form with useForm - Input field validation', () => {
     expect(textInput.instance().scrollIntoView).toBeCalled();
   });
 
+  it('Should validate field for badInput constraint', () => {
+    const sut = mount(<FormWithUseForm initialValues={{ number: 'foo' }} />);
+    const getElement = selector => sut.find(selector);
+
+    const validity = new ElementValidity({ valid: false, badInput: true });
+    const classList = new ElementClassList();
+
+    const numberInput = getElement('#number');
+    numberInput.simulate('blur', {
+      target: {
+        name: 'number', type: 'number', validity, classList,
+      },
+    });
+
+    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
+    expect(validity.valid).toBe(false);
+    expect(getElement('#errors').props().errors.number.badInput).toBeDefined();
+  });
+
   it('Should validate field for required constraint', () => {
     const sut = mount(<FormWithUseForm />);
     const getElement = selector => sut.find(selector);
@@ -534,5 +555,36 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
     expect(getElement('#errors').props().errors.number.stepMismatch).toBeUndefined();
+  });
+});
+
+describe('SetNativeValue', () => {
+  it('Should throw an error if element doesn\'t have proper setter', () => {
+    // const element = Object.create({});
+    try {
+      setNativeValue({ element: {} });
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error).toHaveProperty('message', 'The given element does not have a value setter');
+    }
+  });
+
+  it('Should set element value with element value setter', () => {
+    const mockFn = jest.fn();
+    const element = {
+      _value: '',
+      get value() {
+        return this._value;
+      },
+      set value(v) {
+        this._value = v;
+        mockFn();
+      },
+    };
+
+    setNativeValue({ element, value: 'foo' });
+
+    expect(mockFn).toBeCalledTimes(1);
+    expect(element._value).toEqual('foo');
   });
 });

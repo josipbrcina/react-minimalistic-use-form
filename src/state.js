@@ -13,7 +13,7 @@ export const STATE_ACTIONS = {
   SET_OVERRIDDEN_INITIAL_VALUES: 'SET_OVERRIDDEN_INITIAL_VALUES',
 };
 
-export const getInitialState = ({ initialValues = {}, validateOnSubmit = false }) => ({
+export const getInitialState = ({ initialValues = {}, validateOnSubmit = false } = {}) => ({
   values: initialValues,
   initialValues,
   overriddenInitialValues: {},
@@ -29,6 +29,7 @@ export const reducer = (state, action) => {
       const {
         name, type: elementType, checked, value,
       } = payload;
+
       return {
         ...state,
         values: {

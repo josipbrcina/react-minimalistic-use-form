@@ -35,6 +35,40 @@ const validityDefaultErrorMessages = {
   valueMissing: () => 'Please fill in this field.',
 };
 
+/**
+ *
+ * This function is used on <resetForm>. The function updates the field value natively with initialValue
+ * provided either via initialValues or custom one in case of custom controlled input.
+ * Since Events (change | click) must be fired manually in order to call event handlers
+ * of parent component that controls the input we have to update value via setter function
+ * which will be picked up by input event handler attached as element attribute callback
+ *
+ * Why? Because React tracks when you set the value property on an input to keep track of the node's value.
+ * When you dispatch a change event, it checks it's last value against the current value
+ * (https://github.com/facebook/react/blob/dd5fad29616f706f484938663e93aaadd2a5e594/packages/react-dom/src/client/inputValueTracking.js#L129)
+ * and if they're the same it does not call any event handlers (as no change has taken place as far as react is concerned).
+ * So we have to set the value in a way that React's value setter function
+ * (https://github.com/facebook/react/blob/dd5fad29616f706f484938663e93aaadd2a5e594/packages/react-dom/src/client/inputValueTracking.js#L78-L81)
+ * will not be called, which is where the setNativeValue comes into play.
+ * This function was a team effort: https://github.com/facebook/react/issues/10135#issuecomment-401496776
+ * @param {Node} element
+ * @param {String} attributeToUpdate
+ * @param {String | Boolean} value
+ */
+export const setNativeValue = ({ element, attributeToUpdate = htmlAttributes.value, value = '' }) => {
+  const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, attributeToUpdate) || {};
+  const prototype = Object.getPrototypeOf(element);
+  const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, attributeToUpdate) || {};
+
+  if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+    prototypeValueSetter.call(element, value);
+  } else if (valueSetter) {
+    valueSetter.call(element, value);
+  } else {
+    throw new Error('The given element does not have a value setter');
+  }
+};
+
 export const useForm = ({
   initialValues = {},
   errorClassName = ERROR_CLASS_NAME,
@@ -64,40 +98,6 @@ export const useForm = ({
 
     return _isFormValid;
   }, []);
-
-  /**
-   *
-   * This function is used on <resetForm>. The function updates the field value natively with initialValue
-   * provided either via initialValues or custom one in case of custom controlled input.
-   * Since Events (change | click) must be fired manually in order to call event handlers
-   * of parent component that controls the input we have to update value via setter function
-   * which will be picked up by input event handler attached as element attribute callback
-   *
-   * Why? Because React tracks when you set the value property on an input to keep track of the node's value.
-   * When you dispatch a change event, it checks it's last value against the current value
-   * (https://github.com/facebook/react/blob/dd5fad29616f706f484938663e93aaadd2a5e594/packages/react-dom/src/client/inputValueTracking.js#L129)
-   * and if they're the same it does not call any event handlers (as no change has taken place as far as react is concerned).
-   * So we have to set the value in a way that React's value setter function
-   * (https://github.com/facebook/react/blob/dd5fad29616f706f484938663e93aaadd2a5e594/packages/react-dom/src/client/inputValueTracking.js#L78-L81)
-   * will not be called, which is where the setNativeValue comes into play.
-   * This function was a team effort: https://github.com/facebook/react/issues/10135#issuecomment-401496776
-   * @param {Node} element
-   * @param {String} attributeToUpdate
-   * @param {String | Boolean} value
-   */
-  const setNativeValue = ({ element, attributeToUpdate = htmlAttributes.value, value = '' }) => {
-    const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, attributeToUpdate) || {};
-    const prototype = Object.getPrototypeOf(element);
-    const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, attributeToUpdate) || {};
-
-    if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
-      prototypeValueSetter.call(element, value);
-    } else if (valueSetter) {
-      valueSetter.call(element, value);
-    } else {
-      throw new Error('The given element does not have a value setter');
-    }
-  };
 
   const _scrollToError = element => {
     const { previousSibling, name } = element;

@@ -1,5 +1,5 @@
-export const getDefaultDateValue = () => {
-  const date = new Date();
+export const getDefaultDateValue = (currentDate) => {
+  const date = currentDate ?? new Date();
 
   let day = date.getDate();
   let month = date.getMonth() + 1;
