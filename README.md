@@ -10,7 +10,7 @@
       - [Form](#form)
   + [Features](#features)
       - [Current supported form fields](#current-supported-form-fields)
-      - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo-s)
+      - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
 
 # react-minimalistic-use-form
 ![version][version-badge]
@@ -53,7 +53,7 @@ and `<Form />` component where Form component will bind values and event handler
 + badInput – Is `true` when the input type is `number` and the entered value is `not a number`.
 + stepMismatch – Is `true` when the field has a `step attribute` and the entered value `does not adhere to the step values`.
 + rangeOverflow – Is `true` when the field has a `max attribute` and the entered number value is `greater than the max`.
-+ rangeUnderflow – Is `true` when the field has a min attribute and the entered number value is `lower than the min`.
++ rangeUnderflow – Is `true` when the field has a `min attribute` and the entered number value is `lower than the min`.
 ---
 
 ### Example usage
@@ -362,6 +362,6 @@ Form accepts all html5 form attributes along with one required:
   * url
   * color
 
-#### Planned upcoming features and TODO's
+#### Planned upcoming features and TODO
 + Display errors next to input fields out-of-the-box
 + Custom validation
