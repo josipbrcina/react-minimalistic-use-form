@@ -29,20 +29,28 @@ export const Form = ({
     }
 
     const {
-      children: childChildren, onChange: childOnChange, onBlur: childOnBlur, ...childProps
+      children: childChildren, onChange: childOnChange, onBlur: childOnBlur, value: childValue, ...childProps
     } = child.props;
 
     const isInputField = 'name' in childProps && 'id' in childProps;
 
+    let cloneElementInputProps = {};
+
+    if (isInputField) {
+      cloneElementInputProps = {
+        onChange: _getEventHandler({ callback: childOnChange }),
+        onBlur: _getEventHandler({ callback: childOnBlur, handler: handlers.onBlur }),
+        value: childValue,
+      };
+
+      if (cloneElementInputProps.value === undefined) {
+        cloneElementInputProps.value = bindUseForm.values[childProps.name] === undefined ? '' : bindUseForm.values[childProps.name];
+      }
+    }
+
     const cloneElementProps = {
       ...childProps,
-      ...(isInputField
-        ? {
-          onChange: _getEventHandler({ callback: childOnChange }),
-          onBlur: _getEventHandler({ callback: childOnBlur, handler: handlers.onBlur }),
-          value: bindUseForm.values[childProps.name] === undefined ? '' : bindUseForm.values[childProps.name],
-        }
-        : {}),
+      ...cloneElementInputProps,
     };
 
     return React.cloneElement(child, cloneElementProps, childChildren === undefined ? undefined : addEventHandlersRecursively(childChildren));
