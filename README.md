@@ -343,8 +343,9 @@ Form accepts all html5 form attributes along with one required:
 * Form state management
 * Native html5 form validation
 * Form validation on input or on submit
-* Automatically adds error and "dirty" CSS class names
+* Automatically toggles error and "is-dirty" input class names
 * Scroll to error
+* Very lightweight with no dependencies
 
 #### Current supported form fields
 + input
@@ -363,5 +364,8 @@ Form accepts all html5 form attributes along with one required:
   * color
 
 #### Planned upcoming features and TODO
-+ Display errors next to input fields out-of-the-box
++ FormComponent - Display errors next to input fields out-of-the-box
 + Custom validation
++ Opt-in scroll to error
++ TypeScript support
++ Plugin support - interface for custom written plugins
