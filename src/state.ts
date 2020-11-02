@@ -1,19 +1,61 @@
-import { htmlInputTypes } from './enums';
+import { htmlInputTypes, STATE_ACTIONS } from './enums';
+import { Obj } from './lib';
 
-const getInitialErrorsState = initialValues => Object.keys(initialValues).reduce((acc, fieldName) => {
+interface IState {
+  values: Obj;
+  initialValues: Obj;
+  overriddenInitialValues: Obj;
+  errors: Obj;
+  initialIsFormValid: boolean;
+  isFormValid: boolean;
+}
+
+interface IHtmlField {
+  name: string;
+  type: string;
+  checked: boolean;
+  value: string | boolean | number;
+}
+
+interface ISetFieldValueAction {
+  type: STATE_ACTIONS.SET_FIELD_VALUE;
+  payload: IHtmlField;
+}
+
+interface IResetFormAction {
+  type: STATE_ACTIONS.RESET_FORM;
+  payload?: undefined;
+}
+
+interface ISetIsFormValidAction {
+  type: STATE_ACTIONS.SET_IS_FORM_VALID;
+  payload: { isFormValid: boolean };
+}
+
+interface ISetFieldErrorsAction {
+  type: STATE_ACTIONS.SET_FIELD_ERRORS;
+  payload: { name: string, errors: Obj };
+}
+
+interface ISetOverriddenInitialValuesAction {
+  type: STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES;
+  payload: { overriddenInitialValues: Obj };
+}
+
+type Action = IResetFormAction | ISetFieldValueAction | ISetIsFormValidAction | ISetFieldErrorsAction | ISetOverriddenInitialValuesAction;
+
+const getInitialErrorsState = (initialValues: Obj) => Object.keys(initialValues).reduce((acc: Obj, fieldName) => {
   acc[fieldName] = {};
   return acc;
 }, {});
 
-export const STATE_ACTIONS = {
-  SET_FIELD_VALUE: 'SET_FIELD_VALUE',
-  SET_IS_FORM_VALID: 'SET_IS_FORM_VALID',
-  SET_FIELD_ERRORS: 'SET_FIELD_ERRORS',
-  RESET_FORM: 'RESET_FORM',
-  SET_OVERRIDDEN_INITIAL_VALUES: 'SET_OVERRIDDEN_INITIAL_VALUES',
-};
-
-export const getInitialState = ({ initialValues = {}, validateOnSubmit = false } = {}) => ({
+export const getInitialState = ({
+  initialValues = {},
+  validateOnSubmit = false,
+} : {
+  initialValues?: Obj,
+  validateOnSubmit?: boolean
+} = {}): IState => ({
   values: initialValues,
   initialValues,
   overriddenInitialValues: {},
@@ -22,7 +64,7 @@ export const getInitialState = ({ initialValues = {}, validateOnSubmit = false }
   isFormValid: validateOnSubmit,
 });
 
-export const reducer = (state, action) => {
+export const reducer = (state: IState, action: Action): IState => {
   const { type, payload } = action;
   switch (type) {
     case STATE_ACTIONS.SET_FIELD_VALUE: {

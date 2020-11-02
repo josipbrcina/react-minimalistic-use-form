@@ -1,2 +1,2 @@
-export { useForm } from './useForm';
-export { Form } from './Form';
+export { useForm } from "src/lib/useForm.ts";
+export { Form } from "./Form";

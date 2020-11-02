@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
-    "lint": "esw --ext .jsx --ext .js --color",
+    "lint": "esw --ext .js,.jsx,.ts,.tsx --color",
     "lint:fix": "npm run lint --fix",
     "prepare": "npm run build",
     "prerelease": "npm run lint:fix && npm run build",
@@ -35,9 +35,14 @@
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "@rollup/plugin-babel": "^5.0.3",
+    "@rollup/plugin-typescript": "^6.0.0",
     "@rollup/plugin-url": "^4.0.0",
     "@storybook/addon-notes": "^5.2.8",
     "@storybook/react": "^5.2.8",
+    "@types/jest": "^26.0.14",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.6.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -78,9 +83,12 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-visualizer": "^3.3.0",
     "style-loader": "^1.2.1",
+    "ts-jest": "^26.4.1",
+    "typescript": "^4.0.3",
     "webpack": "^4.43.0",
     "webpack-blocks": "^2.0.1"
   },
+  "types": "src/lib/index.d.ts",
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/src/setupTests.js"
@@ -90,7 +98,8 @@
       "text",
       "text-summary",
       "lcov"
-    ]
+    ],
+    "preset": "ts-jest"
   },
   "files": [
     "dist"
@@ -121,5 +130,8 @@
   "bugs": {
     "url": "https://github.com/josipbrcina/react-minimalistic-use-form/issues"
   },
-  "homepage": "https://github.com/josipbrcina/react-minimalistic-use-form#readme"
+  "homepage": "https://github.com/josipbrcina/react-minimalistic-use-form#readme",
+  "dependencies": {
+    "tslib": "^2.0.1"
+  }
 }

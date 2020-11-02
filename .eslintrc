@@ -1,10 +1,14 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
   "extends": [
-    "airbnb"
+    "airbnb",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
-    "react-hooks"
+    "react-hooks",
+    "@typescript-eslint"
   ],
   "rules": {
     "max-len": "off",
@@ -24,7 +28,8 @@
     "react/jsx-fragments": "off",
     "react/jsx-props-no-spreading": "off",
     "react/state-in-constructor": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "quotes": [2, "single", { "avoidEscape": true }]
   },
   "globals": {
     "fetch": true,
