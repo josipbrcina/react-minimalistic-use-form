@@ -25,3 +25,8 @@ export enum STATE_ACTIONS {
   RESET_FORM = 'RESET_FORM',
   SET_OVERRIDDEN_INITIAL_VALUES = 'SET_OVERRIDDEN_INITIAL_VALUES'
 }
+
+export enum eventHandlers {
+  onChange = 'onChange',
+  onBlur = 'onBlur',
+}

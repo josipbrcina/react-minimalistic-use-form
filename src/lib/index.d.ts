@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, {ReactElement, ReactNode} from 'react';
 import { htmlAttributes } from '../enums';
 
 export type Obj = Record<string, unknown>;
 
 export interface IHtmlInputElement extends HTMLInputElement {
-    validity: { [key: string]: Value };
+    validity: {[key: string]: Value};
 }
 
 export interface IUseForm {
@@ -40,4 +40,19 @@ interface IOnSubmitCallbackFn {
         errors: Obj,
         values: Obj
     }): void;
+}
+
+interface IEventHandlerCallbackFn {
+    (event: Event): void
+}
+
+interface IForm {
+    children: ReactElement[];
+    bindUseForm: {
+        formRef: React.Ref<HTMLFormElement>,
+        onBlur: IEventHandlerCallbackFn,
+        onChange: IEventHandlerCallbackFn,
+        values: Obj,
+        [key: string]: any
+    };
 }
