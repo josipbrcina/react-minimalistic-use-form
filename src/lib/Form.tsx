@@ -5,9 +5,9 @@ import { Obj, IEventHandlerCallbackFn, IForm } from './index';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-export const Form: React.FC<IForm> = ({
+export const Form = ({
   children = [], bindUseForm, ...props
-}) => {
+} : IForm) => {
   if (bindUseForm === undefined) {
     throw new Error('Form is missing bindUseForm prop.');
   }

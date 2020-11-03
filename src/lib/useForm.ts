@@ -2,7 +2,7 @@ import React, {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
-import { getInitialState, reducer } from '../state';
+import { getInitialState, reducer } from './state';
 import {
   eventTypes, htmlAttributes, htmlInputTypes, STATE_ACTIONS,
 } from '../enums';

@@ -1,4 +1,4 @@
-import { reducer, getInitialState, STATE_ACTIONS } from 'src/state';
+import { reducer, getInitialState, STATE_ACTIONS } from 'src/lib/state';
 
 describe('State Reducer', () => {
   it('Should throw exception if unsupported action type is dispatched', () => {
