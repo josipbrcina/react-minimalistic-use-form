@@ -105,7 +105,7 @@ export interface ISetFieldValueAction extends Action {
 }
 
 export interface IResetFormAction extends Action {
-    payload?: undefined;
+    payload: undefined;
 }
 
 export interface ISetIsFormValidAction extends Action {
