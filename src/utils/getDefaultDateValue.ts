@@ -1,8 +1,8 @@
-export const getDefaultDateValue = (currentDate) => {
+export const getDefaultDateValue = (currentDate?: Date): string => {
   const date = currentDate ?? new Date();
 
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
+  let day: number | string = date.getDate();
+  let month: number | string = date.getMonth() + 1;
   const year = date.getFullYear();
 
   if (month < 10) month = `0${month}`;
