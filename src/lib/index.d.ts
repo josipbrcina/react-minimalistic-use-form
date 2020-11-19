@@ -1,5 +1,7 @@
-import React, {ReactElement, ReactNode} from 'react';
-import {htmlAttributes, STATE_ACTIONS} from '../enums';
+import React, {
+  ChangeEvent, MutableRefObject, ReactElement, ReactNode,
+} from 'react';
+import { htmlAttributes } from '../enums';
 
 export type Obj = { [key: string]: Value };
 
@@ -42,19 +44,44 @@ export interface IOnSubmitCallbackFn {
     }): void;
 }
 
-export interface IEventHandlerCallbackFn {
-    (event: Event): void
+export type EventHandler = {
+    (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | FocusEvent<HTMLInputElement>): void;
+}
+
+interface IbindUseFormProp {
+    formRef: MutableRefObject,
+    onBlur: EventHandler,
+    onChange: EventHandler,
+    values: Obj,
+    [key: string]: Value
 }
 
 export interface IForm {
     children: ReactElement[];
-    bindUseForm: {
-        formRef: React.Ref<HTMLFormElement>,
-        onBlur: IEventHandlerCallbackFn,
-        onChange: IEventHandlerCallbackFn,
-        values: Obj,
-        [key: string]: Value
-    };
+    bindUseForm?: IbindUseFormProp;
+    className: string;
+    onSubmit: (event: React.FormEvent) => void;
+    noValidate: boolean;
+}
+
+export interface IuseFormResponse {
+    resetForm: () => void,
+    onChange: EventHandler,
+    onBlur: EventHandler,
+    onSubmit: (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => void,
+    validateForm: () => boolean,
+    isFormValid: boolean,
+    formRef: MutableRefObject,
+    values: Obj,
+    errors: Obj,
+    bindUseForm: IbindUseFormProp,
+}
+
+export interface IonSubmitResponse {
+    event: React.FormEvent,
+    isFormValid: boolean,
+    errors: Obj,
+    values: Obj,
 }
 
 export interface IState {
@@ -66,39 +93,37 @@ export interface IState {
     isFormValid: boolean;
 }
 
-interface IHtmlField {
+interface IInputField {
     name: string;
     type: string;
     checked: boolean;
     value: string | boolean | number;
 }
 
-interface ISetFieldValueAction {
-    type: typeof STATE_ACTIONS.SET_FIELD_VALUE;
-    payload: IHtmlField;
+export interface ISetFieldValueAction extends Action {
+    payload: IInputField;
 }
 
-interface IResetFormAction {
-    type: typeof STATE_ACTIONS.RESET_FORM;
+export interface IResetFormAction extends Action {
     payload?: undefined;
 }
 
-interface ISetIsFormValidAction {
-    type: typeof STATE_ACTIONS.SET_IS_FORM_VALID;
+export interface ISetIsFormValidAction extends Action {
     payload: { isFormValid: boolean };
 }
 
-interface ISetFieldErrorsAction {
-    type: typeof STATE_ACTIONS.SET_FIELD_ERRORS;
+export interface ISetFieldErrorsAction extends Action {
     payload: { name: string, errors: Obj };
 }
 
-interface ISetOverriddenInitialValuesAction {
-    type: typeof STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES;
+export interface ISetOverriddenInitialValuesAction extends Action {
     payload: { overriddenInitialValues: Obj };
 }
 
-export type Action = IResetFormAction | ISetFieldValueAction | ISetIsFormValidAction | ISetFieldErrorsAction | ISetOverriddenInitialValuesAction;
+export interface Action {
+    type: string;
+    payload?: undefined | Obj
+}
 
 export interface IInitialState {
     initialValues?: Obj,
