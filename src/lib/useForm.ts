@@ -137,7 +137,7 @@ export const useForm = ({
     }
 
     classList.add(errorClassName);
-    const elementErrors: Record<string, unknown> = {};
+    const elementErrors: Obj = {};
 
     for (const validityName in validity) {
       /* eslint-disable-next-line */
