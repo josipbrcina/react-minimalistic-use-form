@@ -1,18 +1,16 @@
 import React, { ReactElement } from 'react';
 import { eventHandlers } from '../enums';
-import { Obj, IEventHandlerCallbackFn, IForm } from './index';
+import { Obj, IForm, EventHandler } from './index';
+import { noop } from '../utils/noop';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = () => {};
-
-export const Form = ({
+export const Form: React.FC<IForm> = ({
   children = [], bindUseForm, ...props
-} : IForm) => {
+}): JSX.Element => {
   if (bindUseForm === undefined) {
     throw new Error('Form is missing bindUseForm prop.');
   }
 
-  const _getEventHandler = ({ callback = noop, handler = eventHandlers.onChange }: {callback: IEventHandlerCallbackFn, handler?: string}) => (event: Event) => {
+  const _getEventHandler = ({ callback = noop, handler = eventHandlers.onChange }: {callback?: EventHandler, handler?: string}) => (event: Event) => {
     bindUseForm[handler](event);
     callback(event);
   };

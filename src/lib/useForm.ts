@@ -13,6 +13,7 @@ import {
   IHtmlInputElement,
   IOnSubmitCallbackFn,
   Obj,
+  IuseFormResponse,
 } from './index';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
@@ -91,7 +92,7 @@ export const useForm = ({
   scrollToError = false,
   validateOnInput = true,
   validateOnSubmit = false,
-}: IUseForm = {}) => {
+}: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
   const formRef = useRef<HTMLFormElement>();
 
@@ -295,7 +296,7 @@ export const useForm = ({
       });
 
     dispatch({ type: STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES, payload: { overriddenInitialValues: updatedInitialValues } });
-  }, [getElementInitialValue, state.initialValues]);
+  }, [getElementInitialValue, state.initialValues, getFormElements]);
 
   useEffect(() => {
     const { current: form } = formRef;
