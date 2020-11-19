@@ -4,6 +4,7 @@
   "description": "Minimalistic react hook for handling forms without tears",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "types": "src/lib/index.d.ts",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -35,14 +36,14 @@
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "@rollup/plugin-babel": "^5.0.3",
-    "@rollup/plugin-typescript": "^6.0.0",
     "@rollup/plugin-url": "^4.0.0",
     "@storybook/addon-notes": "^5.2.8",
     "@storybook/react": "^5.2.8",
+    "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
     "@typescript-eslint/eslint-plugin-tslint": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -58,8 +59,9 @@
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-react-app": "^5.0.2",
+    "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-flowtype": "^4.5.2",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^23.1.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.1",
@@ -76,30 +78,25 @@
     "react-syntax-highlighter": "^11.0.2",
     "rollup": "^2.10.2",
     "rollup-plugin-analyzer": "^3.2.2",
-    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-includepaths": "^0.2.3",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-typescript2": "^0.29.0",
     "rollup-plugin-visualizer": "^3.3.0",
     "style-loader": "^1.2.1",
     "ts-jest": "^26.4.1",
+    "tslib": "^2.0.1",
     "typescript": "^4.0.3",
-    "webpack": "^4.43.0",
-    "webpack-blocks": "^2.0.1"
+    "webpack": "^4.43.0"
   },
-  "types": "src/lib/index.d.ts",
   "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ],
     "coverageReporters": [
       "json-summary",
       "text",
       "text-summary",
       "lcov"
-    ],
-    "preset": "ts-jest"
+    ]
   },
   "files": [
     "dist"
@@ -130,8 +127,5 @@
   "bugs": {
     "url": "https://github.com/josipbrcina/react-minimalistic-use-form/issues"
   },
-  "homepage": "https://github.com/josipbrcina/react-minimalistic-use-form#readme",
-  "dependencies": {
-    "tslib": "^2.0.1"
-  }
+  "homepage": "https://github.com/josipbrcina/react-minimalistic-use-form#readme"
 }

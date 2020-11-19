@@ -18,6 +18,15 @@
     "jsx": "react",
     "sourceMap": true,
     "downlevelIteration": true,
+    "declaration": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "src/__mock__",
+    "src/__tests__",
+    "src/utils/",
+    "src/lib/*.stories.js",
+    "src/setupTests.js"
+  ]
 }

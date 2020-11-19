@@ -1,5 +1,5 @@
 import React from 'react';
-import { htmlInputTypes, STATE_ACTIONS } from '../enums';
+import { htmlInputTypes, STATE_ACTIONS } from './enums';
 import {
   Obj,
   IInitialState,

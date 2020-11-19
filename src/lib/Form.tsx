@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { eventHandlers } from '../enums';
+import { eventHandlers } from './enums';
 import { Obj, IForm, EventHandler } from './index';
 import { noop } from '../utils/noop';
 

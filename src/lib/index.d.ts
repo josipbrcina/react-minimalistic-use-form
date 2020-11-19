@@ -1,7 +1,7 @@
 import React, {
   ChangeEvent, MutableRefObject, ReactElement, ReactNode,
 } from 'react';
-import { htmlAttributes } from '../enums';
+import { htmlAttributes } from './enums';
 
 export type Obj = { [key: string]: Value };
 

@@ -1,6 +1,6 @@
 import babel from '@rollup/plugin-babel';
-import typescript from '@rollup/plugin-typescript';
-import commonjs from 'rollup-plugin-commonjs';
+import { DEFAULT_EXTENSIONS } from '@babel/core';
+import typescript from 'rollup-plugin-typescript2';
 import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 import external from 'rollup-plugin-peer-deps-external';
@@ -11,15 +11,9 @@ export default [
     input: 'src/lib/index.js',
     output: [
       {
-        file: 'dist/index.js',
-        format: 'cjs',
-        sourcemap: false,
-        globals: { react: 'React' },
-      },
-      {
         file: 'dist/index.es.js',
         format: 'es',
-        sourcemap: false,
+        sourcemap: true,
       },
     ],
     plugins: [
@@ -29,7 +23,9 @@ export default [
       external(),
       url(),
       json(),
-      typescript(),
+      typescript({
+        clean: true,
+      }),
       babel({
         plugins: [
           '@babel/plugin-proposal-object-rest-spread',
@@ -38,9 +34,13 @@ export default [
           '@babel/plugin-proposal-class-properties',
           ['babel-plugin-transform-react-remove-prop-types', { removeImport: true }],
         ],
+        extensions: [
+          ...DEFAULT_EXTENSIONS,
+          '.ts',
+          '.tsx',
+        ],
         exclude: 'node_modules/**',
       }),
-      commonjs(),
     ],
     external: ['react', 'react-dom'],
   },

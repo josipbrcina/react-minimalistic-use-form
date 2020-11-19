@@ -5,7 +5,7 @@ import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { getInitialState, reducer } from './state';
 import {
   eventTypes, htmlAttributes, htmlInputTypes, STATE_ACTIONS,
-} from '../enums';
+} from './enums';
 import {
   ISetNativeValue,
   IUseForm,
