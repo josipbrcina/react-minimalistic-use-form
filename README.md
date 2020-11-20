@@ -69,7 +69,7 @@ import { useForm } from 'react-minimalistic-use-form';
 
 export const MyForm = () => {
 const {
-    isFormValid, values, onChange, onBlur, onSubmit, errors
+    isFormValid, values, onChange, onBlur, onSubmit, errors, formRef
   } = useForm({ initialValues: { field1: 'foo', field2: 'bar'} });
 
 const submitForm = ({ event, values, errors, isFormValid }) => {
@@ -219,7 +219,7 @@ import { useForm, Form } from 'react-minimalistic-use-form';
 
 export const MyForm = () => {
 const {
-    isFormValid, onChange, onBlur, onSubmit,
+    isFormValid, onChange, onBlur, onSubmit, formRef
   } = useForm();
   
   const [controlledField1, setControlledField1] = useState("field1");

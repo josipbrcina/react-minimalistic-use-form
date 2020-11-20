@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { setNativeValue } from '../lib/useForm';
+import { setNativeValue } from 'src/lib/useForm';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormWithUseForm } from './form';
 import {

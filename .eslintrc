@@ -1,10 +1,14 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
   "extends": [
-    "airbnb"
+    "airbnb",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
-    "react-hooks"
+    "react-hooks",
+    "@typescript-eslint"
   ],
   "rules": {
     "max-len": "off",
@@ -13,7 +17,7 @@
     "jsx-a11y/control-has-associated-label": "off",
     "import/extensions": "off",
     "import/no-extraneous-dependencies": "off",
-    "import/no-unresolved": "off",
+    "import/no-unresolved": "error",
     "import/prefer-default-export": "off",
     "no-restricted-syntax": "off",
     "react/no-typos": "off",
@@ -24,7 +28,23 @@
     "react/jsx-fragments": "off",
     "react/jsx-props-no-spreading": "off",
     "react/state-in-constructor": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "react/prop-types": "off",
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-empty-function": "off"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": "./tsconfig.json"
+      }
+    }
   },
   "globals": {
     "fetch": true,

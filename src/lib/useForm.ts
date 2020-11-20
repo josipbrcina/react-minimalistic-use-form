@@ -1,15 +1,26 @@
-import {
+import React, {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
-import { getInitialState, reducer, STATE_ACTIONS } from '../state';
-import { eventTypes, htmlAttributes, htmlInputTypes } from '../enums';
+import { getInitialState, reducer } from './state';
+import {
+  eventTypes, htmlAttributes, htmlInputTypes, STATE_ACTIONS,
+} from './enums';
+import {
+  ISetNativeValue,
+  IUseForm,
+  IValidityDefaultErrorMessages,
+  IHtmlInputElement,
+  IOnSubmitCallbackFn,
+  Obj,
+  IuseFormResponse,
+} from './index';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
 const ELEMENT_TAG_NAME_SELECT = 'SELECT';
 const CHECKBOX_DEFAULT_VALUE = 'on';
-const supportedFormElements = [
+const supportedFormElements: Array<string> = [
   'text',
   'email',
   'password',
@@ -23,7 +34,8 @@ const supportedFormElements = [
   'url',
   'color',
 ];
-const validityDefaultErrorMessages = {
+
+const validityDefaultErrorMessages: IValidityDefaultErrorMessages = {
   badInput: () => 'Invalid input',
   patternMismatch: ({ pattern }) => `Please match the format requested : "${pattern}"`,
   rangeOverflow: ({ value }) => `Value must be less than or equal to ${value}.`,
@@ -55,7 +67,11 @@ const validityDefaultErrorMessages = {
  * @param {String} attributeToUpdate
  * @param {String | Boolean} value
  */
-export const setNativeValue = ({ element, attributeToUpdate = htmlAttributes.value, value = '' }) => {
+export const setNativeValue = ({
+  element,
+  attributeToUpdate = htmlAttributes.value,
+  value = '',
+}: ISetNativeValue): void => {
   const { set: valueSetter } = Object.getOwnPropertyDescriptor(element, attributeToUpdate) || {};
   const prototype = Object.getPrototypeOf(element);
   const { set: prototypeValueSetter } = Object.getOwnPropertyDescriptor(prototype, attributeToUpdate) || {};
@@ -76,42 +92,39 @@ export const useForm = ({
   scrollToError = false,
   validateOnInput = true,
   validateOnSubmit = false,
-} = {}) => {
+}: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
-  const formRef = useRef();
+  const formRef = useRef<HTMLFormElement>();
 
-  const checkFormRefAndThrowError = form => {
-    if (form === undefined) {
-      throw new Error('formRef is empty! useForm "formRef" needs to be attached to form element');
-    }
+  const throwFormRefError = (): never => {
+    throw new Error('formRef is empty! useForm "formRef" needs to be attached to form element');
   };
 
-  const getFormElements = form => [...form.elements]
-    .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
+  const getFormElements = useCallback((form?: HTMLFormElement): IHtmlInputElement[] => {
+    if (form === undefined) {
+      return throwFormRefError();
+    }
+
+    return [...form.formElements]
+      .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
+  }, []);
 
   const validateForm = useCallback(() => {
     const { current: form } = formRef;
-    checkFormRefAndThrowError(form);
     const _isFormValid = getFormElements(form).every(element => element.validity.valid === true);
 
     dispatch({ type: STATE_ACTIONS.SET_IS_FORM_VALID, payload: { isFormValid: _isFormValid } });
 
     return _isFormValid;
-  }, []);
+  }, [getFormElements]);
 
-  const _scrollToError = element => {
-    const { previousSibling, name } = element;
-    let elementLabel = previousSibling;
-    let isValidLabel = elementLabel && elementLabel.getAttribute(htmlAttributes.for) === name;
-    if (isValidLabel === false) {
-      elementLabel = element.closest('label');
-      isValidLabel = Boolean(elementLabel);
-    }
-    const elementToScrollTo = isValidLabel ? elementLabel : element;
-    elementToScrollTo.scrollIntoView();
+  const _scrollToError = (element: IHtmlInputElement): void => {
+    const inputLabel = element.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
+    const elementToScrollInto = inputLabel ?? element;
+    elementToScrollInto.scrollIntoView();
   };
 
-  const updateError = useCallback(element => {
+  const updateError = useCallback((element: IHtmlInputElement) => {
     const {
       validity, classList, name,
     } = element;
@@ -124,7 +137,7 @@ export const useForm = ({
     }
 
     classList.add(errorClassName);
-    const elementErrors = {};
+    const elementErrors: Obj = {};
 
     for (const validityName in validity) {
       /* eslint-disable-next-line */
@@ -144,7 +157,6 @@ export const useForm = ({
 
   const resetForm = () => {
     const { current: form } = formRef;
-    checkFormRefAndThrowError(form);
     const { overriddenInitialValues } = state;
 
     getFormElements(form)
@@ -199,7 +211,7 @@ export const useForm = ({
     }
   }, [isFieldDirtyClassName, updateError, validateOnInput]);
 
-  const onSubmit = callbackFn => event => {
+  const onSubmit = (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => {
     let _isFormValid = state.isFormValid;
     let _errors = state.errors;
 
@@ -254,7 +266,7 @@ export const useForm = ({
    * without changing the value in custom controlled input fields
    */
   const bindInitialValues = useCallback(form => {
-    const initialValuesToOverride = {};
+    const initialValuesToOverride: Obj = {};
 
     getFormElements(form)
       .forEach(element => {
@@ -284,11 +296,14 @@ export const useForm = ({
       });
 
     dispatch({ type: STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES, payload: { overriddenInitialValues: updatedInitialValues } });
-  }, [getElementInitialValue, state.initialValues]);
+  }, [getElementInitialValue, state.initialValues, getFormElements]);
 
   useEffect(() => {
     const { current: form } = formRef;
-    checkFormRefAndThrowError(form);
+    if (form === undefined) {
+      throwFormRefError();
+    }
+
     bindInitialValues(form);
   }, [bindInitialValues]);
 

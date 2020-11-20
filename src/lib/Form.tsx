@@ -1,28 +1,21 @@
-import React from 'react';
-import {
-  shape, arrayOf, oneOfType, object, func, node,
-} from 'prop-types';
+import React, { ReactElement } from 'react';
+import { eventHandlers } from './enums';
+import { Obj, IForm, EventHandler } from './index';
+import { noop } from '../utils/noop';
 
-const handlers = {
-  onChange: 'onChange',
-  onBlur: 'onBlur',
-};
-
-const noop = () => {};
-
-export const Form = ({
-  children, bindUseForm, ...props
+export const Form: React.FC<IForm> = ({
+  children = [], bindUseForm, ...props
 }) => {
   if (bindUseForm === undefined) {
     throw new Error('Form is missing bindUseForm prop.');
   }
 
-  const _getEventHandler = ({ callback = noop, handler = handlers.onChange }) => event => {
+  const _getEventHandler = ({ callback = noop, handler = eventHandlers.onChange }: {callback?: EventHandler, handler?: string}) => (event: Event) => {
     bindUseForm[handler](event);
     callback(event);
   };
 
-  const addEventHandlersRecursively = sourceElements => React.Children.map(sourceElements, child => {
+  const addEventHandlersRecursively = (sourceElements: ReactElement[]): ReactElement[] => React.Children.map(sourceElements, (child: ReactElement) => {
     // If it's invalid react element element doesn't have props so no need to clone it
     if (React.isValidElement(child) === false) {
       return child;
@@ -34,12 +27,12 @@ export const Form = ({
 
     const isInputField = 'name' in childProps && 'id' in childProps;
 
-    let cloneElementInputProps = {};
+    let cloneElementInputProps: Obj = {};
 
     if (isInputField) {
       cloneElementInputProps = {
         onChange: _getEventHandler({ callback: childOnChange }),
-        onBlur: _getEventHandler({ callback: childOnBlur, handler: handlers.onBlur }),
+        onBlur: _getEventHandler({ callback: childOnBlur, handler: eventHandlers.onBlur }),
         value: childValue,
       };
 
@@ -59,22 +52,4 @@ export const Form = ({
   const formElements = addEventHandlersRecursively(children);
 
   return <form {...props} ref={bindUseForm.formRef}>{formElements}</form>;
-};
-
-Form.defaultProps = {
-  children: [],
-};
-
-Form.propTypes = {
-  children: oneOfType([
-    arrayOf(node),
-    node,
-  ]),
-  bindUseForm: shape({
-    // eslint-disable-next-line react/forbid-prop-types
-    formRef: object,
-    onChange: func,
-    onInput: func,
-    oBlur: func,
-  }).isRequired,
 };
