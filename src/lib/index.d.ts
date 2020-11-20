@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { htmlAttributes } from './enums';
 
-export type Obj = Record<key, Value>;
+export type Obj = Record<string, Value>;
 
 export interface IHtmlInputElement extends HTMLInputElement {
     validity: Obj;
