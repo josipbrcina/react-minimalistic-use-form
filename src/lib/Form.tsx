@@ -5,7 +5,7 @@ import { noop } from '../utils/noop';
 
 export const Form: React.FC<IForm> = ({
   children = [], bindUseForm, ...props
-}): JSX.Element => {
+}) => {
   if (bindUseForm === undefined) {
     throw new Error('Form is missing bindUseForm prop.');
   }
