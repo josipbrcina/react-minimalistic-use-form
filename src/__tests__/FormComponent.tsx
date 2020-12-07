@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   IOnSubmitCallbackFn, IonSubmitResponse, Obj, Form, useForm,
-} from '../lib/index';
+} from '../lib';
 
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 import { noop } from '../utils/noop';

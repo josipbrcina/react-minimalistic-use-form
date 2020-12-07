@@ -1,6 +1,6 @@
 import { reducer, getInitialState } from '../lib/state';
 import { STATE_ACTIONS } from '../lib/enums';
-import { IState } from '../lib/index';
+import { IState } from '../lib';
 
 describe('State Reducer', () => {
   it('Should throw exception if unsupported action type is dispatched', () => {

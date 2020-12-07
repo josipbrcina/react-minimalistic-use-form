@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IonSubmitResponse } from '../lib';
-import { useForm } from '../lib/useForm';
+import { useForm, IonSubmitResponse } from '../lib';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 import { noop } from '../utils/noop';
-import { IFormComponentProps } from "./FormComponent";
+import { IFormComponentProps } from './FormComponent';
 
 export const FormWithUseForm: React.FC<IFormComponentProps> = ({
   onSubmit: _onSubmit = noop,
-                                                                   addFormRef = true,
-initialValues = {},
-validateOnSubmit = false,
-validateOnInput = true,
-scrollToError = false,
-...props}
-) => {
+  addFormRef = true,
+  initialValues = {},
+  validateOnSubmit = false,
+  validateOnInput = true,
+  scrollToError = false,
+  ...props
+}) => {
   const {
     values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm, validateForm,
-  } = useForm({ initialValues, validateOnInput, validateOnSubmit, scrollToError, ...props });
+  } = useForm({
+    initialValues, validateOnInput, validateOnSubmit, scrollToError, ...props,
+  });
 
   const submitValues = ({
     // eslint-disable-next-line no-shadow
@@ -200,16 +201,16 @@ scrollToError = false,
         {renderFieldErrors(errors.color)}
       </div>
 
-        <div id="values">
-            {JSON.stringify(values)}
-        </div>
+      <div id="values">
+        {JSON.stringify(values)}
+      </div>
 
-        <div id="errors">
-            {JSON.stringify(errors)}
-        </div>
-        <div id="isFormValid">
-            {isFormValid.toString()}
-        </div>
+      <div id="errors">
+        {JSON.stringify(errors)}
+      </div>
+      <div id="isFormValid">
+        {isFormValid.toString()}
+      </div>
 
       <div className="d-flex flex-col mt-10">
         <button id="resetForm" className="button" type="button" onClick={resetForm}>Clear</button>

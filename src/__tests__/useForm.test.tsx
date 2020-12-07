@@ -1,13 +1,13 @@
-import React  from 'react';
-import {HTMLAttributes, mount, ReactWrapper} from 'enzyme';
-import { setNativeValue } from '../lib/useForm';
+import React from 'react';
+import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormWithUseForm } from './FormWithUseForm';
 import {
   ElementClassList, ElementValidity, IS_DIRTY_CLASS_NAME, ERROR_CLASS_NAME, initialValues,
 } from '../__mock__/mockData';
 import { ErrorBoundary } from './ErrorBoundary';
-import {IHtmlInputElement, Obj} from "../lib";
+import { setNativeValue } from '../lib/useForm';
+import { IHtmlInputElement, Obj } from '../lib';
 
 describe('form with useForm - Exception', () => {
   it('Should throw no form ref error', () => {
@@ -636,7 +636,6 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
-
 
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
