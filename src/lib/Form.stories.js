@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
 import { useForm } from './useForm';
-import { Form } from 'src/lib/Form';
+import { Form } from './Form';
 import '../style.css';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 

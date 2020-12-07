@@ -1,9 +1,19 @@
-import { reducer, getInitialState, STATE_ACTIONS } from 'src/lib/state';
+import { reducer, getInitialState } from '../lib/state';
+import { STATE_ACTIONS } from '../lib/enums';
+import { IState } from '../lib/index';
 
 describe('State Reducer', () => {
   it('Should throw exception if unsupported action type is dispatched', () => {
     try {
-      reducer({}, { type: 'test' });
+      const state: IState = {
+        values: {},
+        initialValues: {},
+        overriddenInitialValues: {},
+        errors: {},
+        initialIsFormValid: false,
+        isFormValid: false,
+      };
+      reducer(state, { type: 'test' });
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
       expect(error).toHaveProperty('message', 'Unsupported action type: "test" in useForm reducer.');
@@ -11,11 +21,17 @@ describe('State Reducer', () => {
   });
 
   it('Should set checked value as "value" for element type checkbox', () => {
-    const state = {
+    const state: IState = {
       values: {
         testCheckbox: false,
       },
+      initialValues: {},
+      overriddenInitialValues: {},
+      errors: {},
+      initialIsFormValid: false,
+      isFormValid: false,
     };
+
     const updatedState = reducer(state, {
       type: STATE_ACTIONS.SET_FIELD_VALUE,
       payload: {
@@ -25,7 +41,14 @@ describe('State Reducer', () => {
       },
     });
 
-    expect(updatedState).toEqual({ values: { testCheckbox: true } });
+    expect(updatedState).toEqual({
+      values: { testCheckbox: true },
+      initialValues: {},
+      overriddenInitialValues: {},
+      errors: {},
+      initialIsFormValid: false,
+      isFormValid: false,
+    });
   });
 });
 
