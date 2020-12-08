@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { useForm } from './useForm';
-import { Form } from './Form';
+import { useForm, Form, IonSubmitResponse } from './index';
 import '../style.css';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 
@@ -9,7 +8,7 @@ export default {
   title: 'Form component',
 };
 
-export function FormComponent() {
+export const FormComponent: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm,
   } = useForm({ initialValues: { email: '' } });
@@ -17,7 +16,7 @@ export function FormComponent() {
   const submitValues = ({
     // eslint-disable-next-line no-shadow
     event, errors, values, isFormValid,
-  }) => {
+  }: IonSubmitResponse) => {
     event.preventDefault();
     // eslint-disable-next-line no-console
     console.log({ errors, values, isFormValid });
@@ -155,4 +154,4 @@ export function FormComponent() {
       </div>
     </Form>
   );
-}
+};

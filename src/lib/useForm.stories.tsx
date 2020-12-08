@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { useForm } from './useForm';
+import { IonSubmitResponse, useForm } from './index';
 import '../style.css';
 import { renderFieldErrors } from '../utils/renderFieldErrors';
 
@@ -8,7 +8,7 @@ export default {
   title: 'useForm hook',
 };
 
-export function useFormHook() {
+export const useFormHook: React.FC = () => {
   const {
     values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
   } = useForm({ initialValues: { email: '', date: '1986-12-28', tel: '491761110093' } });
@@ -16,7 +16,7 @@ export function useFormHook() {
   const submitValues = ({
     // eslint-disable-next-line no-shadow
     event, errors, values, isFormValid,
-  }) => {
+  }: IonSubmitResponse) => {
     event.preventDefault();
     // eslint-disable-next-line no-console
     console.log({ errors, values, isFormValid });
@@ -154,4 +154,4 @@ export function useFormHook() {
       </div>
     </form>
   );
-}
+};

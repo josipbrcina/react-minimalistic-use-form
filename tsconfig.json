@@ -18,7 +18,8 @@
     "jsx": "react",
     "sourceMap": true,
     "downlevelIteration": true,
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "dist"
   },
   "include": ["src"],
   "exclude": [
@@ -26,7 +27,7 @@
     "src/__mock__",
     "src/__tests__",
     "src/utils/",
-    "src/lib/*.stories.js",
+    "src/lib/*.stories.tsx",
     "src/setupTests.js"
   ]
 }
