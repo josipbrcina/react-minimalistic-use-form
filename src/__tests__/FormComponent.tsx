@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  IOnSubmitCallbackFn, IonSubmitResponse, Obj, Form, useForm,
-} from '../lib';
+  IOnSubmitCallbackFn, IonSubmitResponse, Obj,
+} from '../lib/global_typings';
+import { Form, useForm } from '../lib';
 
-import { renderFieldErrors } from '../utils/renderFieldErrors';
+import { renderFieldErrors } from '../lib/renderFieldErrors';
 import { noop } from '../utils/noop';
 
 export interface IFormComponentProps {

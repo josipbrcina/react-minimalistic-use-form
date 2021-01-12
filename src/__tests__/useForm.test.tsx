@@ -7,7 +7,7 @@ import {
 } from '../__mock__/mockData';
 import { ErrorBoundary } from './ErrorBoundary';
 import { setNativeValue } from '../lib/useForm';
-import { IHtmlInputElement, Obj } from '../lib';
+import { IHtmlInputElement, Obj } from '../lib/global_typings';
 
 describe('form with useForm - Exception', () => {
   it('Should throw no form ref error', () => {

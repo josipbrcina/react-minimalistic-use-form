@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { eventHandlers } from './enums';
-import { Obj, IForm, EventHandler } from './index';
+import { Obj, IForm, EventHandler } from './global_typings';
 import { noop } from '../utils/noop';
 
 export const Form: React.FC<IForm> = ({

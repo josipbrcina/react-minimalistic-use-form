@@ -6,7 +6,7 @@ import { FormComponent } from './FormComponent';
 import {
   ElementClassList, ERROR_CLASS_NAME, IS_DIRTY_CLASS_NAME, initialValues, ElementValidity,
 } from '../__mock__/mockData';
-import { IHtmlInputElement, Obj } from '../lib';
+import { IHtmlInputElement, Obj } from '../lib/global_typings';
 
 describe('Form Component - Exception', () => {
   it('Should throw Form is missing bindUseForm prop error', () => {

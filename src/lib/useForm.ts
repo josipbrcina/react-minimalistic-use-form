@@ -14,7 +14,7 @@ import {
   IOnSubmitCallbackFn,
   Obj,
   IuseFormResponse,
-} from './index';
+} from './global_typings';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';

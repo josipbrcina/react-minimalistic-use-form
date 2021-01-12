@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useForm, IonSubmitResponse } from '../lib';
-import { renderFieldErrors } from '../utils/renderFieldErrors';
+import { IonSubmitResponse } from '../lib/global_typings';
+import { useForm } from '../lib';
+import { renderFieldErrors } from '../lib/renderFieldErrors';
 import { noop } from '../utils/noop';
 import { IFormComponentProps } from './FormComponent';
 
@@ -219,14 +219,4 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
       </div>
     </form>
   );
-};
-
-FormWithUseForm.defaultProps = {
-  onSubmit: noop,
-  addFormRef: true,
-};
-
-FormWithUseForm.propTypes = {
-  onSubmit: PropTypes.func,
-  addFormRef: PropTypes.bool,
 };

@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { useForm, Form, IonSubmitResponse } from './index';
+import { useForm, Form, IonSubmitResponse } from './global_typings';
 import '../style.css';
-import { renderFieldErrors } from '../utils/renderFieldErrors';
+import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
   title: 'Form component',
