@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { IonSubmitResponse, useForm } from './global_typings';
+import { IonSubmitResponse } from './global_typings';
+import { useForm } from './index';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 

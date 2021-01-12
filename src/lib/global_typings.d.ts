@@ -129,9 +129,3 @@ export interface IInitialState {
     initialValues?: Obj,
     validateOnSubmit?: boolean
 }
-
-export declare const Form: React.FC<IForm>;
-export declare const setNativeValue: ({ element, attributeToUpdate, value }: ISetNativeValue) => void;
-export declare const useForm: ({
-  initialValues, errorClassName, isFieldDirtyClassName, scrollToError, validateOnInput, validateOnSubmit }
-?: IUseForm) => IuseFormResponse;
