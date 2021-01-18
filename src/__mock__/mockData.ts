@@ -1,25 +1,47 @@
 // eslint-disable-next-line max-classes-per-file
 export class ElementClassList {
+  classList: Array<string>;
+
   constructor() {
     this.classList = [];
   }
 
-  add(className) {
+  add(className: string): ElementClassList {
     this.classList.push(className);
     return this;
   }
 
-  remove(className) {
+  remove(className: string): ElementClassList {
     this.classList = this.classList.filter(_classname => _classname !== className);
     return this;
   }
 
-  contains(className) {
+  contains(className: string): boolean {
     return this.classList.some(_className => _className === className);
   }
 }
 
 export class ElementValidity {
+  valid: boolean;
+
+  badInput: boolean;
+
+  patternMismatch: boolean;
+
+  rangeOverflow: boolean;
+
+  rangeUnderflow: boolean;
+
+  stepMismatch: boolean;
+
+  tooLong: boolean;
+
+  tooShort: boolean;
+
+  typeMismatch: boolean;
+
+  valueMissing: boolean;
+
   constructor({
     valid = true,
     badInput = false,
@@ -44,7 +66,8 @@ export class ElementValidity {
     this.valueMissing = valueMissing;
   }
 
-  setValidity({ name, value }) {
+  setValidity({ name, value }: {name: string, value: boolean}): void {
+    // @ts-ignore
     this[name] = value;
   }
 }

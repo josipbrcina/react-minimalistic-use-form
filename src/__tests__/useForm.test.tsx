@@ -1,12 +1,13 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { setNativeValue } from 'src/lib/useForm';
+import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
-import { FormWithUseForm } from './form';
+import { FormWithUseForm } from './FormWithUseForm';
 import {
   ElementClassList, ElementValidity, IS_DIRTY_CLASS_NAME, ERROR_CLASS_NAME, initialValues,
 } from '../__mock__/mockData';
 import { ErrorBoundary } from './ErrorBoundary';
+import { setNativeValue } from '../lib/useForm';
+import { IHtmlInputElement, Obj } from '../lib/global_typings';
 
 describe('form with useForm - Exception', () => {
   it('Should throw no form ref error', () => {
@@ -57,7 +58,8 @@ describe('form with useForm - Default values should be provided INITIAL VALUES',
 
     const inputDate = sut.find('#date');
     expect(inputDate.props().value).toEqual('2020-06-29');
-    expect(inputDate.instance().value).toEqual('2020-06-29');
+    const inputDateInstance = inputDate.instance() as unknown as IHtmlInputElement;
+    expect(inputDateInstance.value).toEqual('2020-06-29');
 
     const inputTel = sut.find('#tel');
     expect(inputTel.props().value).toEqual('+12345678');
@@ -119,51 +121,66 @@ describe('form with useForm - isFormValid', () => {
   });
   it('Should be boolean value', () => {
     const sut = mount(<FormWithUseForm validateOnSubmit />);
-    expect(sut.find('#isFormValid').props().isformvalid === 'true').toBeTruthy();
+    const isFormValid = sut.find('#isFormValid');
+
+    expect(isFormValid.props().children).toEqual('true');
   });
 });
 
 describe('form with useForm - ResetForm', () => {
-  const sut = mount(<FormWithUseForm validateOnSubmit initialValues={initialValues} />);
+  const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm validateOnSubmit initialValues={initialValues} />);
   const resetButton = sut.find('#resetForm');
-  const getElement = selector => sut.find(selector);
+  const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
   it('Should ADD "is-dirty" className on blur', () => {
     getElement('#email').simulate('blur');
-    expect(getElement('#email').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const email = sut.find('#email');
+    const emailInstance = email.instance() as unknown as IHtmlInputElement;
+    expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#password').simulate('blur');
-    expect(getElement('#password').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const passwordInstance = getElement('#password').instance() as unknown as IHtmlInputElement;
+    expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#text').simulate('blur');
-    expect(getElement('#text').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const textInstance = getElement('#text').instance() as unknown as IHtmlInputElement;
+    expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#search').simulate('blur');
-    expect(getElement('#search').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const searchInstance = getElement('#search').instance() as unknown as IHtmlInputElement;
+    expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#url').simulate('blur');
-    expect(getElement('#url').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const urlInstance = getElement('#url').instance() as unknown as IHtmlInputElement;
+    expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#number').simulate('blur');
-    expect(getElement('#number').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const numberInstance = getElement('#number').instance() as unknown as IHtmlInputElement;
+    expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#text_area').simulate('blur');
-    expect(getElement('#text_area').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const text_areaInstance = getElement('#text_area').instance() as unknown as IHtmlInputElement;
+    expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#checkbox').simulate('blur');
-    expect(getElement('#checkbox').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const checkboxInstance = getElement('#checkbox').instance() as unknown as IHtmlInputElement;
+    expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#select').simulate('blur');
-    expect(getElement('#select').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const selectInstance = getElement('#select').instance() as unknown as IHtmlInputElement;
+    expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#date').simulate('blur');
-    expect(getElement('#date').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const dateInstance = getElement('#date').instance() as unknown as IHtmlInputElement;
+    expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#tel').simulate('blur');
-    expect(getElement('#tel').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const telInstance = getElement('#tel').instance() as unknown as IHtmlInputElement;
+    expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#color').simulate('blur');
-    expect(getElement('#color').instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    const colorInstance = getElement('#color').instance() as unknown as IHtmlInputElement;
+    expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
   });
 
   it('Should update fields value on change', () => {
@@ -206,72 +223,84 @@ describe('form with useForm - ResetForm', () => {
 
   it('Should reset fields values, classNames and errors on "resetForm"', () => {
     resetButton.simulate('click');
+    const errors = getElement('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
 
-    const { errors } = getElement('#errors').props();
-    Object.values(errors).forEach(inputErrorsObject => {
+    Object.values(parsedErrors).forEach(inputErrorsObject => {
       expect(Object.keys(inputErrorsObject).length === 0).toBeTruthy();
     });
 
     const email = getElement('#email');
-    expect(email.props().value).toEqual('test@test.com');
-    expect(email.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(email.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const emailInstance = email.instance() as unknown as IHtmlInputElement;
+    expect(emailInstance.value).toEqual('test@test.com');
+    expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(emailInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const password = getElement('#password');
-    expect(getElement('#password').props().value).toEqual('password');
-    expect(password.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(password.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const passwordInstance = password.instance() as unknown as IHtmlInputElement;
+    expect(passwordInstance.value).toEqual('password');
+    expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(passwordInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text = getElement('#text');
-    expect(text.props().value).toEqual('text');
-    expect(text.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(text.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const textInstance = text.instance() as unknown as IHtmlInputElement;
+    expect(textInstance.value).toEqual('text');
+    expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(textInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const search = getElement('#search');
-    expect(search.props().value).toEqual('search');
-    expect(search.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(search.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const searchInstance = search.instance() as unknown as IHtmlInputElement;
+    expect(searchInstance.value).toEqual('search');
+    expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(searchInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const url = getElement('#url');
-    expect(url.props().value).toEqual('http://example.com');
-    expect(url.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(url.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const urlInstance = url.instance() as unknown as IHtmlInputElement;
+    expect(urlInstance.value).toEqual('http://example.com');
+    expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(urlInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const number = getElement('#number');
-    expect(number.props().value).toEqual('11');
-    expect(number.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(number.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const numberInstance = number.instance() as unknown as IHtmlInputElement;
+    expect(numberInstance.value).toEqual('11');
+    expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(numberInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text_area = getElement('#text_area');
-    expect(text_area.props().value).toEqual('foobar');
-    expect(text_area.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(text_area.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const text_areaInstance = text_area.instance() as unknown as IHtmlInputElement;
+    expect(text_areaInstance.value).toEqual('foobar');
+    expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(text_areaInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const checkbox = getElement('#checkbox');
-    expect(checkbox.props().value).toEqual(true);
-    expect(checkbox.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(checkbox.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const checkboxInstance = checkbox.instance() as unknown as IHtmlInputElement;
+    expect(checkboxInstance.value).toEqual('true');
+    expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(checkboxInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const select = getElement('#select');
-    expect(select.props().value).toEqual('option2');
-    expect(select.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(select.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const selectInstance = select.instance() as unknown as IHtmlInputElement;
+    expect(selectInstance.value).toEqual('option2');
+    expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(selectInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const date = getElement('#date');
-    expect(date.props().value).toEqual('2020-06-29');
-    expect(date.instance().value).toEqual('2020-06-29');
-    expect(date.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(date.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const dateInstance = date.instance() as unknown as IHtmlInputElement;
+    expect(dateInstance.value).toEqual('2020-06-29');
+    expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(dateInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const tel = getElement('#tel');
-    expect(tel.props().value).toEqual('+12345678');
-    expect(tel.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(tel.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const telInstance = tel.instance() as unknown as IHtmlInputElement;
+    expect(telInstance.value).toEqual('+12345678');
+    expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(telInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const color = getElement('#color');
-    expect(color.props().value).toEqual('#ffffff');
-    expect(color.instance().classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
-    expect(color.instance().classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    const colorInstance = color.instance() as unknown as IHtmlInputElement;
+    expect(colorInstance.value).toEqual('#ffffff');
+    expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(colorInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
   });
 });
 
@@ -281,8 +310,9 @@ describe('form with useForm - Input field validation', () => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     const textInput = sut.find('#password');
     textInput.simulate('blur');
+    const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
 
-    expect(textInput.instance().scrollIntoView).toBeCalled();
+    expect(textInputInstance.scrollIntoView).toBeCalled();
   });
 
   it('Should NOT scroll to error on input', () => {
@@ -290,8 +320,9 @@ describe('form with useForm - Input field validation', () => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     const textInput = sut.find('#password');
     textInput.simulate('blur');
+    const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
 
-    expect(textInput.instance().scrollIntoView).toBeCalledTimes(0);
+    expect(textInputInstance.scrollIntoView).toBeCalledTimes(0);
   });
 
   it('Should scroll to error on submit', () => {
@@ -301,87 +332,89 @@ describe('form with useForm - Input field validation', () => {
     submitButton.props().disabled = false;
     submitButton.simulate('submit');
     const textInput = sut.find('#password');
+    const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
 
-    expect(textInput.instance().scrollIntoView).toBeCalled();
-  });
-
-  it('Should validate field for badInput constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ number: 'foo' }} />);
-    const getElement = selector => sut.find(selector);
-
-    const validity = new ElementValidity({ valid: false, badInput: true });
-    const classList = new ElementClassList();
-
-    const numberInput = getElement('#number');
-    numberInput.simulate('blur', {
-      target: {
-        name: 'number', type: 'number', validity, classList,
-      },
-    });
-
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
-    expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
-    expect(validity.valid).toBe(false);
-    expect(getElement('#errors').props().errors.number.badInput).toBeDefined();
+    expect(textInputInstance.scrollIntoView).toBeCalled();
   });
 
   it('Should validate field for required constraint', () => {
-    const sut = mount(<FormWithUseForm />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const textInput = getElement('#text');
+
     textInput.simulate('blur');
-    let isValid = textInput.instance().validity.valid;
-    let { classList } = textInput.instance();
+    const textInputInstance = textInput.instance() as unknown as IHtmlInputElement;
+    let isValid = textInputInstance.validity.valid;
+    let { classList } = textInputInstance;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
-    expect(getElement('#errors').props().errors.text.valueMissing).toBeDefined();
 
-    textInput.instance().value = 'test text';
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.text.valueMissing).toBeDefined();
+
+    const textInputUpdatedInstance = textInput.instance() as unknown as IHtmlInputElement;
+
+    textInputUpdatedInstance.value = 'test text';
     textInput.simulate('change');
 
-    isValid = textInput.instance().validity.valid;
-    classList = textInput.instance().classList;
+    const textInputUpdatedInstance2 = textInput.instance() as unknown as IHtmlInputElement;
+
+    isValid = textInputUpdatedInstance2.validity.valid;
+    classList = textInputUpdatedInstance2.classList;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
-    expect(getElement('#errors').props().errors.text.valueMissing).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+    expect(parsedErrorsUpdated.text.valueMissing).toBeUndefined();
   });
 
   it('Should validate field for type constraint', () => {
-    const sut = mount(<FormWithUseForm />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const emailInput = getElement('#email');
     emailInput.simulate('blur');
-    emailInput.instance().value = 'foo';
+    const emailInputInstance = emailInput.instance() as unknown as IHtmlInputElement;
+    emailInputInstance.value = 'foo';
     emailInput.simulate('change');
-    let isValid = emailInput.instance().validity.valid;
-    let { classList } = emailInput.instance();
+    const emailInputUpdatedInstance = emailInput.instance() as unknown as IHtmlInputElement;
+    let isValid = emailInputUpdatedInstance.validity.valid;
+    let { classList } = emailInputUpdatedInstance;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
-    expect(getElement('#errors').props().errors.email.typeMismatch).toBeDefined();
 
-    emailInput.instance().value = 'foo@bar.com';
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+    expect(parsedErrors.email.typeMismatch).toBeDefined();
+
+    emailInputInstance.value = 'foo@bar.com';
     emailInput.simulate('change');
 
-    isValid = emailInput.instance().validity.valid;
-    classList = emailInput.instance().classList;
+    isValid = emailInputInstance.validity.valid;
+    classList = emailInputInstance.classList;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
-    expect(getElement('#errors').props().errors.email.typeMismatch).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+    expect(parsedErrorsUpdated.email.typeMismatch).toBeUndefined();
   });
 
   it('Should validate field for minLength constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ min_length_3: '12' }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ min_length_3: '12' }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, tooShort: true });
     const classList = new ElementClassList();
@@ -396,7 +429,11 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
-    expect(getElement('#errors').props().errors.min_length_3.tooShort).toBeDefined();
+
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.min_length_3.tooShort).toBeDefined();
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'tooShort', value: false });
@@ -409,12 +446,16 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
-    expect(getElement('#errors').props().errors.min_length_3.tooShort).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.min_length_3.tooShort).toBeUndefined();
   });
 
   it('Should validate field for maxLength constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ max_length_3: '1234' }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ max_length_3: '1234' }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, tooLong: true });
     const classList = new ElementClassList();
@@ -429,7 +470,11 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
-    expect(getElement('#errors').props().errors.max_length_3.tooLong).toBeDefined();
+
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.max_length_3.tooLong).toBeDefined();
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'tooLong', value: false });
@@ -442,91 +487,124 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
-    expect(getElement('#errors').props().errors.max_length_3.tooLong).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.max_length_3.tooLong).toBeUndefined();
   });
 
   it('Should validate field for min constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ number_min_3: 2 }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number_min_3: 2 }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const numberMin3Input = getElement('#number_min_3');
     numberMin3Input.simulate('blur');
-    let isValid = numberMin3Input.instance().validity.valid;
-    let { classList } = numberMin3Input.instance();
+    const numberMin3InputInstance = numberMin3Input.instance() as unknown as IHtmlInputElement;
+    let isValid = numberMin3InputInstance.validity.valid;
+    let { classList } = numberMin3InputInstance;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
-    expect(getElement('#errors').props().errors.number_min_3.rangeUnderflow).toBeDefined();
 
-    numberMin3Input.instance().value = 4;
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.number_min_3.rangeUnderflow).toBeDefined();
+
+    numberMin3InputInstance.value = '4';
     numberMin3Input.simulate('change');
 
-    isValid = numberMin3Input.instance().validity.valid;
-    classList = numberMin3Input.instance().classList;
+    isValid = numberMin3InputInstance.validity.valid;
+    classList = numberMin3InputInstance.classList;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
-    expect(getElement('#errors').props().errors.number_min_3.rangeUnderflow).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.number_min_3.rangeUnderflow).toBeUndefined();
   });
 
   it('Should validate field for max constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ number_max_3: 4 }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number_max_3: 4 }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const numberMax3Input = getElement('#number_max_3');
     numberMax3Input.simulate('blur');
 
-    let isValid = numberMax3Input.instance().validity.valid;
-    let { classList } = numberMax3Input.instance();
+    const numberMax3InputInstance = numberMax3Input.instance() as unknown as IHtmlInputElement;
+
+    let isValid = numberMax3InputInstance.validity.valid;
+    let { classList } = numberMax3InputInstance;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
-    expect(getElement('#errors').props().errors.number_max_3.rangeOverflow).toBeDefined();
 
-    numberMax3Input.instance().value = 2;
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.number_max_3.rangeOverflow).toBeDefined();
+
+    numberMax3InputInstance.value = '2';
     numberMax3Input.simulate('change');
 
-    isValid = numberMax3Input.instance().validity.valid;
-    classList = numberMax3Input.instance().classList;
+    isValid = numberMax3InputInstance.validity.valid;
+    classList = numberMax3InputInstance.classList;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
-    expect(getElement('#errors').props().errors.number_max_3.rangeOverflow).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.number_max_3.rangeOverflow).toBeUndefined();
   });
 
   it('Should validate field for pattern constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ pattern: 'foo' }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ pattern: 'foo' }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const patternInput = getElement('#pattern');
     patternInput.simulate('blur');
-    let isValid = patternInput.instance().validity.valid;
-    let { classList } = patternInput.instance();
+
+    const patternInputInstance = patternInput.instance() as unknown as IHtmlInputElement;
+    let isValid = patternInputInstance.validity.valid;
+    let { classList } = patternInputInstance;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
-    expect(getElement('#errors').props().errors.pattern.patternMismatch).toBeDefined();
 
-    patternInput.instance().value = 'A2323.1';
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.pattern.patternMismatch).toBeDefined();
+
+    patternInputInstance.value = 'A2323.1';
     patternInput.simulate('change');
 
-    isValid = patternInput.instance().validity.valid;
-    classList = patternInput.instance().classList;
+    isValid = patternInputInstance.validity.valid;
+    classList = patternInputInstance.classList;
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
-    expect(getElement('#errors').props().errors.pattern.patternMismatch).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.pattern.patternMismatch).toBeUndefined();
   });
 
   it('Should validate field for step constraint', () => {
-    const sut = mount(<FormWithUseForm initialValues={{ number: 0.123 }} />);
-    const getElement = selector => sut.find(selector);
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number: 0.123 }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, stepMismatch: true });
     const classList = new ElementClassList();
@@ -541,7 +619,11 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
-    expect(getElement('#errors').props().errors.number.stepMismatch).toBeDefined();
+
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.number.stepMismatch).toBeDefined();
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'stepMismatch', value: false });
@@ -554,7 +636,11 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
-    expect(getElement('#errors').props().errors.number.stepMismatch).toBeUndefined();
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.number.stepMismatch).toBeUndefined();
   });
 });
 

@@ -14,7 +14,7 @@ import {
   IOnSubmitCallbackFn,
   Obj,
   IuseFormResponse,
-} from './index';
+} from './global_typings';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -105,7 +105,9 @@ export const useForm = ({
       return throwFormRefError();
     }
 
-    return [...form.formElements]
+    const formElements = form.elements as unknown as IHtmlInputElement[];
+
+    return [...formElements]
       .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
   }, []);
 
