@@ -21,7 +21,7 @@
 ![](coverage-badges/badge-lines.svg)
 ![](coverage-badges/badge-statements.svg)
 
-[version-badge]: https://img.shields.io/badge/version-1.1.6-blue.svg
+[version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
 
 Minimalistic react hook for handling forms without tears.
 
