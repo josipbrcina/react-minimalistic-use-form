@@ -27,7 +27,6 @@
     "src/__mock__",
     "src/__tests__",
     "src/lib/*.stories.tsx",
-    "src/lib/renderFieldErrors.tsx",
-    "src/setupTests.js"
+    "src/lib/renderFieldErrors.tsx"
   ]
 }

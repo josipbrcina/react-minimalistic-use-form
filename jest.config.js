@@ -10,6 +10,6 @@ module.exports = {
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
   setupFilesAfterEnv: [
-    '<rootDir>/src/setupTests.js',
+    '<rootDir>/src/__tests__/setupTests.ts',
   ],
 };

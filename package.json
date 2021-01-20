@@ -44,6 +44,7 @@
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^6.1.10",
     "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/eslint-plugin-tslint": "^4.6.0",
