@@ -1,4 +1,6 @@
 - [react-minimalistic-use-form](#react-minimalistic-use-form)
+    + [Features](#features)
+      - [Current supported form fields](#current-supported-form-fields)
     + [Installation](#installation)
   * [Supported validation rules](#supported-validation-rules)
   + [Example usage](#example-usage)
@@ -8,13 +10,12 @@
   * [API](#api)
       - [useForm](#useform)
       - [Form](#form)
-  + [Features](#features)
-      - [Current supported form fields](#current-supported-form-fields)
-      - [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
+  * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
 
 # react-minimalistic-use-form
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
 ![](coverage-badges/badge-branches.svg)
 ![](coverage-badges/badge-functions.svg)
@@ -41,6 +42,31 @@ and `<Form />` component where Form component will bind values and event handler
 + NPM `npm i react-minimalistic-use-form`
 
 + YARN `yarn add react-minimalistic-use-form`
+
+### Features
+* Form state management
+* Native html5 form validation
+* Form validation `on input` or `on submit`
+* Automatically toggles error and "is-dirty" input class names
+* Scroll to error
+* Very lightweight with no dependencies
+* Typescript support
+
+#### Current supported form fields
++ input
+  * text
+  * number
+  * email
+  * password
+  * textarea
+  * checkbox
+  * radio
+  * select
+  * tel
+  * date
+  * search
+  * url
+  * color
 
 
 ### Supported validation rules
@@ -337,35 +363,9 @@ Form accepts all html5 form attributes along with one required:
 | property  	        |  description 	                              |   type            |    	
 |---	                |---	                                      |---	              |	
 |`bindUseForm`          | Object - contains formRef and eventHandlers | object *required  |
- 
-
-### Features
-* Form state management
-* Native html5 form validation
-* Form validation on input or on submit
-* Automatically toggles error and "is-dirty" input class names
-* Scroll to error
-* Very lightweight with no dependencies
-
-#### Current supported form fields
-+ input
-  * text
-  * number
-  * email
-  * password
-  * textarea
-  * checkbox
-  * radio
-  * select
-  * tel
-  * date
-  * search
-  * url
-  * color
 
 #### Planned upcoming features and TODO
 + FormComponent - Display errors next to input fields out-of-the-box
 + Custom validation
 + Opt-in scroll to error
-+ TypeScript support
 + Plugin support - interface for custom written plugins

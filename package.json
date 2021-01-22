@@ -89,14 +89,6 @@
     "typescript": "^4.0.3",
     "webpack": "^4.43.0"
   },
-  "jest": {
-    "coverageReporters": [
-      "json-summary",
-      "text",
-      "text-summary",
-      "lcov"
-    ]
-  },
   "files": [
     "dist"
   ],

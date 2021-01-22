@@ -15,6 +15,12 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: [
     '<rootDir>/src/__tests__/setupTests.ts',
   ],
+  coverageReporters: [
+    'json-summary',
+    'text',
+    'text-summary',
+    'lcov',
+  ],
 };
 
 export default config;
