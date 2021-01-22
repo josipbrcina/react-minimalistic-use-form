@@ -7,7 +7,7 @@ import {
 } from '../__mock__/mockData';
 import { ErrorBoundary } from './ErrorBoundary';
 import { setNativeValue } from '../lib/useForm';
-import { IHtmlInputElement, Obj } from '../lib/global_typings';
+import { Obj } from '../lib';
 
 describe('form with useForm - Exception', () => {
   it('Should throw no form ref error', () => {
@@ -58,7 +58,7 @@ describe('form with useForm - Default values should be provided INITIAL VALUES',
 
     const inputDate = sut.find('#date');
     expect(inputDate.props().value).toEqual('2020-06-29');
-    const inputDateInstance = inputDate.instance() as unknown as IHtmlInputElement;
+    const inputDateInstance = inputDate.instance() as unknown as HTMLInputElement;
     expect(inputDateInstance.value).toEqual('2020-06-29');
 
     const inputTel = sut.find('#tel');
@@ -135,51 +135,51 @@ describe('form with useForm - ResetForm', () => {
   it('Should ADD "is-dirty" className on blur', () => {
     getElement('#email').simulate('blur');
     const email = sut.find('#email');
-    const emailInstance = email.instance() as unknown as IHtmlInputElement;
+    const emailInstance = email.instance() as unknown as HTMLInputElement;
     expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#password').simulate('blur');
-    const passwordInstance = getElement('#password').instance() as unknown as IHtmlInputElement;
+    const passwordInstance = getElement('#password').instance() as unknown as HTMLInputElement;
     expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#text').simulate('blur');
-    const textInstance = getElement('#text').instance() as unknown as IHtmlInputElement;
+    const textInstance = getElement('#text').instance() as unknown as HTMLInputElement;
     expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#search').simulate('blur');
-    const searchInstance = getElement('#search').instance() as unknown as IHtmlInputElement;
+    const searchInstance = getElement('#search').instance() as unknown as HTMLInputElement;
     expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#url').simulate('blur');
-    const urlInstance = getElement('#url').instance() as unknown as IHtmlInputElement;
+    const urlInstance = getElement('#url').instance() as unknown as HTMLInputElement;
     expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#number').simulate('blur');
-    const numberInstance = getElement('#number').instance() as unknown as IHtmlInputElement;
+    const numberInstance = getElement('#number').instance() as unknown as HTMLInputElement;
     expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#text_area').simulate('blur');
-    const text_areaInstance = getElement('#text_area').instance() as unknown as IHtmlInputElement;
+    const text_areaInstance = getElement('#text_area').instance() as unknown as HTMLInputElement;
     expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#checkbox').simulate('blur');
-    const checkboxInstance = getElement('#checkbox').instance() as unknown as IHtmlInputElement;
+    const checkboxInstance = getElement('#checkbox').instance() as unknown as HTMLInputElement;
     expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#select').simulate('blur');
-    const selectInstance = getElement('#select').instance() as unknown as IHtmlInputElement;
+    const selectInstance = getElement('#select').instance() as unknown as HTMLInputElement;
     expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#date').simulate('blur');
-    const dateInstance = getElement('#date').instance() as unknown as IHtmlInputElement;
+    const dateInstance = getElement('#date').instance() as unknown as HTMLInputElement;
     expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#tel').simulate('blur');
-    const telInstance = getElement('#tel').instance() as unknown as IHtmlInputElement;
+    const telInstance = getElement('#tel').instance() as unknown as HTMLInputElement;
     expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
 
     getElement('#color').simulate('blur');
-    const colorInstance = getElement('#color').instance() as unknown as IHtmlInputElement;
+    const colorInstance = getElement('#color').instance() as unknown as HTMLInputElement;
     expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
   });
 
@@ -231,73 +231,73 @@ describe('form with useForm - ResetForm', () => {
     });
 
     const email = getElement('#email');
-    const emailInstance = email.instance() as unknown as IHtmlInputElement;
+    const emailInstance = email.instance() as unknown as HTMLInputElement;
     expect(emailInstance.value).toEqual('test@test.com');
     expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(emailInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const password = getElement('#password');
-    const passwordInstance = password.instance() as unknown as IHtmlInputElement;
+    const passwordInstance = password.instance() as unknown as HTMLInputElement;
     expect(passwordInstance.value).toEqual('password');
     expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(passwordInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text = getElement('#text');
-    const textInstance = text.instance() as unknown as IHtmlInputElement;
+    const textInstance = text.instance() as unknown as HTMLInputElement;
     expect(textInstance.value).toEqual('text');
     expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(textInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const search = getElement('#search');
-    const searchInstance = search.instance() as unknown as IHtmlInputElement;
+    const searchInstance = search.instance() as unknown as HTMLInputElement;
     expect(searchInstance.value).toEqual('search');
     expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(searchInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const url = getElement('#url');
-    const urlInstance = url.instance() as unknown as IHtmlInputElement;
+    const urlInstance = url.instance() as unknown as HTMLInputElement;
     expect(urlInstance.value).toEqual('http://example.com');
     expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(urlInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const number = getElement('#number');
-    const numberInstance = number.instance() as unknown as IHtmlInputElement;
+    const numberInstance = number.instance() as unknown as HTMLInputElement;
     expect(numberInstance.value).toEqual('11');
     expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(numberInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text_area = getElement('#text_area');
-    const text_areaInstance = text_area.instance() as unknown as IHtmlInputElement;
+    const text_areaInstance = text_area.instance() as unknown as HTMLInputElement;
     expect(text_areaInstance.value).toEqual('foobar');
     expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(text_areaInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const checkbox = getElement('#checkbox');
-    const checkboxInstance = checkbox.instance() as unknown as IHtmlInputElement;
+    const checkboxInstance = checkbox.instance() as unknown as HTMLInputElement;
     expect(checkboxInstance.value).toEqual('true');
     expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(checkboxInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const select = getElement('#select');
-    const selectInstance = select.instance() as unknown as IHtmlInputElement;
+    const selectInstance = select.instance() as unknown as HTMLInputElement;
     expect(selectInstance.value).toEqual('option2');
     expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(selectInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const date = getElement('#date');
-    const dateInstance = date.instance() as unknown as IHtmlInputElement;
+    const dateInstance = date.instance() as unknown as HTMLInputElement;
     expect(dateInstance.value).toEqual('2020-06-29');
     expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(dateInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const tel = getElement('#tel');
-    const telInstance = tel.instance() as unknown as IHtmlInputElement;
+    const telInstance = tel.instance() as unknown as HTMLInputElement;
     expect(telInstance.value).toEqual('+12345678');
     expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(telInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const color = getElement('#color');
-    const colorInstance = color.instance() as unknown as IHtmlInputElement;
+    const colorInstance = color.instance() as unknown as HTMLInputElement;
     expect(colorInstance.value).toEqual('#ffffff');
     expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(colorInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
@@ -344,7 +344,7 @@ describe('form with useForm - Input field validation', () => {
     const textInput = getElement('#text');
 
     textInput.simulate('blur');
-    const textInputInstance = textInput.instance() as unknown as IHtmlInputElement;
+    const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
     let isValid = textInputInstance.validity.valid;
     let { classList } = textInputInstance;
 
@@ -357,12 +357,12 @@ describe('form with useForm - Input field validation', () => {
 
     expect(parsedErrors.text.valueMissing).toBeDefined();
 
-    const textInputUpdatedInstance = textInput.instance() as unknown as IHtmlInputElement;
+    const textInputUpdatedInstance = textInput.instance() as unknown as HTMLInputElement;
 
     textInputUpdatedInstance.value = 'test text';
     textInput.simulate('change');
 
-    const textInputUpdatedInstance2 = textInput.instance() as unknown as IHtmlInputElement;
+    const textInputUpdatedInstance2 = textInput.instance() as unknown as HTMLInputElement;
 
     isValid = textInputUpdatedInstance2.validity.valid;
     classList = textInputUpdatedInstance2.classList;
@@ -382,10 +382,10 @@ describe('form with useForm - Input field validation', () => {
 
     const emailInput = getElement('#email');
     emailInput.simulate('blur');
-    const emailInputInstance = emailInput.instance() as unknown as IHtmlInputElement;
+    const emailInputInstance = emailInput.instance() as unknown as HTMLInputElement;
     emailInputInstance.value = 'foo';
     emailInput.simulate('change');
-    const emailInputUpdatedInstance = emailInput.instance() as unknown as IHtmlInputElement;
+    const emailInputUpdatedInstance = emailInput.instance() as unknown as HTMLInputElement;
     let isValid = emailInputUpdatedInstance.validity.valid;
     let { classList } = emailInputUpdatedInstance;
 
@@ -500,7 +500,7 @@ describe('form with useForm - Input field validation', () => {
 
     const numberMin3Input = getElement('#number_min_3');
     numberMin3Input.simulate('blur');
-    const numberMin3InputInstance = numberMin3Input.instance() as unknown as IHtmlInputElement;
+    const numberMin3InputInstance = numberMin3Input.instance() as unknown as HTMLInputElement;
     let isValid = numberMin3InputInstance.validity.valid;
     let { classList } = numberMin3InputInstance;
 
@@ -536,7 +536,7 @@ describe('form with useForm - Input field validation', () => {
     const numberMax3Input = getElement('#number_max_3');
     numberMax3Input.simulate('blur');
 
-    const numberMax3InputInstance = numberMax3Input.instance() as unknown as IHtmlInputElement;
+    const numberMax3InputInstance = numberMax3Input.instance() as unknown as HTMLInputElement;
 
     let isValid = numberMax3InputInstance.validity.valid;
     let { classList } = numberMax3InputInstance;
@@ -573,7 +573,7 @@ describe('form with useForm - Input field validation', () => {
     const patternInput = getElement('#pattern');
     patternInput.simulate('blur');
 
-    const patternInputInstance = patternInput.instance() as unknown as IHtmlInputElement;
+    const patternInputInstance = patternInput.instance() as unknown as HTMLInputElement;
     let isValid = patternInputInstance.validity.valid;
     let { classList } = patternInputInstance;
 

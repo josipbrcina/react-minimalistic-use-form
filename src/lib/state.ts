@@ -9,7 +9,7 @@ import {
   ISetIsFormValidAction,
   ISetFieldErrorsAction,
   IResetFormAction, ISetOverriddenInitialValuesAction,
-} from './global_typings';
+} from './index';
 
 const getInitialErrorsState = (initialValues: Obj) => Object.keys(initialValues).reduce((acc: Obj, fieldName) => {
   acc[fieldName] = {};

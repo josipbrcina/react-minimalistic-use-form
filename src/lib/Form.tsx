@@ -1,6 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { ChangeEvent, FocusEvent, ReactElement } from 'react';
 import { eventHandlers } from './enums';
-import { Obj, IForm, EventHandler } from './global_typings';
+import { Obj, IForm, EventHandler } from './index';
 import { noop } from '../utils/noop';
 
 export const Form: React.FC<IForm> = ({
@@ -10,7 +10,7 @@ export const Form: React.FC<IForm> = ({
     throw new Error('Form is missing bindUseForm prop.');
   }
 
-  const _getEventHandler = ({ callback = noop, handler = eventHandlers.onChange }: {callback?: EventHandler, handler?: string}) => (event: Event) => {
+  const _getEventHandler = ({ callback = noop, handler = eventHandlers.onChange }: {callback?: EventHandler, handler?: eventHandlers}) => (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     bindUseForm[handler](event);
     callback(event);
   };

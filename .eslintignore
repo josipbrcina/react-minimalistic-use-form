@@ -6,3 +6,4 @@ scripts
 .storybook
 dist
 coverage
+library-check

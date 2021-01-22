@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   IOnSubmitCallbackFn, IonSubmitResponse, Obj,
-} from '../lib/global_typings';
-import { Form, useForm } from '../lib';
+  Form, useForm,
+} from '../lib';
 
 import { renderFieldErrors } from '../lib/renderFieldErrors';
 import { noop } from '../utils/noop';
@@ -33,12 +33,11 @@ export const FormComponent: React.FC<IFormComponentProps> = ({
   });
 
   const submitValues = ({
-    // eslint-disable-next-line no-shadow
-    event, errors, values, isFormValid,
+    event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
     _onSubmit({
-      event, errors, values, isFormValid,
+      event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
     });
   };
 

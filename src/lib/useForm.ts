@@ -10,11 +10,10 @@ import {
   ISetNativeValue,
   IUseForm,
   IValidityDefaultErrorMessages,
-  IHtmlInputElement,
   IOnSubmitCallbackFn,
   Obj,
   IuseFormResponse,
-} from './global_typings';
+} from './index';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -94,18 +93,18 @@ export const useForm = ({
   validateOnSubmit = false,
 }: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
-  const formRef = useRef<HTMLFormElement>();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const throwFormRefError = (): never => {
     throw new Error('formRef is empty! useForm "formRef" needs to be attached to form element');
   };
 
-  const getFormElements = useCallback((form?: HTMLFormElement): IHtmlInputElement[] => {
-    if (form === undefined) {
+  const getFormElements = useCallback((form?: HTMLFormElement | null): HTMLInputElement[] => {
+    if (form === null || form === undefined) {
       return throwFormRefError();
     }
 
-    const formElements = form.elements as unknown as IHtmlInputElement[];
+    const formElements = form.elements as unknown as HTMLInputElement[];
 
     return [...formElements]
       .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
@@ -120,13 +119,13 @@ export const useForm = ({
     return _isFormValid;
   }, [getFormElements]);
 
-  const _scrollToError = (element: IHtmlInputElement): void => {
+  const _scrollToError = (element: HTMLInputElement): void => {
     const inputLabel = element.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
     const elementToScrollInto = inputLabel ?? element;
     elementToScrollInto.scrollIntoView();
   };
 
-  const updateError = useCallback((element: IHtmlInputElement) => {
+  const updateError = useCallback((element: HTMLInputElement) => {
     const {
       validity, classList, name,
     } = element;
@@ -142,7 +141,7 @@ export const useForm = ({
     const elementErrors: Obj = {};
 
     for (const validityName in validity) {
-      /* eslint-disable-next-line */
+      //@ts-ignore eslint-disable-next-line
       if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) {
         elementErrors[validityName] = validityDefaultErrorMessages[validityName](element);
       }

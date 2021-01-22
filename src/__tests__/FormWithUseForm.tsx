@@ -1,6 +1,5 @@
 import React from 'react';
-import { IonSubmitResponse } from '../lib/global_typings';
-import { useForm } from '../lib';
+import { IonSubmitResponse, useForm } from '../lib';
 import { renderFieldErrors } from '../lib/renderFieldErrors';
 import { noop } from '../utils/noop';
 import { IFormComponentProps } from './FormComponent';
@@ -21,12 +20,11 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
   });
 
   const submitValues = ({
-    // eslint-disable-next-line no-shadow
-    event, errors, values, isFormValid,
+    event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
     _onSubmit({
-      event, errors, values, isFormValid,
+      event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
     });
   };
 

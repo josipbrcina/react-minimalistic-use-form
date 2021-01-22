@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { IonSubmitResponse } from './global_typings';
-import { useForm } from './index';
+import { useForm, IonSubmitResponse } from './index';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
@@ -15,12 +14,11 @@ export const useFormHook: React.FC = () => {
   } = useForm({ initialValues: { email: '', date: '1986-12-28', tel: '491761110093' } });
 
   const submitValues = ({
-    // eslint-disable-next-line no-shadow
-    event, errors, values, isFormValid,
+    event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
     // eslint-disable-next-line no-console
-    console.log({ errors, values, isFormValid });
+    console.log({ errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid });
   };
 
   return (
