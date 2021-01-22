@@ -141,8 +141,8 @@ export const useForm = ({
     const elementErrors: Obj = {};
 
     for (const validityName in validity) {
-      //@ts-ignore eslint-disable-next-line
-      if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) {
+      // @ts-ignore
+      if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) { // eslint-disable-line
         elementErrors[validityName] = validityDefaultErrorMessages[validityName](element);
       }
     }
@@ -301,10 +301,6 @@ export const useForm = ({
 
   useEffect(() => {
     const { current: form } = formRef;
-    if (form === undefined) {
-      throwFormRefError();
-    }
-
     bindInitialValues(form);
   }, [bindInitialValues]);
 
