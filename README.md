@@ -12,7 +12,7 @@
       - [Form](#form)
   * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
 
-# react-minimalistic-use-form
+# <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/main/RMUF_logo.png' height='120' alt='RMUF Logo' aria-label='react minimalistic use form' /> React Minimalistic Use Form 
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
@@ -24,13 +24,13 @@
 
 [version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
 
-Minimalistic react hook for handling forms without tears.
+Minimalistic react hook for handling forms without much pain.
 
 React-minimalistic-use-form provides minimalistic way to handle forms in react.
 It takes care of form state and validation. Validation is based on [html5 form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation).
 It uses [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation) and
 validates form based on input `validity`.
-This library has just peer dependencies `"react": ">=16.13.1"`, `"react-dom": ">=16.13.1"` and absolutely **ZERO OTHER DEPENDENCIES**, it's lightweight and yet so powerful! 
+This library has just peer dependencies `"react": ">=16.13.1"`, `"react-dom": ">=16.13.1"` and absolutely **ZERO OTHER DEPENDENCIES**, it's lightweight and powerful! 
 
 It provides ability to validate form fields on user input or on form submit.
 It automatically adds or removes error class name to input field if field is valid or not.  
@@ -94,50 +94,44 @@ import React from 'react';
 import { useForm } from 'react-minimalistic-use-form';
 
 export const MyForm = () => {
-const {
-    isFormValid, values, onChange, onBlur, onSubmit, errors, formRef
-  } = useForm({ initialValues: { field1: 'foo', field2: 'bar'} });
+    const {
+        isFormValid, values, onChange, onBlur, onSubmit, errors, formRef
+      } = useForm({ initialValues: { field1: 'foo', field2: 'bar'} });
+    
+    const submitForm = ({ event, values, errors, isFormValid }) => {
+     event.preventDefault();
+     /* do some logic here... */
+    };
 
-const submitForm = ({ event, values, errors, isFormValid }) => {
- event.preventDefault();
- /* do some logic here... */
-}
-
-return {
+  return (
     <form onSubmit={onSubmit(submitForm)} noValidate ref={formRef}>
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
-            <input id="field1" name="field1" type="email" required value={values.field1} onChange={onChange} onBlur={onBlur} />
-            {errros.field1 && Object.values(errors.field1).map((error, index) => (
-            <span key={index} className="text-error">
-              {error}
-              <br />
-            </span>}
-          </div>
-        </div>
-       
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field2" className="m-0 mb-1 p-0">Field2</label>
-            <input id="field2" name="field2" type="text" minLength="5" required value={values.field2} onChange={onChange} onBlur={onBlur} />
-            {errros.field2 && Object.values(errors.field2).map((error, index) => (
-              <span key={index} className="text-error">
-                {error}
-                <br />
-              </span>}
-          </div>
-        </div>
-
-      <div className="d-flex flex-row">
-        <div className="col-12">
-          <button type="submit" className="mt-3 mb-0" disabled={isFormValid === false}>
-            <span>Start!</span>
-          </button>
-        </div>
+      <div>
+        <label htmlFor="field1">Field1</label>
+        <input id="field1" name="field1" type="email" required value={values.field1} onChange={onChange} onBlur={onBlur} />
+        {errros.field1 && Object.values(errors.field1).map((error, index) => (
+        <span key={index} className="text-error">
+          {error}
+          <br />
+        </span>))}
       </div>
-</form>
-}
+       
+      <div>
+        <label htmlFor="field2">Field2</label>
+        <input id="field2" name="field2" type="text" minLength="5" required value={values.field2} onChange={onChange} onBlur={onBlur} />
+        {errros.field2 && Object.values(errors.field2).map((error, index) => (
+          <span key={index} className="text-error">
+            {error}
+            <br />
+          </span>))}
+      </div>
+
+      <div>
+        <button type="submit" disabled={isFormValid === false}>
+          <span>Start!</span>
+        </button>
+      </div>
+    </form>
+  );
 }
 ```
 
@@ -154,50 +148,46 @@ import React from 'react';
 import { useForm, Form } from 'react-minimalistic-use-form';
 
 export const MyForm = () => {
-const {
-    isFormValid, onSubmit, errors, bindUseForm
-  } = useForm({ initialValues: { field1: 'foo', field2: 'bar'} });
-
-const submitForm = ({ event, values, errors, isFormValid }) => {
- event.preventDefault();
- /* do some logic here... */
-}
-
-return {
-    <Form onSubmit={onSubmit(submitForm)} noValidate bindUseForm={bindUseForm}>
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
+    const {
+        isFormValid, onSubmit, errors, bindUseForm
+      } = useForm({ initialValues: { field1: 'foo', field2: 'bar'} });
+    
+    const submitForm = ({ event, values, errors, isFormValid }) => {
+     event.preventDefault();
+     /* do some logic here... */
+    };
+    
+    return (
+        <Form onSubmit={onSubmit(submitForm)} noValidate bindUseForm={bindUseForm}>
+          <div>
+            <label htmlFor="field1">Field1</label>
             <input id="field1" name="field1" type="text" required />
-            {errros.field1 && Object.values(errors.field1).map((error, index) => (
-            <span key={index} className="text-error">
-              {error}
-              <br />
-            </span>}
+            {errors.field1 && Object.values(errors.field1).map((error, index) => (
+                <span key={index} className="text-error">
+                  {error}
+                  <br />
+                </span>
+             ))}
           </div>
-        </div>
-       
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field2" className="m-0 mb-1 p-0">Field2</label>
+           
+           <div>
+            <label htmlFor="field2">Field2</label>
             <input id="field2" name="field2" type="text" required minLength={4} />
-            {errros.field2 && Object.values(errors.field2).map((error, index) => (
+            {errors.field2 && Object.values(errors.field2).map((error, index) => (
               <span key={index} className="text-error">
                 {error}
                 <br />
-              </span>}
+              </span>))}
           </div>
-        </div>
-
-      <div className="d-flex flex-row">
-        <div className="col-12">
-          <button type="submit" className="mt-3 mb-0" disabled={isFormValid === false}>
-            <span>Start!</span>
-          </button>
-        </div>
-      </div>
-    </Form>
-    }
+           
+          <div>
+            <button type="submit" disabled={isFormValid === false}>
+              <span>Start!</span>
+            </button>
+          </div>
+         
+        </Form>
+    );
 }
 ```
 
@@ -218,7 +208,7 @@ trigger input validation. If field has validity: `false` an error className `has
 will be attached to input field. As soon as field validity is valid, error class is removed from the field.
 
 `errors` object contains all form field errors in format:
-```javascript
+```
 errors: {
   [fieldName]: {
     [validityName]: 'Error message',
@@ -244,43 +234,41 @@ import React, { useState} from 'react';
 import { useForm, Form } from 'react-minimalistic-use-form';
 
 export const MyForm = () => {
-const {
+  const {
     isFormValid, onChange, onBlur, onSubmit, formRef
   } = useForm();
   
   const [controlledField1, setControlledField1] = useState("field1");
+  
   const _onChange = event => {
     setControlledField1(event.target.value);
     onChange(event); // useForm onChange needs to be called!
-  }
+  };
+
   const _onBlur = event => {
     /* some logic goes here */
     onBlur(event); // useForm onBlur needs to be called!
-  }
+  };
 
-const submitForm = ({ event, values, errors, isFormValid }) => {
- event.preventDefault();
- /* do some logic here... */
-}
-
-return {
+  const submitForm = ({ event, values, errors, isFormValid }) => {
+    event.preventDefault();
+    /* do some logic here... */
+  };
+    
+  return (
     <form onSubmit={onSubmit(submitForm)} noValidate ref={formRef}>
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
-            <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} onBlur={_onBlur} />
-          </div>
-        </div>
-
-      <div className="d-flex flex-row">
-        <div className="col-12">
-          <button type="submit" className="mt-3 mb-0" disabled={isFormValid === false}>
-            <span>Start!</span>
-          </button>
-        </div>
+      <div>
+        <label htmlFor="field1">Field1</label>
+          <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} onBlur={_onBlur} />
       </div>
-</form>
-}
+           
+      <div>
+        <button type="submit" disabled={isFormValid === false}>
+          <span>Start!</span>
+        </button>
+      </div>
+    </form>
+  );
 }
 ```
 
@@ -296,32 +284,28 @@ const {
   const [controlledField1, setControlledField1] = useState("field1");
   const _onChange = event => {
     setControlledField1(event.target.value);
-  }
+  };
 
 const submitForm = ({ event, values, errors, isFormValid }) => {
  event.preventDefault();
  /* do some logic here... */
-}
+};
 
 
-return {
+return (
     <Form onSubmit={onSubmit(submitForm)} noValidate bindUseForm={bindUseForm}>
-       <div className="d-flex flex-row">
-          <div className="col-12 mt-3">
-            <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
-            <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} />
-          </div>
-        </div>
-
-      <div className="d-flex flex-row">
-        <div className="col-12">
-          <button type="submit" className="mt-3 mb-0" disabled={isFormValid === false}>
-            <span>Start!</span>
-          </button>
-        </div>
+      <div className="col-12 mt-3">
+        <label htmlFor="field1" className="m-0 mb-1 p-0">Field1</label>
+        <input id="field1" name="field1" type="email" value={controlledField1} onChange={_onChange} />
       </div>
-</Form>
-}
+       
+      <div className="col-12">
+        <button type="submit" className="mt-3 mb-0" disabled={isFormValid === false}>
+          <span>Start!</span>
+        </button>
+      </div>
+    </Form>
+  );
 }
 ```
 
