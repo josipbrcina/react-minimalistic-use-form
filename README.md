@@ -1,4 +1,4 @@
-- [react-minimalistic-use-form](#react-minimalistic-use-form)
+- [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
     + [Features](#features)
       - [Current supported form fields](#current-supported-form-fields)
     + [Installation](#installation)
@@ -11,8 +11,13 @@
       - [useForm](#useform)
       - [Form](#form)
   * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
+  
+<p align="center">
+ <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/master/RMUF_logo.png' height='200' alt='RMUF Logo' aria-label='react minimalistic use form' />
+</p>
 
-# <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/master/RMUF_logo.png' height='120' alt='RMUF Logo' aria-label='react minimalistic use form' /> React Minimalistic Use Form 
+<h1 align="center">React Minimalistic Use Form </h1> 
+
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
@@ -24,7 +29,7 @@
 
 [version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
 
-Minimalistic react hook for handling forms without much pain.
+# Minimalistic react hook for handling forms without much pain.
 
 React-minimalistic-use-form provides minimalistic way to handle forms in react.
 It takes care of form state and validation. Validation is based on [html5 form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation).
