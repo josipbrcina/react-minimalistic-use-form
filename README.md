@@ -1,17 +1,3 @@
-- [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
-    + [Features](#features)
-      - [Current supported form fields](#current-supported-form-fields)
-    + [Installation](#installation)
-  * [Supported validation rules](#supported-validation-rules)
-  + [Example usage](#example-usage)
-     - [EXPLICIT FORM CONTROL](#explicit-form-control)
-     - [IMPLICIT FORM CONTROL](#implicit-form-control)
-     - [Custom controlled inputs](#custom-controlled-inputs)
-  * [API](#api)
-      - [useForm](#useform)
-      - [Form](#form)
-  * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
-  
 <p align="center">
  <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/master/RMUF_logo.png' height='200' alt='RMUF Logo' aria-label='react minimalistic use form' />
 </p>
@@ -28,6 +14,21 @@
 ![](coverage-badges/badge-statements.svg)
 
 [version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
+
+# Table of contents
+- [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
+    + [Features](#features)
+      - [Current supported form fields](#current-supported-form-fields)
+    + [Installation](#installation)
+  * [Supported validation rules](#supported-validation-rules)
+  + [Example usage](#example-usage)
+     - [EXPLICIT FORM CONTROL](#explicit-form-control)
+     - [IMPLICIT FORM CONTROL](#implicit-form-control)
+     - [Custom controlled inputs](#custom-controlled-inputs)
+  * [API](#api)
+      - [useForm](#useform)
+      - [Form](#form)
+  * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
 
 # Minimalistic react hook for handling forms without much pain.
 
