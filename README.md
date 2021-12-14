@@ -4,6 +4,8 @@
 
 <h1 align="center">React Minimalistic Use Form </h1> 
 
+<div align="center">
+
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
@@ -12,6 +14,8 @@
 ![](coverage-badges/badge-functions.svg)
 ![](coverage-badges/badge-lines.svg)
 ![](coverage-badges/badge-statements.svg)
+
+</div>
 
 [version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
 
