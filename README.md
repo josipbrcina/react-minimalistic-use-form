@@ -12,7 +12,7 @@
       - [Form](#form)
   * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
 
-# <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/main/RMUF_logo.png' height='120' alt='RMUF Logo' aria-label='react minimalistic use form' /> React Minimalistic Use Form 
+# <img src='https://raw.githubusercontent.com/josipbrcina/react-minimalistic-use-form/master/RMUF_logo.png' height='120' alt='RMUF Logo' aria-label='react minimalistic use form' /> React Minimalistic Use Form 
 ![version][version-badge]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
