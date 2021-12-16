@@ -22,17 +22,19 @@
 # Table of contents
 - [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
     + [Features](#features)
-      - [Current supported form fields](#current-supported-form-fields)
+      - [Current Supported Form Fields](#current-supported-form-fields)
     + [Installation](#installation)
-  * [Supported validation rules](#supported-validation-rules)
-  + [Example usage](#example-usage)
-     - [EXPLICIT FORM CONTROL](#explicit-form-control)
-     - [IMPLICIT FORM CONTROL](#implicit-form-control)
-     - [Custom controlled inputs](#custom-controlled-inputs)
+  * [Supported Validation Rules](#supported-validation-rules)
+  + [Example Usage](#example-usage)
+     - [Explicit Form Control](#explicit-form-control)
+     - [Implicit Form Control](#implicit-form-control)
+     - [Custom Controlled Inputs](#custom-controlled-inputs)
   * [API](#api)
       - [useForm](#useform)
+        - [Scroll to Error](#scroll-to-error)
+        - [Plugins](#plugins)
       - [Form](#form)
-  * [Planned upcoming features and TODO's](#planned-upcoming-features-and-todo)
+  * [Planned Upcoming Features](#planned-upcoming-features-and-todo)
 
 # Minimalistic react hook for handling forms without much pain.
 
@@ -324,14 +326,36 @@ return (
 #### useForm
 useForm accepts configuration object with following options:
 
-| property  	        |  description 	                      |   type  | default     |   	
-|---	                |---	                              |---	    |---	      |	
-|`initialValues`        | Form initial values                 | object  | {}   	      |   	
-|`errorClassName`       | Input field error class name        | string  | "has-error" |   	
-|`isFieldDirtyClassName`| Input field "touched" class name    | string  | "is-dirty"  |   	
-|`scrollToError`  	    | Scroll to form field that has error.| boolean | false   	  |   	
-|`validateOnInput`  	| Validate form on user input.  	  | boolean | true   	  |   	
-|`validateOnSubmit`  	| Validate form on submit.   	      | boolean | false   	  |   	
+| property  	        |  description 	                                |   type  | default     |   	
+|---	                |---	                                        |---	  |---	        |	
+|`initialValues`        | Form initial values                           | object  | {}   	    |   	
+|`errorClassName`       | Input field error class name                  | string  | "has-error" |   	
+|`isFieldDirtyClassName`| Input field "touched" class name              | string  | "is-dirty"  |   	
+|`scrollToError`  	    | Scroll to form input field that has an error. | boolean | false   	|   	
+|`scrollToErrorOptions` | Scroll to error options                       | object  | undefined   |  	
+|`validateOnInput`  	| Validate form on user input.  	            | boolean | true   	    |   	
+|`validateOnSubmit`  	| Validate form on submit.   	                | boolean | false   	|
+|`plugins`  	        | Plugins to opt-in with custom logic.          | object  | {}   	    |
+
+##### Scroll to Error
+- scrollToError - If enabled useForm will scroll to element in case input has an error.
+It will try to find input label to scroll to or if no label found it will scroll to input field.
+By default useForm is using `Element.ScrollIntoView()` with provided `scrollToErrorOptions`;
+
+- scrollToErrorOptions - options to be passed in as an argument to `Element.ScrollIntoView()`.
+
+- What options are supported and how scrollIntoView works, which browsers are supported etc. check out official
+documentation on [MDN - Element.ScrollIntoView()](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView)                      	
+
+##### Plugins
+
+Use Form offers possibility to opt-in via `plugins` prop and change default useForm capabilities.
+Currently supported plugins:
+- `scrollToError` - scrolltoError plugin is a function that will be called on input field error.
+useForm calls a scrollToError plugin function with one argument, the DOM label element (if one found) or input element itself.
+ If scrollToError plugin is provided the default `Element.ScrollIntoView()` is overridden and hence ignored.  
+
+
 
 useForm in return provides:
 + resetForm - `function` - resets form to initial state.
@@ -360,6 +384,4 @@ Form accepts all html5 form attributes along with one required:
 
 #### Planned upcoming features and TODO
 + FormComponent - Display errors next to input fields out-of-the-box
-+ Custom validation
-+ Opt-in scroll to error
-+ Plugin support - interface for custom written plugins
++ Support for validator plugin
