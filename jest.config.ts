@@ -2,9 +2,7 @@ import { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   verbose: true,
-  roots: [
-    '<rootDir>/src',
-  ],
+  rootDir: '.',
   testMatch: [
     '**/?(*.)+(spec|test).+(ts|tsx|js)',
   ],
@@ -21,6 +19,7 @@ const config: Config.InitialOptions = {
     'text-summary',
     'lcov',
   ],
+  maxWorkers: '50%',
 };
 
 export default config;
