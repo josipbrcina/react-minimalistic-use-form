@@ -6,13 +6,25 @@ import { htmlAttributes } from './enums';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Obj = Record<string, any>;
 
+export interface IPluginsObject {
+    scrollToError?: (element: HTMLElement) => Promise<unknown> | void;
+}
+
+export interface IScrollToErrorOptions {
+    behaviour?: 'auto' | 'smooth';
+    block?: 'start' | 'center' | 'end' | 'nearest';
+    inline?: 'start' | 'center' | 'end' | 'nearest';
+}
+
 export interface IUseForm {
     initialValues?: Obj;
     errorClassName?: string;
     isFieldDirtyClassName?: string;
     scrollToError?: boolean;
+    scrollToErrorOptions?: IScrollToErrorOptions;
     validateOnInput?: boolean;
     validateOnSubmit?: boolean;
+    plugins?: IPluginsObject
 }
 
 export interface ISetNativeValue {

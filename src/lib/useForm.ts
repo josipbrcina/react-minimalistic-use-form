@@ -1,6 +1,7 @@
 import React, {
   useRef, useEffect, useCallback, useMemo, useReducer,
 } from 'react';
+
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { getInitialState, reducer } from './state';
 import {
@@ -14,6 +15,7 @@ import {
   Obj,
   IuseFormResponse,
 } from './index';
+import { validatePlugins } from '../utils/validatePlugins';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -89,8 +91,10 @@ export const useForm = ({
   errorClassName = ERROR_CLASS_NAME,
   isFieldDirtyClassName = IS_DIRTY_CLASS_NAME,
   scrollToError = false,
+  scrollToErrorOptions,
   validateOnInput = true,
   validateOnSubmit = false,
+  plugins = {},
 }: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
   const formRef = useRef<HTMLFormElement>(null);
@@ -112,25 +116,30 @@ export const useForm = ({
 
   const validateForm = useCallback(() => {
     const { current: form } = formRef;
-    const _isFormValid = getFormElements(form).every(element => element.validity.valid === true);
+    const _isFormValid = getFormElements(form).every(element => element.validity.valid);
 
     dispatch({ type: STATE_ACTIONS.SET_IS_FORM_VALID, payload: { isFormValid: _isFormValid } });
 
     return _isFormValid;
   }, [getFormElements]);
 
-  const _scrollToError = (element: HTMLInputElement): void => {
-    const inputLabel = element.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
+  const _scrollToError = useCallback(async (element: HTMLInputElement): Promise<void> => {
+    const inputLabel = element?.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
     const elementToScrollInto = inputLabel ?? element;
-    elementToScrollInto.scrollIntoView();
-  };
+
+    if (plugins?.scrollToError !== undefined) {
+      await plugins.scrollToError(elementToScrollInto);
+    }
+
+    elementToScrollInto.scrollIntoView(scrollToErrorOptions);
+  }, [plugins, scrollToErrorOptions]);
 
   const updateError = useCallback((element: HTMLInputElement) => {
     const {
       validity, classList, name,
     } = element;
 
-    if (validity.valid === true) {
+    if (validity.valid) {
       classList.remove(errorClassName);
       dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: {} } });
 
@@ -154,7 +163,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, scrollToError]);
+  }, [errorClassName, scrollToError, _scrollToError]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -220,6 +229,7 @@ export const useForm = ({
       const _formElements = getFormElements(formRef.current);
       _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError(element) }), {});
       _isFormValid = validateForm();
+
       if (scrollToError === true) {
         const elementToScrollInto = _formElements.find(element => element.validity.valid === false);
         if (elementToScrollInto !== undefined) {
@@ -298,6 +308,10 @@ export const useForm = ({
 
     dispatch({ type: STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES, payload: { overriddenInitialValues: updatedInitialValues } });
   }, [getElementInitialValue, state.initialValues, getFormElements]);
+
+  const _validatePlugins = useCallback(() => validatePlugins(plugins), [plugins]);
+
+  useEffect(_validatePlugins, []);
 
   useEffect(() => {
     const { current: form } = formRef;
