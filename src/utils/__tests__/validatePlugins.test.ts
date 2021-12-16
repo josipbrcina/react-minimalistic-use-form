@@ -8,6 +8,10 @@ describe('validatePlugins utility function', () => {
   });
 
   it('Should not throw if scrollToError is a function', () => {
-    expect(() => validatePlugins({ scrollToError: noop })).not.toThrow(Error);
+    expect(() => validatePlugins({ scrollToError: noop })).not.toThrow('Plugin scrollToError must be a type of function!');
+  });
+
+  it('Should not throw if scrollToError is not defined', () => {
+    expect(() => validatePlugins({})).not.toThrow('Plugin scrollToError must be a type of function!');
   });
 });
