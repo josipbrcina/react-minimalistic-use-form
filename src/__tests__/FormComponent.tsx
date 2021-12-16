@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   IOnSubmitCallbackFn, IonSubmitResponse, Obj,
-  Form, useForm,
+  Form, useForm, IPluginsObject,
 } from '../lib';
 
 import { renderFieldErrors } from '../lib/renderFieldErrors';
@@ -15,6 +15,7 @@ export interface IFormComponentProps {
     validateOnInput?: boolean,
     scrollToError?: boolean,
     addFormRef?: boolean,
+    plugins?: IPluginsObject
 }
 
 export const FormComponent: React.FC<IFormComponentProps> = ({

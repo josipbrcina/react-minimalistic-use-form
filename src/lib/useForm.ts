@@ -123,12 +123,13 @@ export const useForm = ({
     return _isFormValid;
   }, [getFormElements]);
 
-  const _scrollToError = useCallback(async (element: HTMLInputElement): Promise<void> => {
+  const _scrollToError = useCallback(async (element: HTMLInputElement): Promise<unknown> => {
     const inputLabel = element?.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
     const elementToScrollInto = inputLabel ?? element;
 
     if (plugins?.scrollToError !== undefined) {
       await plugins.scrollToError(elementToScrollInto);
+      return;
     }
 
     elementToScrollInto.scrollIntoView(scrollToErrorOptions);

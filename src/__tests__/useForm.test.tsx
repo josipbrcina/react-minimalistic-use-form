@@ -315,6 +315,20 @@ describe('form with useForm - Input field validation', () => {
     expect(textInputInstance.scrollIntoView).toBeCalled();
   });
 
+  it('Should scroll to error on input with custom scrollToError plugin', () => {
+    const scrollToError = jest.fn();
+    const sut = mount(<FormWithUseForm scrollToError plugins={{ scrollToError }} />);
+
+    const textInput = sut.find('#password');
+    textInput.simulate('blur');
+
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
+
+    expect(textInputInstance.scrollIntoView).not.toBeCalled();
+    expect(scrollToError).toBeCalled();
+  });
+
   it('Should NOT scroll to error on input', () => {
     const sut = mount(<FormWithUseForm scrollToError validateOnInput={false} />);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
