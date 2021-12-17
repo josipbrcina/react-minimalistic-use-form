@@ -17,7 +17,7 @@
 
 </div>
 
-[version-badge]: https://img.shields.io/badge/version-1.2.0-blue.svg
+[version-badge]: https://img.shields.io/badge/version-1.3.0-blue.svg
 
 # Table of contents
 - [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
