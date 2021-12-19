@@ -64,7 +64,7 @@ and `<Form />` component where Form component will bind values and event handler
 * Automatically toggles error and "is-dirty" input class names
 * Scroll to error
 * Very lightweight with no dependencies
-* Typescript support\
+* Typescript support
 * Opt-in via plugins
 
 #### Current supported form fields
