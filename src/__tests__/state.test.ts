@@ -12,6 +12,7 @@ describe('State Reducer', () => {
         errors: {},
         initialIsFormValid: false,
         isFormValid: false,
+        isSubmitting: false,
       };
       reducer(state, { type: 'test' });
     } catch (error) {
@@ -30,6 +31,7 @@ describe('State Reducer', () => {
       errors: {},
       initialIsFormValid: false,
       isFormValid: false,
+      isSubmitting: false,
     };
 
     const updatedState = reducer(state, {
@@ -48,6 +50,37 @@ describe('State Reducer', () => {
       errors: {},
       initialIsFormValid: false,
       isFormValid: false,
+      isSubmitting: false,
+    });
+  });
+  it('Should set isSubmitting if SET_IS_SUBMITTING action type is dispatched', () => {
+    const state: IState = {
+      values: {
+        testCheckbox: false,
+      },
+      initialValues: {},
+      overriddenInitialValues: {},
+      errors: {},
+      initialIsFormValid: false,
+      isFormValid: false,
+      isSubmitting: false,
+    };
+
+    const updatedState = reducer(state, {
+      type: STATE_ACTIONS.SET_IS_SUBMITTING,
+      payload: { isSubmitting: true },
+    });
+
+    expect(updatedState).toEqual({
+      values: {
+        testCheckbox: false,
+      },
+      initialValues: {},
+      overriddenInitialValues: {},
+      errors: {},
+      initialIsFormValid: false,
+      isFormValid: false,
+      isSubmitting: true,
     });
   });
 });
@@ -61,6 +94,7 @@ describe('getInitialState', () => {
       errors: {},
       initialIsFormValid: false,
       isFormValid: false,
+      isSubmitting: false,
     });
   });
 
@@ -83,6 +117,7 @@ describe('getInitialState', () => {
       errors: {},
       initialIsFormValid: true,
       isFormValid: true,
+      isSubmitting: false,
     });
   });
 });

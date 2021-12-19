@@ -9,6 +9,7 @@ import {
   ISetIsFormValidAction,
   ISetFieldErrorsAction,
   IResetFormAction, ISetOverriddenInitialValuesAction,
+  ISetIsSubmittingAction,
 } from './index';
 
 const getInitialErrorsState = (initialValues: Obj) => Object.keys(initialValues).reduce((acc: Obj, fieldName) => {
@@ -26,6 +27,7 @@ export const getInitialState = ({
   errors: {},
   initialIsFormValid: validateOnSubmit,
   isFormValid: validateOnSubmit,
+  isSubmitting: false,
 });
 
 // The Type Guard Functions
@@ -47,6 +49,10 @@ function isResetFormAction(action: Action): action is IResetFormAction {
 
 function isSetOverriddenInitialValuesAction(action: Action): action is ISetOverriddenInitialValuesAction {
   return action.type === STATE_ACTIONS.SET_OVERRIDDEN_INITIAL_VALUES;
+}
+
+function isSetIsSubmittingAction(action: Action): action is ISetIsSubmittingAction {
+  return action.type === STATE_ACTIONS.SET_IS_SUBMITTING;
 }
 
 export const reducer: React.Reducer<IState, Action> = (state, action): IState => {
@@ -99,6 +105,15 @@ export const reducer: React.Reducer<IState, Action> = (state, action): IState =>
       values: overriddenInitialValues,
       overriddenInitialValues,
       errors: getInitialErrorsState(overriddenInitialValues),
+    };
+  }
+
+  if (isSetIsSubmittingAction(action)) {
+    const { isSubmitting } = action.payload;
+
+    return {
+      ...state,
+      isSubmitting,
     };
   }
 
