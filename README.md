@@ -33,6 +33,8 @@
       - [useForm](#useform)
         - [Scroll to Error](#scroll-to-error)
         - [Plugins](#plugins)
+        - [useForm in return provides](#useform-in-return-provides)
+        - [Form submission](#form-submission)
       - [Form](#form)
   * [Planned Upcoming Features](#planned-upcoming-features-and-todo)
 
@@ -356,7 +358,7 @@ Currently supported plugins:
 useForm calls a scrollToError plugin function with one argument, the DOM label element (if one found) or input element itself.
  If scrollToError plugin is provided the default `Element.ScrollIntoView()` is overridden and hence ignored.  
 
-useForm in return provides:
+##### useForm in return provides:
 + resetForm - `function` - resets form to initial state.
 + onChange - `function` - event handler needed for handling validation and input state.
 + onBlur - `function` - event handler needed for handling form validation
