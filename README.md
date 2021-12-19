@@ -17,7 +17,7 @@
 
 </div>
 
-[version-badge]: https://img.shields.io/badge/version-1.3.0-blue.svg
+[version-badge]: https://img.shields.io/badge/version-1.4.0-blue.svg
 
 # Table of contents
 - [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
@@ -62,7 +62,8 @@ and `<Form />` component where Form component will bind values and event handler
 * Automatically toggles error and "is-dirty" input class names
 * Scroll to error
 * Very lightweight with no dependencies
-* Typescript support
+* Typescript support\
+* Opt-in via plugins
 
 #### Current supported form fields
 + input
@@ -355,8 +356,6 @@ Currently supported plugins:
 useForm calls a scrollToError plugin function with one argument, the DOM label element (if one found) or input element itself.
  If scrollToError plugin is provided the default `Element.ScrollIntoView()` is overridden and hence ignored.  
 
-
-
 useForm in return provides:
 + resetForm - `function` - resets form to initial state.
 + onChange - `function` - event handler needed for handling validation and input state.
@@ -369,11 +368,19 @@ It returns an object with `{ event, errors, values, isFormValid }`
 + values - `object` - form values
 + errors - `object` - form errors
 + bindUseForm - `object` - *required to be attached to `<Form />` to automatically bind formRef and event handlers
++ isSubmitting - `boolean` - Boolean flag describing is form being in submission state
++ setIsSubmitting - `function` - Function to Toggle `isSubmitting` state
 
 NOTE: `isFormValid` initial value === `validateOnSubmit`. By `default` validateOnSubmit value is `false` which means 
 form initial `isFormValid` state is false as well. You can choose how to handle initial isFormValid state by combining 
 `validateOnInput` and manually triggering `validateForm` once your component is mounted, by just validating on submit
 or by turning ON both validations. 
+
+##### Form Submission
+1. UseForm will set `isSubmitting` to `true` when form is submitted. 
+2. If `validateOnSubmit` is `true` it will run validation and update `isFormValid` and `errors`.
+3. It Call your registered submission handler i.e. `onSubmit({ event, isFormValid, errors, values });` 
+4. You have to call `setIsSubmitting(false)`.
 
 #### Form
 Form accepts all html5 form attributes along with one required:
