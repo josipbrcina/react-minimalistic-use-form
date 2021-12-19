@@ -28,7 +28,7 @@ export const FormComponent: React.FC<IFormComponentProps> = ({
   ...props
 }) => {
   const {
-    values, errors, isFormValid, onSubmit, bindUseForm, resetForm, validateForm,
+    values, errors, isFormValid, onSubmit, bindUseForm, resetForm, validateForm, isSubmitting,
   } = useForm({
     initialValues, validateOnSubmit, scrollToError, validateOnInput, ...props,
   });
@@ -37,7 +37,7 @@ export const FormComponent: React.FC<IFormComponentProps> = ({
     event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
-    _onSubmit({
+    return _onSubmit({
       event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
     });
   };
@@ -222,6 +222,10 @@ export const FormComponent: React.FC<IFormComponentProps> = ({
       </div>
       <div id="isFormValid">
         {isFormValid.toString()}
+      </div>
+
+      <div id="isSubmitting">
+        {isSubmitting.toString()}
       </div>
 
       <div className="d-flex flex-col mt-10">

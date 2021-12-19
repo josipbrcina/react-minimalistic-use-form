@@ -316,7 +316,7 @@ describe('FormComponent - ResetForm', () => {
   });
 });
 
-describe('FormComponent - Input field validation', () => {
+describe('FormComponent - Scroll to Error', () => {
   it('Should scroll to error on input', () => {
     const sut = mount(<FormComponent scrollToError />);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -339,17 +339,19 @@ describe('FormComponent - Input field validation', () => {
 
   it('Should scroll to error on submit', async () => {
     const sut = mount(<FormComponent scrollToError validateOnInput={false} validateOnSubmit />);
-    await waitForComponentToPaint(sut);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     const submitButton = sut.find({ type: 'submit' });
     submitButton.props().disabled = false;
     submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
     const textInput = sut.find('#password');
     const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
 
     expect(textInputInstance.scrollIntoView).toBeCalled();
   });
+});
 
+describe('FormComponent - Input field validation', () => {
   it('Should validate field for required constraint', () => {
     const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormComponent />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);

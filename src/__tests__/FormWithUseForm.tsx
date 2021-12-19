@@ -14,7 +14,7 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
   ...props
 }) => {
   const {
-    values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm, validateForm,
+    values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm, validateForm, isSubmitting,
   } = useForm({
     initialValues, validateOnInput, validateOnSubmit, scrollToError, ...props,
   });
@@ -23,7 +23,7 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
     event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
-    _onSubmit({
+    return _onSubmit({
       event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
     });
   };
@@ -206,8 +206,13 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
       <div id="errors">
         {JSON.stringify(errors)}
       </div>
+
       <div id="isFormValid">
         {isFormValid.toString()}
+      </div>
+
+      <div id="isSubmitting">
+        {isSubmitting.toString()}
       </div>
 
       <div className="d-flex flex-col mt-10">

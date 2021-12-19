@@ -1,5 +1,6 @@
 import React from 'react';
 import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormWithUseForm } from './FormWithUseForm';
 import {
@@ -8,6 +9,13 @@ import {
 import { ErrorBoundary } from './ErrorBoundary';
 import { setNativeValue } from '../lib/useForm';
 import { Obj } from '../lib';
+
+const waitForComponentToPaint = async (wrapper: ReactWrapper) => {
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    wrapper.update();
+  });
+};
 
 describe('form with useForm - Exception', () => {
   it('Should throw no form ref error', () => {
@@ -304,7 +312,7 @@ describe('form with useForm - ResetForm', () => {
   });
 });
 
-describe('form with useForm - Input field validation', () => {
+describe('form with useForm - Scroll To Error', () => {
   it('Should scroll to error on input', () => {
     const sut = mount(<FormWithUseForm scrollToError />);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -339,18 +347,21 @@ describe('form with useForm - Input field validation', () => {
     expect(textInputInstance.scrollIntoView).toBeCalledTimes(0);
   });
 
-  it('Should scroll to error on submit', () => {
+  it('Should scroll to error on submit', async () => {
     const sut = mount(<FormWithUseForm scrollToError validateOnInput={false} validateOnSubmit />);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     const submitButton = sut.find({ type: 'submit' });
     submitButton.props().disabled = false;
     submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
     const textInput = sut.find('#password');
     const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
 
     expect(textInputInstance.scrollIntoView).toBeCalled();
   });
+});
 
+describe('form with useForm - Input field validation', () => {
   it('Should validate field for required constraint', () => {
     const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
