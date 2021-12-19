@@ -164,7 +164,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, scrollToError, _scrollToError]);
+  }, [errorClassName, _scrollToError]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -210,7 +210,7 @@ export const useForm = ({
         name, type, checked, value,
       },
     });
-  }, [isFieldDirtyClassName, updateError, validateForm, validateOnInput]);
+  }, [isFieldDirtyClassName, updateError, validateForm, validateOnInput, scrollToError]);
 
   const onBlur = useCallback(({ target }) => {
     // once blur is triggered, input is set to dirty which _flags_ onChange
@@ -220,10 +220,14 @@ export const useForm = ({
     if (validateOnInput === true) {
       updateError({ element: target, shouldScrollToError: scrollToError });
     }
-  }, [isFieldDirtyClassName, updateError, validateOnInput]);
+  }, [isFieldDirtyClassName, updateError, validateOnInput, scrollToError]);
+
+  const setIsSubmitting = useCallback((isSubmitting) => {
+    dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
+  }, []);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
-    dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: true } });
+    setIsSubmitting(true);
 
     let _isFormValid = state.isFormValid;
     let _errors = state.errors;
@@ -242,14 +246,9 @@ export const useForm = ({
       }
     }
 
-    try {
-      await callbackFn({
-        event, isFormValid: _isFormValid, errors: _errors, values: state.values,
-      });
-      dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: false } });
-    } catch (error) {
-      dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: false } });
-    }
+    await callbackFn({
+      event, isFormValid: _isFormValid, errors: _errors, values: state.values,
+    });
   };
 
   /**
@@ -343,5 +342,6 @@ export const useForm = ({
     values: state.values,
     errors: state.errors,
     bindUseForm,
+    setIsSubmitting,
   };
 };

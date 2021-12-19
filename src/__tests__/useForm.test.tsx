@@ -312,6 +312,36 @@ describe('form with useForm - ResetForm', () => {
   });
 });
 
+describe('FormComponent - onSubmit', () => {
+  it('onSubmit should set isSubmitting to TRUE', async () => {
+    const sut = mount(<FormWithUseForm validateOnInput={false} validateOnSubmit />);
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
+    const isSubmitting = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmitting.props().children as string)).toBe(true);
+  });
+
+  it('setIsSubmitting should set isSubmitting to FALSE', async () => {
+    const sut = mount(<FormWithUseForm validateOnInput={false} validateOnSubmit />);
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
+    const isSubmitting = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmitting.props().children as string)).toBe(true);
+
+    const setIsSubmittingFalseButton = sut.find('#setIsSubmitting');
+
+    setIsSubmittingFalseButton.simulate('click');
+    await waitForComponentToPaint(sut);
+    const isSubmittingAfterSubmission = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmittingAfterSubmission.props().children as string)).toBe(false);
+  });
+});
+
 describe('form with useForm - Scroll To Error', () => {
   it('Should scroll to error on input', () => {
     const sut = mount(<FormWithUseForm scrollToError />);

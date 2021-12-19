@@ -1,6 +1,8 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
+import {
+  HTMLAttributes, mount, ReactWrapper,
+} from 'enzyme';
 import { ErrorBoundary } from './ErrorBoundary';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormComponent } from './FormComponent';
@@ -313,6 +315,36 @@ describe('FormComponent - ResetForm', () => {
     expect(colorInstance.value).toEqual('#ffffff');
     expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
     expect(colorInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
+  });
+});
+
+describe('FormComponent - onSubmit', () => {
+  it('onSubmit should set isSubmitting to TRUE', async () => {
+    const sut = mount(<FormComponent validateOnInput={false} validateOnSubmit />);
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
+    const isSubmitting = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmitting.props().children as string)).toBe(true);
+  });
+
+  it('setIsSubmitting should set isSubmitting to FALSE', async () => {
+    const sut = mount(<FormComponent validateOnInput={false} validateOnSubmit />);
+    const submitButton = sut.find({ type: 'submit' });
+    submitButton.simulate('submit');
+    await waitForComponentToPaint(sut);
+    const isSubmitting = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmitting.props().children as string)).toBe(true);
+
+    const setIsSubmittingFalseButton = sut.find('#setIsSubmitting');
+
+    setIsSubmittingFalseButton.simulate('click');
+    await waitForComponentToPaint(sut);
+    const isSubmittingAfterSubmission = sut.find('#isSubmitting');
+
+    expect(JSON.parse(isSubmittingAfterSubmission.props().children as string)).toBe(false);
   });
 });
 

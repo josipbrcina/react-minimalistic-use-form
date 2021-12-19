@@ -85,6 +85,7 @@ export interface IuseFormResponse {
     values: Obj,
     errors: Obj,
     bindUseForm: IBindUseFormProp,
+    setIsSubmitting: (isSubmitting: boolean) => void
 }
 
 export interface IonSubmitResponse {
