@@ -135,7 +135,7 @@ export const useForm = ({
     elementToScrollInto.scrollIntoView(scrollToErrorOptions);
   }, [plugins, scrollToErrorOptions]);
 
-  const updateError = useCallback((element: HTMLInputElement) => {
+  const updateError = useCallback(({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean}) => {
     const {
       validity, classList, name,
     } = element;
@@ -159,7 +159,7 @@ export const useForm = ({
 
     dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: elementErrors } });
 
-    if (scrollToError === true) {
+    if (shouldScrollToError) {
       _scrollToError(element);
     }
 
@@ -199,7 +199,7 @@ export const useForm = ({
     // Input is dirty - checking for validity live...
     if (validateOnInput === true) {
       if (classList.contains(isFieldDirtyClassName) === true) {
-        updateError(target);
+        updateError({ element: target, shouldScrollToError: scrollToError });
       }
       validateForm();
     }
@@ -218,7 +218,7 @@ export const useForm = ({
     target.classList.add(isFieldDirtyClassName);
 
     if (validateOnInput === true) {
-      updateError(target);
+      updateError({ element: target, shouldScrollToError: scrollToError });
     }
   }, [isFieldDirtyClassName, updateError, validateOnInput]);
 
@@ -230,11 +230,12 @@ export const useForm = ({
 
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
-      _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError(element) }), {});
+      _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError({ element, shouldScrollToError: false }) }), {});
       _isFormValid = validateForm();
 
       if (scrollToError === true) {
         const elementToScrollInto = _formElements.find(element => element.validity.valid === false);
+
         if (elementToScrollInto !== undefined) {
           _scrollToError(elementToScrollInto);
         }
