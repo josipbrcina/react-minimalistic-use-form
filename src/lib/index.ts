@@ -80,6 +80,7 @@ export interface IuseFormResponse {
     onSubmit: (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => void,
     validateForm: () => boolean,
     isFormValid: boolean,
+    isSubmitting: boolean,
     formRef: RefObject<HTMLFormElement> | undefined,
     values: Obj,
     errors: Obj,
@@ -100,6 +101,7 @@ export interface IState {
     errors: Obj;
     initialIsFormValid: boolean;
     isFormValid: boolean;
+    isSubmitting: boolean;
 }
 
 interface IInputField {
@@ -127,6 +129,10 @@ export interface ISetFieldErrorsAction extends Action {
 
 export interface ISetOverriddenInitialValuesAction extends Action {
     payload: { overriddenInitialValues: Obj };
+}
+
+export interface ISetIsSubmittingAction extends Action {
+    payload: { isSubmitting: boolean };
 }
 
 export interface Action {
