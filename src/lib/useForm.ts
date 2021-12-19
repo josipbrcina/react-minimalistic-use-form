@@ -222,7 +222,9 @@ export const useForm = ({
     }
   }, [isFieldDirtyClassName, updateError, validateOnInput]);
 
-  const onSubmit = (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => {
+  const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
+    dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: true } });
+
     let _isFormValid = state.isFormValid;
     let _errors = state.errors;
 
@@ -239,9 +241,14 @@ export const useForm = ({
       }
     }
 
-    return callbackFn({
-      event, isFormValid: _isFormValid, errors: _errors, values: state.values,
-    });
+    try {
+      await callbackFn({
+        event, isFormValid: _isFormValid, errors: _errors, values: state.values,
+      });
+      dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: false } });
+    } catch (error) {
+      dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting: false } });
+    }
   };
 
   /**
@@ -330,6 +337,7 @@ export const useForm = ({
     onSubmit,
     validateForm,
     isFormValid: state.isFormValid,
+    isSubmitting: state.isSubmitting,
     formRef,
     values: state.values,
     errors: state.errors,

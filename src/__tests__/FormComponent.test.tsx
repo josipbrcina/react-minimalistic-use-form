@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
 import { ErrorBoundary } from './ErrorBoundary';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
@@ -7,6 +8,13 @@ import {
   ElementClassList, ERROR_CLASS_NAME, IS_DIRTY_CLASS_NAME, initialValues, ElementValidity,
 } from '../__mock__/mockData';
 import { Obj } from '../lib';
+
+const waitForComponentToPaint = async (wrapper: ReactWrapper) => {
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    wrapper.update();
+  });
+};
 
 describe('Form Component - Exception', () => {
   it('Should throw Form is missing bindUseForm prop error', () => {
@@ -329,8 +337,9 @@ describe('FormComponent - Input field validation', () => {
     expect(textInputInstance.scrollIntoView).toBeCalledTimes(0);
   });
 
-  it('Should scroll to error on submit', () => {
+  it('Should scroll to error on submit', async () => {
     const sut = mount(<FormComponent scrollToError validateOnInput={false} validateOnSubmit />);
+    await waitForComponentToPaint(sut);
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
     const submitButton = sut.find({ type: 'submit' });
     submitButton.props().disabled = false;
