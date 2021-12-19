@@ -237,8 +237,8 @@ export const useForm = ({
       _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError({ element, shouldScrollToError: false }) }), {});
       _isFormValid = validateForm();
 
-      if (scrollToError === true) {
-        const elementToScrollInto = _formElements.find(element => element.validity.valid === false);
+      if (!_isFormValid && scrollToError === true) {
+        const elementToScrollInto = _formElements.find(element => !element.validity.valid);
 
         if (elementToScrollInto !== undefined) {
           _scrollToError(elementToScrollInto);
