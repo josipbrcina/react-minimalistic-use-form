@@ -7,6 +7,7 @@
 <div align="center">
 
 ![version][version-badge]
+![][version-size]
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/josipbrcina/react-minimalistic-use-form/blob/master/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![npm downloads](https://img.shields.io/npm/dt/react-minimalistic-use-form.svg?style=flat-square&label=npm%20downloads)](<>)
@@ -18,6 +19,7 @@
 </div>
 
 [version-badge]: https://img.shields.io/badge/version-1.4.0-blue.svg
+[version-size]: https://img.shields.io/bundlephobia/minzip/react-minimalistic-use-form/1.4.0
 
 # Table of contents
 - [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
