@@ -3,6 +3,7 @@ import { HTMLAttributes, mount, ReactWrapper } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormWithUseForm } from './FormWithUseForm';
+import { FormWithUseFormPlugins } from './FormWithUseFormPlugins';
 import {
   ElementClassList, ElementValidity, IS_DIRTY_CLASS_NAME, ERROR_CLASS_NAME, initialValues,
 } from '../__mock__/mockData';
@@ -696,6 +697,54 @@ describe('form with useForm - Input field validation', () => {
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.number.stepMismatch).toBeUndefined();
+  });
+
+  it('Validate plugin - Should validate synchronously', () => {
+    const validate = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj | undefined => {
+      if (name === 'password_confirm' && value !== values.password) {
+        return ({ passwordMismatch: 'Passwords do not match!' });
+      }
+    };
+
+    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseFormPlugins plugins={{ validate }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
+
+    const passwordInput = getElement('#password');
+    const passwordInstance = passwordInput.instance() as unknown as HTMLInputElement;
+    passwordInstance.value = 'password';
+    passwordInput.simulate('change');
+
+    const passwordConfirmInput = getElement('#password_confirm');
+    const passwordConfirmInstance = passwordConfirmInput.instance() as unknown as HTMLInputElement;
+    passwordConfirmInstance.value = 'foo';
+    passwordConfirmInput.simulate('change');
+
+    let isValid = passwordConfirmInstance.validity.valid;
+    let { classList } = passwordConfirmInstance;
+
+    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
+    expect(isValid).toBe(true);
+
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.password_confirm.passwordMismatch).toBeDefined();
+
+    passwordConfirmInstance.value = 'password';
+    passwordConfirmInput.simulate('change');
+
+    isValid = passwordConfirmInstance.validity.valid;
+    classList = passwordConfirmInstance.classList;
+
+    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    expect(isValid).toBe(true);
+
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.password_confirm.passwordMismatch).toBeUndefined();
   });
 });
 
