@@ -137,7 +137,7 @@ describe('form with useForm - isFormValid', () => {
 });
 
 describe('form with useForm - ResetForm', () => {
-  const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm validateOnSubmit initialValues={initialValues} />);
+  const sut = mount(<FormWithUseForm validateOnSubmit initialValues={initialValues} />);
   const resetButton = sut.find('#resetForm');
   const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
@@ -393,13 +393,15 @@ describe('form with useForm - Scroll To Error', () => {
 });
 
 describe('form with useForm - Input field validation', () => {
-  it('Should validate field for required constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm />);
+  it('Should validate field for required constraint', async () => {
+    const sut = mount(<FormWithUseForm />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const textInput = getElement('#text');
 
-    textInput.simulate('blur');
+    await act(async () => {
+      textInput.simulate('blur');
+    });
     const textInputInstance = textInput.instance() as unknown as HTMLInputElement;
     let isValid = textInputInstance.validity.valid;
     let { classList } = textInputInstance;
@@ -408,6 +410,7 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
@@ -416,7 +419,9 @@ describe('form with useForm - Input field validation', () => {
     const textInputUpdatedInstance = textInput.instance() as unknown as HTMLInputElement;
 
     textInputUpdatedInstance.value = 'test text';
-    textInput.simulate('change');
+    await act(async () => {
+      textInput.simulate('change');
+    });
 
     const textInputUpdatedInstance2 = textInput.instance() as unknown as HTMLInputElement;
 
@@ -427,20 +432,27 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
     expect(parsedErrorsUpdated.text.valueMissing).toBeUndefined();
   });
 
-  it('Should validate field for type constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm />);
+  it('Should validate field for type constraint', async () => {
+    const sut = mount(<FormWithUseForm />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const emailInput = getElement('#email');
-    emailInput.simulate('blur');
+    await act(async () => {
+      emailInput.simulate('blur');
+    });
+
     const emailInputInstance = emailInput.instance() as unknown as HTMLInputElement;
     emailInputInstance.value = 'foo';
-    emailInput.simulate('change');
+    await act(async () => {
+      emailInput.simulate('change');
+    });
+
     const emailInputUpdatedInstance = emailInput.instance() as unknown as HTMLInputElement;
     let isValid = emailInputUpdatedInstance.validity.valid;
     let { classList } = emailInputUpdatedInstance;
@@ -449,12 +461,15 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
     expect(parsedErrors.email.typeMismatch).toBeDefined();
 
     emailInputInstance.value = 'foo@bar.com';
-    emailInput.simulate('change');
+    await act(async () => {
+      emailInput.simulate('change');
+    });
 
     isValid = emailInputInstance.validity.valid;
     classList = emailInputInstance.classList;
@@ -463,29 +478,33 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
     expect(parsedErrorsUpdated.email.typeMismatch).toBeUndefined();
   });
 
-  it('Should validate field for minLength constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ min_length_3: '12' }} />);
+  it('Should validate field for minLength constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ min_length_3: '12' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, tooShort: true });
     const classList = new ElementClassList();
 
     const numberInput = getElement('#min_length_3');
-    numberInput.simulate('blur', {
-      target: {
-        name: 'min_length_3', type: 'text', validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('blur', {
+        target: {
+          name: 'min_length_3', type: 'text', validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
@@ -493,40 +512,46 @@ describe('form with useForm - Input field validation', () => {
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'tooShort', value: false });
-    numberInput.simulate('change', {
-      target: {
-        name: 'min_length_3', type: 'text', value: '123', validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('change', {
+        target: {
+          name: 'min_length_3', type: 'text', value: '123', validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.min_length_3.tooShort).toBeUndefined();
   });
 
-  it('Should validate field for maxLength constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ max_length_3: '1234' }} />);
+  it('Should validate field for maxLength constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ max_length_3: '1234' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, tooLong: true });
     const classList = new ElementClassList();
 
     const numberInput = getElement('#max_length_3');
-    numberInput.simulate('blur', {
-      target: {
-        name: 'max_length_3', type: 'text', validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('blur', {
+        target: {
+          name: 'max_length_3', type: 'text', validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
@@ -534,28 +559,34 @@ describe('form with useForm - Input field validation', () => {
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'tooLong', value: false });
-    numberInput.simulate('change', {
-      target: {
-        name: 'max_length_3', type: 'text', value: '12', validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('change', {
+        target: {
+          name: 'max_length_3', type: 'text', value: '12', validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.max_length_3.tooLong).toBeUndefined();
   });
 
-  it('Should validate field for min constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number_min_3: 2 }} />);
+  it('Should validate field for min constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ number_min_3: 2 }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const numberMin3Input = getElement('#number_min_3');
-    numberMin3Input.simulate('blur');
+    await act(async () => {
+      numberMin3Input.simulate('blur');
+    });
+
     const numberMin3InputInstance = numberMin3Input.instance() as unknown as HTMLInputElement;
     let isValid = numberMin3InputInstance.validity.valid;
     let { classList } = numberMin3InputInstance;
@@ -564,13 +595,16 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
     expect(parsedErrors.number_min_3.rangeUnderflow).toBeDefined();
 
     numberMin3InputInstance.value = '4';
-    numberMin3Input.simulate('change');
+    await act(async () => {
+      numberMin3Input.simulate('change');
+    });
 
     isValid = numberMin3InputInstance.validity.valid;
     classList = numberMin3InputInstance.classList;
@@ -579,18 +613,21 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.number_min_3.rangeUnderflow).toBeUndefined();
   });
 
-  it('Should validate field for max constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number_max_3: 4 }} />);
+  it('Should validate field for max constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ number_max_3: 4 }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const numberMax3Input = getElement('#number_max_3');
-    numberMax3Input.simulate('blur');
+    await act(async () => {
+      numberMax3Input.simulate('blur');
+    });
 
     const numberMax3InputInstance = numberMax3Input.instance() as unknown as HTMLInputElement;
 
@@ -601,13 +638,16 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
     expect(parsedErrors.number_max_3.rangeOverflow).toBeDefined();
 
     numberMax3InputInstance.value = '2';
-    numberMax3Input.simulate('change');
+    await act(async () => {
+      numberMax3Input.simulate('change');
+    });
 
     isValid = numberMax3InputInstance.validity.valid;
     classList = numberMax3InputInstance.classList;
@@ -616,18 +656,21 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.number_max_3.rangeOverflow).toBeUndefined();
   });
 
-  it('Should validate field for pattern constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ pattern: 'foo' }} />);
+  it('Should validate field for pattern constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ pattern: 'foo' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const patternInput = getElement('#pattern');
-    patternInput.simulate('blur');
+    await act(async () => {
+      patternInput.simulate('blur');
+    });
 
     const patternInputInstance = patternInput.instance() as unknown as HTMLInputElement;
     let isValid = patternInputInstance.validity.valid;
@@ -637,13 +680,16 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
     expect(parsedErrors.pattern.patternMismatch).toBeDefined();
 
     patternInputInstance.value = 'A2323.1';
-    patternInput.simulate('change');
+    await act(async () => {
+      patternInput.simulate('change');
+    });
 
     isValid = patternInputInstance.validity.valid;
     classList = patternInputInstance.classList;
@@ -652,30 +698,34 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.pattern.patternMismatch).toBeUndefined();
   });
 
-  it('Should validate field for step constraint', () => {
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseForm initialValues={{ number: 0.123 }} />);
+  it('Should validate field for step constraint', async () => {
+    const sut = mount(<FormWithUseForm initialValues={{ number: 0.123 }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const validity = new ElementValidity({ valid: false, stepMismatch: true });
     const classList = new ElementClassList();
 
     const numberInput = getElement('#number');
-    numberInput.simulate('blur', {
-      target: {
-        name: 'number', type: 'number', validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('blur', {
+        target: {
+          name: 'number', type: 'number', validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
@@ -683,41 +733,54 @@ describe('form with useForm - Input field validation', () => {
 
     validity.setValidity({ name: 'valid', value: true });
     validity.setValidity({ name: 'stepMismatch', value: false });
-    numberInput.simulate('change', {
-      target: {
-        name: 'number', type: 'number', value: 1.11, validity, classList,
-      },
+    await act(async () => {
+      numberInput.simulate('change', {
+        target: {
+          name: 'number', type: 'number', value: 1.11, validity, classList,
+        },
+      });
     });
 
     expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 
     expect(parsedErrorsUpdated.number.stepMismatch).toBeUndefined();
   });
 
-  it('Validate plugin - Should validate synchronously', () => {
-    const validate = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj | undefined => {
+  it('Validate plugin - Should validate SYNC', async () => {
+    const validate = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj => {
       if (name === 'password_confirm' && value !== values.password) {
         return ({ passwordMismatch: 'Passwords do not match!' });
       }
+
+      return {};
     };
 
-    const sut: ReactWrapper<unknown, unknown, unknown> = mount(<FormWithUseFormPlugins plugins={{ validate }} />);
+    const sut = mount(<FormWithUseFormPlugins plugins={{ validate }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const passwordInput = getElement('#password');
     const passwordInstance = passwordInput.instance() as unknown as HTMLInputElement;
     passwordInstance.value = 'password';
-    passwordInput.simulate('change');
+    await act(async () => {
+      passwordInput.simulate('change');
+    });
 
     const passwordConfirmInput = getElement('#password_confirm');
+    await act(async () => {
+      passwordConfirmInput.simulate('blur');
+    });
+
     const passwordConfirmInstance = passwordConfirmInput.instance() as unknown as HTMLInputElement;
     passwordConfirmInstance.value = 'foo';
-    passwordConfirmInput.simulate('change');
+    await act(async () => {
+      passwordConfirmInput.simulate('change');
+    });
 
     let isValid = passwordConfirmInstance.validity.valid;
     let { classList } = passwordConfirmInstance;
@@ -726,13 +789,16 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
 
     expect(parsedErrors.password_confirm.passwordMismatch).toBeDefined();
 
     passwordConfirmInstance.value = 'password';
-    passwordConfirmInput.simulate('change');
+    await act(async () => {
+      passwordConfirmInput.simulate('change');
+    });
 
     isValid = passwordConfirmInstance.validity.valid;
     classList = passwordConfirmInstance.classList;
@@ -741,6 +807,71 @@ describe('form with useForm - Input field validation', () => {
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
+    await waitForComponentToPaint(sut);
+    const errorsUpdated = sut.find('#errors').props().children as string;
+    const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
+
+    expect(parsedErrorsUpdated.password_confirm.passwordMismatch).toBeUndefined();
+  });
+
+  // TODO: Test async validation
+  xit('Validate plugin - Should validate ASYNC', async () => {
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(() => resolve(true), ms));
+    const validate = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj> => {
+      await sleep(1000);
+      if (name === 'password_confirm' && value !== values.password) {
+        return ({ passwordMismatch: 'Passwords do not match!' });
+      }
+      return {};
+    };
+
+    const sut = mount(<FormWithUseFormPlugins plugins={{ validate }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
+    const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
+
+    const passwordInput = getElement('#password');
+    const passwordInstance = passwordInput.instance() as unknown as HTMLInputElement;
+    passwordInstance.value = 'password';
+    await act(async () => {
+      passwordInput.simulate('change');
+    });
+
+    const passwordConfirmInput = getElement('#password_confirm');
+    await act(async () => {
+      passwordConfirmInput.simulate('blur');
+    });
+
+    const passwordConfirmInstance = passwordConfirmInput.instance() as unknown as HTMLInputElement;
+    passwordConfirmInstance.value = 'foo';
+    await act(async () => {
+      passwordConfirmInput.simulate('change');
+    });
+
+    let isValid = passwordConfirmInstance.validity.valid;
+    let { classList } = passwordConfirmInstance;
+
+    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
+    expect(isValid).toBe(true);
+
+    await waitForComponentToPaint(sut);
+    const errors = sut.find('#errors').props().children as string;
+    const parsedErrors: Obj = JSON.parse(errors);
+
+    expect(parsedErrors.password_confirm.passwordMismatch).toBeDefined();
+
+    passwordConfirmInstance.value = 'password';
+    await act(async () => {
+      passwordConfirmInput.simulate('change');
+    });
+
+    isValid = passwordConfirmInstance.validity.valid;
+    classList = passwordConfirmInstance.classList;
+
+    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
+    expect(isValid).toBe(true);
+
+    await waitForComponentToPaint(sut);
     const errorsUpdated = sut.find('#errors').props().children as string;
     const parsedErrorsUpdated: Obj = JSON.parse(errorsUpdated);
 

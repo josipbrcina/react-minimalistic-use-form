@@ -135,12 +135,34 @@ export const useForm = ({
     elementToScrollInto.scrollIntoView(scrollToErrorOptions);
   }, [plugins, scrollToErrorOptions]);
 
-  const updateError = useCallback(({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean}) => {
+  const updateError = useCallback(async ({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean }) => {
     const {
-      validity, classList, name,
+      validity, classList, name, value,
     } = element;
 
-    if (validity.valid) {
+    let elementErrors: Obj = {};
+
+    if (!validity.valid) {
+      for (const validityName in validity) {
+        // @ts-ignore
+        if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) { // eslint-disable-line
+          elementErrors[validityName] = validityDefaultErrorMessages[validityName](element);
+        }
+      }
+    }
+
+    const validator = plugins.validate;
+
+    // TODO: Handle asynchronous validation
+    if (validator !== undefined) {
+      const errors = await validator({ name, value, values: state.values });
+      elementErrors = {
+        ...elementErrors,
+        ...errors,
+      };
+    }
+
+    if (Object.keys(elementErrors).length === 0) {
       classList.remove(errorClassName);
       dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: {} } });
 
@@ -148,15 +170,6 @@ export const useForm = ({
     }
 
     classList.add(errorClassName);
-    const elementErrors: Obj = {};
-
-    for (const validityName in validity) {
-      // @ts-ignore
-      if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) { // eslint-disable-line
-        elementErrors[validityName] = validityDefaultErrorMessages[validityName](element);
-      }
-    }
-
     dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: elementErrors } });
 
     if (shouldScrollToError) {
@@ -164,7 +177,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, _scrollToError]);
+  }, [errorClassName, _scrollToError, state.values]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -192,14 +205,14 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.RESET_FORM });
   };
 
-  const onChange = useCallback(({ target }) => {
+  const onChange = useCallback(async ({ target }) => {
     const {
       name, value, type, checked, classList,
     } = target;
     // Input is dirty - checking for validity live...
     if (validateOnInput === true) {
       if (classList.contains(isFieldDirtyClassName) === true) {
-        updateError({ element: target, shouldScrollToError: scrollToError });
+        await updateError({ element: target, shouldScrollToError: scrollToError });
       }
       validateForm();
     }
@@ -212,13 +225,13 @@ export const useForm = ({
     });
   }, [isFieldDirtyClassName, updateError, validateForm, validateOnInput, scrollToError]);
 
-  const onBlur = useCallback(({ target }) => {
+  const onBlur = useCallback(async ({ target }) => {
     // once blur is triggered, input is set to dirty which _flags_ onChange
     // handler to do live validation as the user types
     target.classList.add(isFieldDirtyClassName);
 
     if (validateOnInput === true) {
-      updateError({ element: target, shouldScrollToError: scrollToError });
+      await updateError({ element: target, shouldScrollToError: scrollToError });
     }
   }, [isFieldDirtyClassName, updateError, validateOnInput, scrollToError]);
 
