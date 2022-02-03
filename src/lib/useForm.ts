@@ -94,10 +94,13 @@ export const useForm = ({
   scrollToErrorOptions,
   validateOnInput = true,
   validateOnSubmit = false,
+  debounceValidation = false,
+  debounceTime = 300,
   plugins = {},
 }: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
   const formRef = useRef<HTMLFormElement>(null);
+  const validatorDebounceTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const throwFormRefError = (): never => {
     throw new Error('formRef is empty! useForm "formRef" needs to be attached to form element');
@@ -114,7 +117,7 @@ export const useForm = ({
       .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
   }, []);
 
-  const validateForm = useCallback(() => {
+  const checkIsFormValid = useCallback(() => {
     const { current: form } = formRef;
     const _isFormValid = getFormElements(form).every(element => element.validity.valid);
 
@@ -153,7 +156,6 @@ export const useForm = ({
 
     const validator = plugins.validate;
 
-    // TODO: Handle asynchronous validation
     if (validator !== undefined) {
       const errors = await validator({ name, value, values: state.values });
       elementErrors = {
@@ -177,7 +179,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, _scrollToError, state.values]);
+  }, [errorClassName, _scrollToError, state.values, plugins.validate, checkIsFormValid]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -205,17 +207,32 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.RESET_FORM });
   };
 
-  const onChange = useCallback(async ({ target }) => {
-    const {
-      name, value, type, checked, classList,
-    } = target;
+  const validateField = useCallback(async event => {
     // Input is dirty - checking for validity live...
-    if (validateOnInput === true) {
-      if (classList.contains(isFieldDirtyClassName) === true) {
-        await updateError({ element: target, shouldScrollToError: scrollToError });
-      }
-      validateForm();
+    const shouldValidate = validateOnInput === true && event.target.classList.contains(isFieldDirtyClassName);
+
+    if (!shouldValidate) return;
+
+    if (debounceValidation) {
+      // @ts-ignore
+      clearTimeout(validatorDebounceTimeout.current);
+      event.persist();
+      validatorDebounceTimeout.current = setTimeout(async () => {
+        await updateError({ element: event.target, shouldScrollToError: scrollToError });
+        checkIsFormValid();
+      }, debounceTime);
+
+      return;
     }
+
+    await updateError({ element: event.target, shouldScrollToError: scrollToError });
+    checkIsFormValid();
+  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput]);
+
+  const onChange = useCallback(async (event) : Promise<void> => {
+    const {
+      name, value, type, checked,
+    } = event.target;
 
     dispatch({
       type: STATE_ACTIONS.SET_FIELD_VALUE,
@@ -223,7 +240,9 @@ export const useForm = ({
         name, type, checked, value,
       },
     });
-  }, [isFieldDirtyClassName, updateError, validateForm, validateOnInput, scrollToError]);
+
+    await validateField(event);
+  }, [validateField]);
 
   const onBlur = useCallback(async ({ target }) => {
     // once blur is triggered, input is set to dirty which _flags_ onChange
@@ -248,7 +267,7 @@ export const useForm = ({
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
       _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError({ element, shouldScrollToError: false }) }), {});
-      _isFormValid = validateForm();
+      _isFormValid = checkIsFormValid();
 
       if (!_isFormValid && scrollToError === true) {
         const elementToScrollInto = _formElements.find(element => !element.validity.valid);
@@ -348,7 +367,7 @@ export const useForm = ({
     onChange,
     onBlur,
     onSubmit,
-    validateForm,
+    validateForm: checkIsFormValid,
     isFormValid: state.isFormValid,
     isSubmitting: state.isSubmitting,
     formRef,

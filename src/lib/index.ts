@@ -26,6 +26,8 @@ export interface IUseForm {
     validateOnInput?: boolean;
     validateOnSubmit?: boolean;
     plugins?: IPluginsObject
+    debounceValidation?: boolean;
+    debounceTime?: number;
 }
 
 export interface ISetNativeValue {
