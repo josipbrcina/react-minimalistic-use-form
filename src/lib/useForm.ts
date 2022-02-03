@@ -157,7 +157,9 @@ export const useForm = ({
     const validator = plugins.validate;
 
     if (validator !== undefined) {
-      const errors = await validator({ name, value, values: state.values });
+      const errors = await validator({
+        name, value, values: state.values, target: element,
+      });
       elementErrors = {
         ...elementErrors,
         ...errors,
@@ -179,7 +181,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, _scrollToError, state.values, plugins.validate, checkIsFormValid]);
+  }, [errorClassName, _scrollToError, state.values, plugins.validate]);
 
   const resetForm = () => {
     const { current: form } = formRef;

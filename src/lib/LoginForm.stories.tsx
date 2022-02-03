@@ -10,7 +10,10 @@ export default {
   title: 'Login Form component',
 };
 
-const validate = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
+const validate = async ({
+  name, value, values, target,
+} : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) : Promise<Obj | undefined> => {
+  console.log(target);
   if (name === 'password_confirm' && value !== values.password) {
     return ({ passwordMismatch: 'Passwords do not match!' });
   }
