@@ -10,23 +10,25 @@ export default {
   title: 'Login Form component',
 };
 
-const validate = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj | undefined => {
+const validate = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
   if (name === 'password_confirm' && value !== values.password) {
     return ({ passwordMismatch: 'Passwords do not match!' });
   }
+
+  return undefined;
 };
 
 export const FormComponent: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm, values,
-  } = useForm({ initialValues: { email: '' }, plugins: { validate } });
+  } = useForm({ initialValues: { email: '' }, plugins: { validate }, debounceValidation: true });
 
   const submitValues = ({
-    event, errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid,
+    event, errors: onSubmitErrors, values: _values, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
     // eslint-disable-next-line no-console
-    console.log({ errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid });
+    console.log({ errors: onSubmitErrors, _values, isFormValid: onSubmitIsFormValid });
   };
 
   return (
