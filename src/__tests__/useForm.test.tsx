@@ -753,7 +753,7 @@ describe('form with useForm - Input field validation', () => {
   });
 
   it('Validate plugin - Should validate SYNC', async () => {
-    const validate = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj => {
+    const validator = ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Obj => {
       if (name === 'password_confirm' && value !== values.password) {
         return ({ passwordMismatch: 'Passwords do not match!' });
       }
@@ -761,7 +761,7 @@ describe('form with useForm - Input field validation', () => {
       return {};
     };
 
-    const sut = mount(<FormWithUseFormPlugins plugins={{ validate }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
+    const sut = mount(<FormWithUseFormPlugins plugins={{ validator }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const passwordInput = getElement('#password');
@@ -814,18 +814,18 @@ describe('form with useForm - Input field validation', () => {
     expect(parsedErrorsUpdated.password_confirm.passwordMismatch).toBeUndefined();
   });
 
-  // TODO: Test async validation
   xit('Validate plugin - Should validate ASYNC', async () => {
     const sleep = (ms: number) => new Promise(resolve => setTimeout(() => resolve(true), ms));
-    const validate = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj> => {
+    const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj> => {
       await sleep(1000);
+      console.log(values, value);
       if (name === 'password_confirm' && value !== values.password) {
         return ({ passwordMismatch: 'Passwords do not match!' });
       }
       return {};
     };
 
-    const sut = mount(<FormWithUseFormPlugins plugins={{ validate }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
+    const sut = mount(<FormWithUseFormPlugins plugins={{ validator }} initialValues={{ email: '', password: '', password_confirm: '' }} />);
     const getElement = (selector: string): ReactWrapper<HTMLAttributes, unknown> => sut.find(selector);
 
     const passwordInput = getElement('#password');

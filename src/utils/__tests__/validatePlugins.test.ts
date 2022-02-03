@@ -17,11 +17,11 @@ describe('validatePlugins utility function', () => {
 
   it('Should throw an error if validate is not a function', () => {
     // @ts-ignore
-    expect(() => validatePlugins({ validate: 'string' })).toThrow('Plugin "validate" must be a type of function!');
+    expect(() => validatePlugins({ validator: 'string' })).toThrow('Plugin "validate" must be a type of function!');
   });
 
   it('Should not throw if validate is a function', () => {
-    expect(() => validatePlugins({ validate: noop })).not.toThrow('Plugin "validate" must be a type of function!');
+    expect(() => validatePlugins({ validator: noop })).not.toThrow('Plugin "validate" must be a type of function!');
   });
 
   it('Should not throw if validate is not defined', () => {

@@ -8,7 +8,7 @@ export type Obj = Record<string, any>;
 
 export interface IPluginsObject {
     scrollToError?: (element: HTMLElement) => Promise<unknown> | void;
-    validate?: ({
+    validator?: ({
       name, value, values, target,
     } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) => Promise<Obj> | void | Obj
 }

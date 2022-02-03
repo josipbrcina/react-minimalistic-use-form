@@ -5,7 +5,7 @@ export const validatePlugins = (plugins: IPluginsObject) : void => {
     throw new Error('Plugin "scrollToError" must be a type of function!');
   }
 
-  if (plugins?.validate !== undefined && typeof plugins.validate !== 'function') {
+  if (plugins?.validator !== undefined && typeof plugins.validator !== 'function') {
     throw new Error('Plugin "validate" must be a type of function!');
   }
 };

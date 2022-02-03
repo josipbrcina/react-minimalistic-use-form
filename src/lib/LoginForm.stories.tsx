@@ -10,7 +10,7 @@ export default {
   title: 'Login Form component',
 };
 
-const validate = async ({
+const validator = async ({
   name, value, values, target,
 } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) : Promise<Obj | undefined> => {
   console.log(target);
@@ -24,7 +24,7 @@ const validate = async ({
 export const FormComponent: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm, values,
-  } = useForm({ initialValues: { email: '' }, plugins: { validate }, debounceValidation: true });
+  } = useForm({ initialValues: { email: '' }, plugins: { validator }, debounceValidation: true });
 
   const submitValues = ({
     event, errors: onSubmitErrors, values: _values, isFormValid: onSubmitIsFormValid,

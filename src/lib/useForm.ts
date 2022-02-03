@@ -154,7 +154,7 @@ export const useForm = ({
       }
     }
 
-    const validator = plugins.validate;
+    const { validator } = plugins;
 
     if (validator !== undefined) {
       const errors = await validator({
@@ -181,7 +181,7 @@ export const useForm = ({
     }
 
     return { [name]: elementErrors };
-  }, [errorClassName, _scrollToError, state.values, plugins.validate]);
+  }, [errorClassName, _scrollToError, state.values, plugins]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -229,7 +229,7 @@ export const useForm = ({
 
     await updateError({ element: event.target, shouldScrollToError: scrollToError });
     checkIsFormValid();
-  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput]);
+  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput, checkIsFormValid]);
 
   const onChange = useCallback(async (event) : Promise<void> => {
     const {
