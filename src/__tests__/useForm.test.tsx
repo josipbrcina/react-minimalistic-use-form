@@ -814,11 +814,10 @@ describe('form with useForm - Input field validation', () => {
     expect(parsedErrorsUpdated.password_confirm.passwordMismatch).toBeUndefined();
   });
 
-  xit('Validate plugin - Should validate ASYNC', async () => {
+  it('Validate plugin - Should validate ASYNC', async () => {
     const sleep = (ms: number) => new Promise(resolve => setTimeout(() => resolve(true), ms));
     const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj> => {
-      await sleep(1000);
-      console.log(values, value);
+      await sleep(500);
       if (name === 'password_confirm' && value !== values.password) {
         return ({ passwordMismatch: 'Passwords do not match!' });
       }
@@ -845,6 +844,9 @@ describe('form with useForm - Input field validation', () => {
     await act(async () => {
       passwordConfirmInput.simulate('change');
     });
+    await act(async () => {
+      await sleep(600);
+    });
 
     let isValid = passwordConfirmInstance.validity.valid;
     let { classList } = passwordConfirmInstance;
@@ -862,6 +864,9 @@ describe('form with useForm - Input field validation', () => {
     passwordConfirmInstance.value = 'password';
     await act(async () => {
       passwordConfirmInput.simulate('change');
+    });
+    await act(async () => {
+      await sleep(600);
     });
 
     isValid = passwordConfirmInstance.validity.valid;
