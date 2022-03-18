@@ -16,6 +16,7 @@ import {
   IuseFormResponse,
 } from './index';
 import { validatePlugins } from '../utils/validatePlugins';
+import { useIsUpdated } from '../hooks/is-updated';
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -117,14 +118,13 @@ export const useForm = ({
       .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
   }, []);
 
-  const checkIsFormValid = useCallback(() => {
-    const { current: form } = formRef;
-    const _isFormValid = getFormElements(form).every(element => element.validity.valid);
+  const updateIsFormValid = useCallback(() => {
+    const _isFormValid = Object.values(state.errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
     dispatch({ type: STATE_ACTIONS.SET_IS_FORM_VALID, payload: { isFormValid: _isFormValid } });
 
     return _isFormValid;
-  }, [getFormElements]);
+  }, [state.errors]);
 
   const _scrollToError = useCallback(async (element: HTMLInputElement): Promise<unknown> => {
     const inputLabel = element?.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
@@ -209,7 +209,7 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.RESET_FORM });
   };
 
-  const validateField = useCallback(async event => {
+  const validateInputOnChange = useCallback(async event => {
     // Input is dirty - checking for validity live...
     const shouldValidate = validateOnInput === true && event.target.classList.contains(isFieldDirtyClassName);
 
@@ -221,15 +221,13 @@ export const useForm = ({
       event.persist();
       validatorDebounceTimeout.current = setTimeout(async () => {
         await updateError({ element: event.target, shouldScrollToError: scrollToError });
-        checkIsFormValid();
       }, debounceTime);
 
       return;
     }
 
     await updateError({ element: event.target, shouldScrollToError: scrollToError });
-    checkIsFormValid();
-  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput, checkIsFormValid]);
+  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput]);
 
   const onChange = useCallback(async (event) : Promise<void> => {
     const {
@@ -243,24 +241,37 @@ export const useForm = ({
       },
     });
 
-    await validateField(event);
-  }, [validateField]);
+    await validateInputOnChange(event);
+  }, [validateInputOnChange]);
+
+  const setFieldTouched = useCallback((element: HTMLInputElement) => element.classList.add(isFieldDirtyClassName), [isFieldDirtyClassName]);
 
   const onBlur = useCallback(async ({ target }) => {
     // once blur is triggered, input is set to dirty which _flags_ onChange
     // handler to do live validation as the user types
-    target.classList.add(isFieldDirtyClassName);
+    setFieldTouched(target);
 
     if (validateOnInput === true) {
       await updateError({ element: target, shouldScrollToError: scrollToError });
     }
-  }, [isFieldDirtyClassName, updateError, validateOnInput, scrollToError]);
+  }, [updateError, validateOnInput, scrollToError, setFieldTouched]);
 
   const setIsSubmitting = useCallback((isSubmitting) => {
     dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
   }, []);
 
+  const validateForm = async ({ shouldTouchField = true, shouldScrollToError = false } = {}) => {
+    const _formElements = getFormElements(formRef.current);
+
+    if (shouldTouchField === true) {
+      _formElements.forEach(element => setFieldTouched(element));
+    }
+
+    return Promise.all(_formElements.map(element => updateError({ element, shouldScrollToError })));
+  };
+
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
+    event.persist();
     setIsSubmitting(true);
 
     let _isFormValid = state.isFormValid;
@@ -268,11 +279,12 @@ export const useForm = ({
 
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
-      _errors = _formElements.reduce((acc, element) => ({ ...acc, ...updateError({ element, shouldScrollToError: false }) }), {});
-      _isFormValid = checkIsFormValid();
+      const updatedErrors = await validateForm();
+      _errors = updatedErrors.reduce((acc, error) => ({ ...acc, ...error }), _errors);
+      _isFormValid = Object.values(_errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
       if (!_isFormValid && scrollToError === true) {
-        const elementToScrollInto = _formElements.find(element => !element.validity.valid);
+        const elementToScrollInto = _formElements.find(element => !element.validity.valid || Object.keys(_errors[element.name]).length > 0);
 
         if (elementToScrollInto !== undefined) {
           _scrollToError(elementToScrollInto);
@@ -355,6 +367,10 @@ export const useForm = ({
 
   useEffect(_validatePlugins, []);
 
+  useIsUpdated(() => {
+    updateIsFormValid();
+  }, [state.errors]);
+
   useEffect(() => {
     const { current: form } = formRef;
     bindInitialValues(form);
@@ -369,7 +385,7 @@ export const useForm = ({
     onChange,
     onBlur,
     onSubmit,
-    validateForm: checkIsFormValid,
+    validateForm,
     isFormValid: state.isFormValid,
     isSubmitting: state.isSubmitting,
     formRef,

@@ -83,7 +83,7 @@ export interface IuseFormResponse {
     onChange: EventHandler,
     onBlur: EventHandler,
     onSubmit: (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => void,
-    validateForm: () => boolean,
+    validateForm: ({ shouldTouchField, shouldScrollToError }: { shouldTouchField: boolean, shouldScrollToError: boolean}) => void,
     isFormValid: boolean,
     isSubmitting: boolean,
     formRef: RefObject<HTMLFormElement> | undefined,
