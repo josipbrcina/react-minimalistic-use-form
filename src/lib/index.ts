@@ -83,7 +83,7 @@ export interface IuseFormResponse {
     onChange: EventHandler,
     onBlur: EventHandler,
     onSubmit: (callbackFn: IOnSubmitCallbackFn) => (event: React.FormEvent) => void,
-    validateForm: ({ shouldTouchField, shouldScrollToError }: { shouldTouchField: boolean, shouldScrollToError: boolean}) => void,
+    validateForm: ({ shouldTouchField, shouldScrollToError }: { shouldTouchField?: boolean, shouldScrollToError?: boolean}) => void,
     isFormValid: boolean,
     isSubmitting: boolean,
     formRef: RefObject<HTMLFormElement> | undefined,
@@ -144,11 +144,6 @@ export interface ISetIsSubmittingAction extends Action {
 export interface Action {
     type: string;
     payload?: undefined | Obj
-}
-
-export interface IInitialState {
-    initialValues?: Obj,
-    validateOnSubmit?: boolean
 }
 
 // eslint-disable-next-line import/no-cycle

@@ -120,19 +120,21 @@ describe('form with useForm - Default values should be set WITHOUT provided init
 });
 
 describe('form with useForm - isFormValid', () => {
-  it('Should have initial isFormValid TRUE and enabled submit button', () => {
+  it('Should have initial isFormValid FALSE and enabled submit button', () => {
     const sut = mount(<FormWithUseForm validateOnSubmit />);
-    expect(sut.find({ type: 'submit' }).props().disabled).toBe(false);
+    expect(sut.find({ type: 'submit' }).props().disabled).toBe(true);
   });
+
   it('Should have initial isFormValid FALSE and disabled submit button', () => {
     const sut = mount(<FormWithUseForm />);
     expect(sut.find({ type: 'submit' }).props().disabled).toBe(true);
   });
+
   it('Should be boolean value', () => {
     const sut = mount(<FormWithUseForm validateOnSubmit />);
     const isFormValid = sut.find('#isFormValid');
 
-    expect(isFormValid.props().children).toEqual('true');
+    expect(isFormValid.props().children).toEqual('false');
   });
 });
 

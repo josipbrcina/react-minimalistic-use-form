@@ -219,7 +219,7 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
 
       <div className="d-flex flex-col mt-10">
         <button id="resetForm" className="button" type="button" onClick={resetForm}>Clear</button>
-        <button id="validateForm" className="button" type="button" onClick={validateForm}>Validate Form</button>
+        <button id="validateForm" className="button" type="button" onClick={() => validateForm({})}>Validate Form</button>
         <button className="button mt-5" type="submit" disabled={isFormValid === false}>Submit</button>
         <button id="setIsSubmitting" type="button" onClick={() => _setIsSubmitting(false)}>Set is submitting to false</button>
       </div>

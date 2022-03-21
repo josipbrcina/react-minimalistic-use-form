@@ -119,9 +119,9 @@ describe('FormComponent - Default values should be set WITHOUT provided initial 
 });
 
 describe('FormComponent - isFormValid', () => {
-  it('Should have initial isFormValid TRUE and enabled submit button', () => {
+  it('Should have initial isFormValid FALSE and disabled submit button', () => {
     const sut: ReactWrapper = mount(<FormComponent validateOnSubmit />);
-    expect(sut.find({ type: 'submit' }).props().disabled).toBe(false);
+    expect(sut.find({ type: 'submit' }).props().disabled).toBe(true);
   });
   it('Should have initial isFormValid FALSE and disabled submit button', () => {
     const sut = mount(<FormComponent />);
@@ -131,7 +131,7 @@ describe('FormComponent - isFormValid', () => {
     const sut = mount(<FormComponent validateOnSubmit />);
     const isFormValid = sut.find('#isFormValid');
 
-    expect(isFormValid.props().children).toEqual(['true']);
+    expect(isFormValid.props().children).toEqual(['false']);
   });
 });
 

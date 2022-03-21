@@ -104,7 +104,7 @@ describe('getInitialState', () => {
       bar: 'bar',
     };
 
-    expect(getInitialState({ initialValues, validateOnSubmit: true })).toEqual({
+    expect(getInitialState(initialValues)).toEqual({
       values: {
         foo: 'foo',
         bar: 'bar',
@@ -115,8 +115,8 @@ describe('getInitialState', () => {
       },
       overriddenInitialValues: {},
       errors: {},
-      initialIsFormValid: true,
-      isFormValid: true,
+      initialIsFormValid: false,
+      isFormValid: false,
       isSubmitting: false,
     });
   });

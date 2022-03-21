@@ -10,7 +10,7 @@ export default {
   title: 'Form component with custom controlled Input',
 };
 
-const validate = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
+const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
   if (name === 'password_confirm' && value !== values.password) {
     return ({ passwordMismatch: 'Passwords do not match!' });
   }
@@ -21,7 +21,7 @@ const validate = async ({ name, value, values } : { name: string, value: string 
 export const FormComponent: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm,
-  } = useForm({ initialValues: { email: '' }, plugins: { validate }, debounceValidation: true });
+  } = useForm({ initialValues: { email: '' }, plugins: { validator }, debounceValidation: true });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

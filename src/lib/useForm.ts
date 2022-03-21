@@ -17,6 +17,7 @@ import {
 } from './index';
 import { validatePlugins } from '../utils/validatePlugins';
 import { useIsUpdated } from '../hooks/is-updated';
+import get = Reflect.get;
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
@@ -99,7 +100,7 @@ export const useForm = ({
   debounceTime = 300,
   plugins = {},
 }: IUseForm = {}): IuseFormResponse => {
-  const [state, dispatch] = useReducer(reducer, getInitialState({ initialValues, validateOnSubmit }));
+  const [state, dispatch] = useReducer(reducer, getInitialState(initialValues));
   const formRef = useRef<HTMLFormElement>(null);
   const validatorDebounceTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -118,13 +119,20 @@ export const useForm = ({
       .filter(element => supportedFormElements.includes(element.type) || element.tagName === ELEMENT_TAG_NAME_SELECT);
   }, []);
 
+  /**
+   * Method runs on each change of state.errors to properly update "isFormValid".
+   */
   const updateIsFormValid = useCallback(() => {
-    const _isFormValid = Object.values(state.errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
+    const formElements = getFormElements(formRef.current);
+    const allValidityValid = formElements.every(element => element.validity.valid);
+    const noErrors = Object.values(state.errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
-    dispatch({ type: STATE_ACTIONS.SET_IS_FORM_VALID, payload: { isFormValid: _isFormValid } });
+    const isFormValid = allValidityValid && noErrors;
 
-    return _isFormValid;
-  }, [state.errors]);
+    dispatch({ type: STATE_ACTIONS.SET_IS_FORM_VALID, payload: { isFormValid } });
+
+    return isFormValid;
+  }, [getFormElements, state.errors]);
 
   const _scrollToError = useCallback(async (element: HTMLInputElement): Promise<unknown> => {
     const inputLabel = element?.closest('label') ?? document.querySelector(`label[for="${element.name}"`);
@@ -260,15 +268,15 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
   }, []);
 
-  const validateForm = async ({ shouldTouchField = true, shouldScrollToError = false } = {}) => {
+  const validateForm = useCallback(async ({ shouldTouchField = true, shouldScrollToError = false }: { shouldTouchField?: boolean, shouldScrollToError?: boolean } = {}) => {
     const _formElements = getFormElements(formRef.current);
 
     if (shouldTouchField === true) {
       _formElements.forEach(element => setFieldTouched(element));
     }
 
-    return Promise.all(_formElements.map(element => updateError({ element, shouldScrollToError })));
-  };
+    return Promise.all<Obj>(_formElements.map(element => updateError({ element, shouldScrollToError })));
+  }, []);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
     event.persist();

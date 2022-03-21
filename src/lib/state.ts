@@ -2,7 +2,6 @@ import React from 'react';
 import { htmlInputTypes, STATE_ACTIONS } from './enums';
 import {
   Obj,
-  IInitialState,
   IState,
   Action,
   ISetFieldValueAction,
@@ -17,16 +16,15 @@ const getInitialErrorsState = (initialValues: Obj) => Object.keys(initialValues)
   return acc;
 }, {});
 
-export const getInitialState = ({
-  initialValues = {},
-  validateOnSubmit = false,
-}: IInitialState = {}): IState => ({
+export const getInitialState = (
+  initialValues: Obj = {},
+): IState => ({
   values: initialValues,
   initialValues,
   overriddenInitialValues: {},
   errors: {},
-  initialIsFormValid: validateOnSubmit,
-  isFormValid: validateOnSubmit,
+  initialIsFormValid: false,
+  isFormValid: false,
   isSubmitting: false,
 });
 
