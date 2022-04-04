@@ -17,7 +17,6 @@ import {
 } from './index';
 import { validatePlugins } from '../utils/validatePlugins';
 import { useIsUpdated } from '../hooks/is-updated';
-import get = Reflect.get;
 
 const IS_DIRTY_CLASS_NAME = 'is-dirty';
 const ERROR_CLASS_NAME = 'has-error';
