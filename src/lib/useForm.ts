@@ -189,13 +189,21 @@ export const useForm = ({
     let elementErrors = getFieldValidityErrors(element);
 
     if (validator !== undefined) {
-      const { [name]: elementValidatorErrors, ...errors } = await validator({
+      const { [name]: elementValidatorErrors, ...otherFieldsErrors } = await validator({
         name, value, values: state.values, target: element,
       });
       elementErrors = {
         ...elementValidatorErrors,
         ...elementErrors,
       };
+
+      Object.entries(otherFieldsErrors).forEach(([fieldName, fieldErrors]) => {
+        const formElement = getFormElements(formRef.current).find(_element => _element.name === fieldName);
+
+        if (!formElement) return;
+
+        setFieldErrors({ element: formElement, errors: fieldErrors });
+      });
     }
 
     if (Object.keys(elementErrors).length === 0) {
@@ -207,7 +215,7 @@ export const useForm = ({
     }
 
     return setFieldErrors({ element, errors: elementErrors });
-  }, [_scrollToError, state.values, plugins, getFieldValidityErrors, setFieldErrors, unsetFieldErrors]);
+  }, [_scrollToError, state.values, plugins, getFieldValidityErrors, setFieldErrors, unsetFieldErrors, getFormElements]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -236,7 +244,7 @@ export const useForm = ({
   };
 
   const validateInputOnChange = useCallback(async event => {
-    // Input is dirty - checking for validity live...
+    // Input is touched - checking for validity live...
     const shouldValidate = validateOnInput === true && event.target.classList.contains(touchedClassName);
 
     if (!shouldValidate) return;
@@ -273,8 +281,8 @@ export const useForm = ({
   const setFieldTouchedClassName = useCallback((element: HTMLInputElement) => element.classList.add(touchedClassName), [touchedClassName]);
 
   const onBlur = useCallback(async ({ target }) => {
-    // once blur is triggered, input is set to dirty which _flags_ onChange
-    // handler to do live validation as the user types
+    /* Once blur is triggered, input is set to touched which _flags_ onChange
+     handler to do live validation as the user types */
     setFieldTouchedClassName(target);
 
     if (validateOnInput === true) {
@@ -306,7 +314,7 @@ export const useForm = ({
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
       const updatedErrors = await validateForm();
-      _errors = updatedErrors.reduce((acc, error) => ({ ...acc, ...error }), _errors);
+      _errors = updatedErrors.reduce((acc, errors) => ({ ...acc, ...errors }), _errors);
       _isFormValid = Object.values(_errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
       if (!_isFormValid && scrollToError === true) {

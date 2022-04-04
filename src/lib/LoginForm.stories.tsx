@@ -15,7 +15,7 @@ const validator = async ({
 } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) : Promise<Obj | undefined> => {
   const errors: Obj = {};
   console.log(target);
-  if (name === 'password_confirm' && value !== values.password) {
+  if (name === 'password_confirm' && value !== values.password || name === 'password' && value !== values.password_confirm) {
     errors.password_confirm = {
       passwordMismatch: 'Passwords do not match!',
     };
