@@ -13,6 +13,9 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: [
     '<rootDir>/src/__tests__/setupTests.ts',
   ],
+  coveragePathIgnorePatterns: [
+    '__tests__',
+  ],
   coverageReporters: [
     'json-summary',
     'text',
