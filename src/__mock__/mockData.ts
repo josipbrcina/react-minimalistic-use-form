@@ -72,7 +72,7 @@ export class ElementValidity {
   }
 }
 
-export const IS_DIRTY_CLASS_NAME = 'is-dirty';
+export const TOUCHED_CLASS_NAME = 'is-touched';
 export const ERROR_CLASS_NAME = 'has-error';
 export const initialValues = {
   email: 'test@test.com',

@@ -10,7 +10,7 @@ export interface IPluginsObject {
     scrollToError?: (element: HTMLElement) => Promise<unknown> | void;
     validator?: ({
       name, value, values, target,
-    } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) => Promise<Obj> | void | Obj
+    } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) => Promise<Obj> | Obj
 }
 
 export interface IScrollToErrorOptions {
@@ -22,7 +22,7 @@ export interface IScrollToErrorOptions {
 export interface IUseForm {
     initialValues?: Obj;
     errorClassName?: string;
-    isFieldDirtyClassName?: string;
+    touchedClassName?: string;
     scrollToError?: boolean;
     scrollToErrorOptions?: IScrollToErrorOptions;
     validateOnInput?: boolean;

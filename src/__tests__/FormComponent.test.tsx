@@ -7,7 +7,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { getDefaultDateValue } from '../utils/getDefaultDateValue';
 import { FormComponent } from './FormComponent';
 import {
-  ElementClassList, ERROR_CLASS_NAME, IS_DIRTY_CLASS_NAME, initialValues, ElementValidity,
+  ElementClassList, ERROR_CLASS_NAME, TOUCHED_CLASS_NAME, initialValues, ElementValidity,
 } from '../__mock__/mockData';
 import { Obj } from '../lib';
 
@@ -144,51 +144,51 @@ describe('FormComponent - ResetForm', () => {
     getElement('#email').simulate('blur');
     const email = sut.find('#email');
     const emailInstance = email.instance() as unknown as HTMLInputElement;
-    expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(emailInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#password').simulate('blur');
     const passwordInstance = getElement('#password').instance() as unknown as HTMLInputElement;
-    expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(passwordInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#text').simulate('blur');
     const textInstance = getElement('#text').instance() as unknown as HTMLInputElement;
-    expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(textInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#search').simulate('blur');
     const searchInstance = getElement('#search').instance() as unknown as HTMLInputElement;
-    expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(searchInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#url').simulate('blur');
     const urlInstance = getElement('#url').instance() as unknown as HTMLInputElement;
-    expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(urlInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#number').simulate('blur');
     const numberInstance = getElement('#number').instance() as unknown as HTMLInputElement;
-    expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(numberInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#text_area').simulate('blur');
     const text_areaInstance = getElement('#text_area').instance() as unknown as HTMLInputElement;
-    expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(text_areaInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#checkbox').simulate('blur');
     const checkboxInstance = getElement('#checkbox').instance() as unknown as HTMLInputElement;
-    expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(checkboxInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#select').simulate('blur');
     const selectInstance = getElement('#select').instance() as unknown as HTMLInputElement;
-    expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(selectInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#date').simulate('blur');
     const dateInstance = getElement('#date').instance() as unknown as HTMLInputElement;
-    expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(dateInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#tel').simulate('blur');
     const telInstance = getElement('#tel').instance() as unknown as HTMLInputElement;
-    expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(telInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
 
     getElement('#color').simulate('blur');
     const colorInstance = getElement('#color').instance() as unknown as HTMLInputElement;
-    expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(colorInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
   });
 
   it('Should update fields value on change', () => {
@@ -247,73 +247,73 @@ describe('FormComponent - ResetForm', () => {
     const email = getElement('#email');
     const emailInstance = email.instance() as unknown as HTMLInputElement;
     expect(emailInstance.value).toEqual('test@test.com');
-    expect(emailInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(emailInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(emailInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const password = getElement('#password');
     const passwordInstance = password.instance() as unknown as HTMLInputElement;
     expect(passwordInstance.value).toEqual('password');
-    expect(passwordInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(passwordInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(passwordInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text = getElement('#text');
     const textInstance = text.instance() as unknown as HTMLInputElement;
     expect(textInstance.value).toEqual('text');
-    expect(textInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(textInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(textInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const search = getElement('#search');
     const searchInstance = search.instance() as unknown as HTMLInputElement;
     expect(searchInstance.value).toEqual('search');
-    expect(searchInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(searchInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(searchInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const url = getElement('#url');
     const urlInstance = url.instance() as unknown as HTMLInputElement;
     expect(urlInstance.value).toEqual('http://example.com');
-    expect(urlInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(urlInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(urlInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const number = getElement('#number');
     const numberInstance = number.instance() as unknown as HTMLInputElement;
     expect(numberInstance.value).toEqual('11');
-    expect(numberInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(numberInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(numberInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const text_area = getElement('#text_area');
     const text_areaInstance = text_area.instance() as unknown as HTMLInputElement;
     expect(text_areaInstance.value).toEqual('foobar');
-    expect(text_areaInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(text_areaInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(text_areaInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const checkbox = getElement('#checkbox');
     const checkboxInstance = checkbox.instance() as unknown as HTMLInputElement;
     expect(checkboxInstance.value).toEqual('true');
-    expect(checkboxInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(checkboxInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(checkboxInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const select = getElement('#select');
     const selectInstance = select.instance() as unknown as HTMLInputElement;
     expect(selectInstance.value).toEqual('option2');
-    expect(selectInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(selectInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(selectInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const date = getElement('#date');
     const dateInstance = date.instance() as unknown as HTMLInputElement;
     expect(dateInstance.value).toEqual('2020-06-29');
-    expect(dateInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(dateInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(dateInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const tel = getElement('#tel');
     const telInstance = tel.instance() as unknown as HTMLInputElement;
     expect(telInstance.value).toEqual('+12345678');
-    expect(telInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(telInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(telInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
 
     const color = getElement('#color');
     const colorInstance = color.instance() as unknown as HTMLInputElement;
     expect(colorInstance.value).toEqual('#ffffff');
-    expect(colorInstance.classList.contains(IS_DIRTY_CLASS_NAME)).toBe(false);
+    expect(colorInstance.classList.contains(TOUCHED_CLASS_NAME)).toBe(false);
     expect(colorInstance.classList.contains(ERROR_CLASS_NAME)).toBe(false);
   });
 });
@@ -396,7 +396,7 @@ describe('FormComponent - Input field validation', () => {
     let isValid = textInputInstance.validity.valid;
     let { classList } = textInputInstance;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
@@ -418,7 +418,7 @@ describe('FormComponent - Input field validation', () => {
     isValid = textInputUpdatedInstance2.validity.valid;
     classList = textInputUpdatedInstance2.classList;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
@@ -445,7 +445,7 @@ describe('FormComponent - Input field validation', () => {
     let isValid = emailInputUpdatedInstance.validity.valid;
     let { classList } = emailInputUpdatedInstance;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
@@ -462,7 +462,7 @@ describe('FormComponent - Input field validation', () => {
     isValid = emailInputInstance.validity.valid;
     classList = emailInputInstance.classList;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
@@ -488,7 +488,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
@@ -508,7 +508,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 
@@ -535,7 +535,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
@@ -555,7 +555,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 
@@ -579,7 +579,7 @@ describe('FormComponent - Input field validation', () => {
     let isValid = numberMin3InputInstance.validity.valid;
     let { classList } = numberMin3InputInstance;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
@@ -597,7 +597,7 @@ describe('FormComponent - Input field validation', () => {
     isValid = numberMin3InputInstance.validity.valid;
     classList = numberMin3InputInstance.classList;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
@@ -622,7 +622,7 @@ describe('FormComponent - Input field validation', () => {
     let isValid = numberMax3InputInstance.validity.valid;
     let { classList } = numberMax3InputInstance;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
@@ -640,7 +640,7 @@ describe('FormComponent - Input field validation', () => {
     isValid = numberMax3InputInstance.validity.valid;
     classList = numberMax3InputInstance.classList;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
@@ -664,7 +664,7 @@ describe('FormComponent - Input field validation', () => {
     let isValid = patternInputInstance.validity.valid;
     let { classList } = patternInputInstance;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(isValid).toBe(false);
 
@@ -682,7 +682,7 @@ describe('FormComponent - Input field validation', () => {
     isValid = patternInputInstance.validity.valid;
     classList = patternInputInstance.classList;
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(isValid).toBe(true);
 
@@ -709,7 +709,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
 
@@ -729,7 +729,7 @@ describe('FormComponent - Input field validation', () => {
       });
     });
 
-    expect(classList.contains(IS_DIRTY_CLASS_NAME)).toBe(true);
+    expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(false);
     expect(validity.valid).toBe(true);
 

@@ -13,12 +13,15 @@ export default {
 const validator = async ({
   name, value, values, target,
 } : { name: string, value: string | number | boolean, values: Obj, target: HTMLElement}) : Promise<Obj | undefined> => {
+  const errors: Obj = {};
   console.log(target);
   if (name === 'password_confirm' && value !== values.password) {
-    return ({ passwordMismatch: 'Passwords do not match!' });
+    errors.password_confirm = {
+      passwordMismatch: 'Passwords do not match!',
+    };
   }
 
-  return undefined;
+  return errors;
 };
 
 export const FormComponent: React.FC = () => {

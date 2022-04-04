@@ -18,7 +18,7 @@ import {
 import { validatePlugins } from '../utils/validatePlugins';
 import { useIsUpdated } from '../hooks/is-updated';
 
-const IS_DIRTY_CLASS_NAME = 'is-dirty';
+const TOUCHED_CLASS_NAME = 'is-touched';
 const ERROR_CLASS_NAME = 'has-error';
 const ELEMENT_TAG_NAME_SELECT = 'SELECT';
 const CHECKBOX_DEFAULT_VALUE = 'on';
@@ -90,7 +90,7 @@ export const setNativeValue = ({
 export const useForm = ({
   initialValues = {},
   errorClassName = ERROR_CLASS_NAME,
-  isFieldDirtyClassName = IS_DIRTY_CLASS_NAME,
+  touchedClassName = TOUCHED_CLASS_NAME,
   scrollToError = false,
   scrollToErrorOptions,
   validateOnInput = true,
@@ -145,50 +145,69 @@ export const useForm = ({
     elementToScrollInto.scrollIntoView(scrollToErrorOptions);
   }, [plugins, scrollToErrorOptions]);
 
-  const updateError = useCallback(async ({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean }) => {
-    const {
-      validity, classList, name, value,
-    } = element;
+  /**
+   * Set error class name and update the state
+   */
+  const setFieldErrors = useCallback(({ element, errors }: { element: HTMLInputElement, errors: Obj}): Obj => {
+    const { classList, name } = element;
+    classList.add(errorClassName);
+    dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors } });
 
-    let elementErrors: Obj = {};
+    return { [name]: errors };
+  }, [errorClassName]);
 
-    if (!validity.valid) {
-      for (const validityName in validity) {
+  /**
+   * Unset error classname and update the state
+   */
+  const unsetFieldErrors = useCallback((element: HTMLInputElement): Obj => {
+    const { classList, name } = element;
+    classList.remove(errorClassName);
+    dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: {} } });
+
+    return { [name]: {} };
+  }, [errorClassName]);
+
+  const getFieldValidityErrors = useCallback((element: HTMLInputElement) => {
+    const elementErrors: Obj = {};
+
+    if (!element.validity.valid) {
+      for (const validityName in element.validity) {
         // @ts-ignore
-        if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && validity[validityName] === true) { // eslint-disable-line
+        if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && element.validity[validityName] === true) { // eslint-disable-line
           elementErrors[validityName] = validityDefaultErrorMessages[validityName](element);
         }
       }
     }
 
+    return elementErrors;
+  }, []);
+
+  const updateError = useCallback(async ({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean }) => {
+    const { name, value } = element;
     const { validator } = plugins;
 
+    let elementErrors = getFieldValidityErrors(element);
+
     if (validator !== undefined) {
-      const errors = await validator({
+      const { [name]: elementValidatorErrors, ...errors } = await validator({
         name, value, values: state.values, target: element,
       });
       elementErrors = {
+        ...elementValidatorErrors,
         ...elementErrors,
-        ...errors,
       };
     }
 
     if (Object.keys(elementErrors).length === 0) {
-      classList.remove(errorClassName);
-      dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: {} } });
-
-      return { [name]: {} };
+      return unsetFieldErrors(element);
     }
-
-    classList.add(errorClassName);
-    dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: elementErrors } });
 
     if (shouldScrollToError) {
       _scrollToError(element);
     }
 
-    return { [name]: elementErrors };
-  }, [errorClassName, _scrollToError, state.values, plugins]);
+    return setFieldErrors({ element, errors: elementErrors });
+  }, [_scrollToError, state.values, plugins, getFieldValidityErrors, setFieldErrors, unsetFieldErrors]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -199,7 +218,7 @@ export const useForm = ({
         const {
           classList, type, value, name,
         } = element;
-        classList.remove(errorClassName, isFieldDirtyClassName);
+        classList.remove(errorClassName, touchedClassName);
 
         setNativeValue({ element, value: overriddenInitialValues[name] });
 
@@ -218,7 +237,7 @@ export const useForm = ({
 
   const validateInputOnChange = useCallback(async event => {
     // Input is dirty - checking for validity live...
-    const shouldValidate = validateOnInput === true && event.target.classList.contains(isFieldDirtyClassName);
+    const shouldValidate = validateOnInput === true && event.target.classList.contains(touchedClassName);
 
     if (!shouldValidate) return;
 
@@ -234,7 +253,7 @@ export const useForm = ({
     }
 
     await updateError({ element: event.target, shouldScrollToError: scrollToError });
-  }, [debounceValidation, debounceTime, isFieldDirtyClassName, scrollToError, updateError, validateOnInput]);
+  }, [debounceValidation, debounceTime, touchedClassName, scrollToError, updateError, validateOnInput]);
 
   const onChange = useCallback(async (event) : Promise<void> => {
     const {
@@ -251,17 +270,17 @@ export const useForm = ({
     await validateInputOnChange(event);
   }, [validateInputOnChange]);
 
-  const setFieldTouched = useCallback((element: HTMLInputElement) => element.classList.add(isFieldDirtyClassName), [isFieldDirtyClassName]);
+  const setFieldTouchedClassName = useCallback((element: HTMLInputElement) => element.classList.add(touchedClassName), [touchedClassName]);
 
   const onBlur = useCallback(async ({ target }) => {
     // once blur is triggered, input is set to dirty which _flags_ onChange
     // handler to do live validation as the user types
-    setFieldTouched(target);
+    setFieldTouchedClassName(target);
 
     if (validateOnInput === true) {
       await updateError({ element: target, shouldScrollToError: scrollToError });
     }
-  }, [updateError, validateOnInput, scrollToError, setFieldTouched]);
+  }, [updateError, validateOnInput, scrollToError, setFieldTouchedClassName]);
 
   const setIsSubmitting = useCallback((isSubmitting) => {
     dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
@@ -271,11 +290,11 @@ export const useForm = ({
     const _formElements = getFormElements(formRef.current);
 
     if (shouldTouchField === true) {
-      _formElements.forEach(element => setFieldTouched(element));
+      _formElements.forEach(element => setFieldTouchedClassName(element));
     }
 
     return Promise.all<Obj>(_formElements.map(element => updateError({ element, shouldScrollToError })));
-  }, []);
+  }, [getFormElements, setFieldTouchedClassName, updateError]);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
     event.persist();
