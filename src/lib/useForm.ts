@@ -202,7 +202,13 @@ export const useForm = ({
 
         if (!formElement) return;
 
-        setFieldErrors({ element: formElement, errors: fieldErrors });
+        const fieldValidityErrors = getFieldValidityErrors(formElement);
+        const fieldCombinedErrors = {
+          ...fieldValidityErrors,
+          ...fieldErrors,
+        };
+
+        setFieldErrors({ element: formElement, errors: fieldCombinedErrors });
       });
     }
 
@@ -301,7 +307,9 @@ export const useForm = ({
       _formElements.forEach(element => setFieldTouchedClassName(element));
     }
 
-    return Promise.all<Obj>(_formElements.map(element => updateError({ element, shouldScrollToError })));
+    const errors = await Promise.all<Obj>(_formElements.map(element => updateError({ element, shouldScrollToError })));
+
+    return errors.reduce((acc, fieldErrors) => ({ ...acc, ...fieldErrors }), {});
   }, [getFormElements, setFieldTouchedClassName, updateError]);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
@@ -313,8 +321,7 @@ export const useForm = ({
 
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
-      const updatedErrors = await validateForm();
-      _errors = updatedErrors.reduce((acc, errors) => ({ ...acc, ...errors }), _errors);
+      _errors = await validateForm();
       _isFormValid = Object.values(_errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
       if (!_isFormValid && scrollToError === true) {
