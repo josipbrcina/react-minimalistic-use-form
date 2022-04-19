@@ -84,7 +84,6 @@ export const reducer: React.Reducer<IState, Action> = (state, action): IState =>
 
   if (isSetFieldErrorsAction(action)) {
     const { name, errors } = action.payload;
-    console.log('SETTING FIELD errORS', { name, errors });
     return {
       ...state,
       errors: {

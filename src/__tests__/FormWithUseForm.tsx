@@ -30,8 +30,6 @@ export const FormWithUseForm: React.FC<IFormComponentProps> = ({
 
   const _setIsSubmitting = (_isSubmitting: boolean) => setIsSubmitting(_isSubmitting);
 
-  console.log(errors);
-
   return (
     <form onSubmit={onSubmit(submitValues)} noValidate {...(addFormRef ? { ref: formRef } : {})} className="d-flex flex-col form">
       <div className="d-flex flex-col mb-10">

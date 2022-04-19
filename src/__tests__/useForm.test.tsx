@@ -502,8 +502,6 @@ describe('form with useForm - Input field validation', () => {
       });
     });
 
-    console.log(classList);
-
     expect(classList.contains(TOUCHED_CLASS_NAME)).toBe(true);
     expect(classList.contains(ERROR_CLASS_NAME)).toBe(true);
     expect(validity.valid).toBe(false);
@@ -511,8 +509,6 @@ describe('form with useForm - Input field validation', () => {
     await waitForComponentToPaint(sut);
     const errors = sut.find('#errors').props().children as string;
     const parsedErrors: Obj = JSON.parse(errors);
-
-    console.log({ parsedErrors });
 
     expect(parsedErrors.min_length_3.tooShort).toBeDefined();
 

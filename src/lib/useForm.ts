@@ -102,6 +102,7 @@ export const useForm = ({
 }: IUseForm = {}): IuseFormResponse => {
   const [state, dispatch] = useReducer(reducer, getInitialState(initialValues));
   const formRef = useRef<HTMLFormElement>(null);
+  const touchedRef = useRef<Obj>({});
   const validatorDebounceTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const throwFormRefError = (): never => {
@@ -177,7 +178,7 @@ export const useForm = ({
   const getFieldValidityErrors = useCallback((element: HTMLInputElement) => {
     const elementErrors: Obj = {};
 
-    if (!element.validity.valid) {
+    if (!element.validity?.valid) {
       for (const validityName in element.validity) {
         // @ts-ignore
         if (validityDefaultErrorMessages.hasOwnProperty(validityName) === true && element.validity[validityName] === true) { // eslint-disable-line
@@ -273,12 +274,16 @@ export const useForm = ({
         element.dispatchEvent(new window.InputEvent(eventTypes.change, { bubbles: true }));
       });
 
+    touchedRef.current = {};
+
     dispatch({ type: STATE_ACTIONS.RESET_FORM });
   };
 
+  const isTouched = useCallback((name) => touchedRef.current[name] === true, []);
+
   const validateInputOnChange = useCallback(async event => {
     // Input is touched - checking for validity live...
-    const shouldValidate = validateOnInput === true && event.target.classList.contains(touchedClassName);
+    const shouldValidate = validateOnInput === true && isTouched(event.target.name);
 
     if (!shouldValidate) return;
 
@@ -294,7 +299,7 @@ export const useForm = ({
     }
 
     await updateError({ element: event.target, shouldScrollToError: scrollToError });
-  }, [debounceValidation, debounceTime, touchedClassName, scrollToError, updateError, validateOnInput]);
+  }, [debounceValidation, debounceTime, touchedClassName, scrollToError, updateError, validateOnInput, isTouched]);
 
   const onChange = useCallback(async (event) : Promise<void> => {
     const {
@@ -311,17 +316,20 @@ export const useForm = ({
     await validateInputOnChange(event);
   }, [validateInputOnChange]);
 
-  const setFieldTouchedClassName = useCallback((element: HTMLInputElement) => element.classList.add(touchedClassName), [touchedClassName]);
+  const setFieldTouched = useCallback((element: HTMLInputElement) => {
+    element.classList.add(touchedClassName);
+    touchedRef.current[element.name] = true;
+  }, [touchedClassName]);
 
   const onBlur = useCallback(async ({ target }) => {
     /* Once blur is triggered, input is set to touched which _flags_ onChange
      handler to do live validation as the user types */
-    setFieldTouchedClassName(target);
+    setFieldTouched(target);
 
     if (validateOnInput === true) {
       await updateError({ element: target, shouldScrollToError: scrollToError });
     }
-  }, [updateError, validateOnInput, scrollToError, setFieldTouchedClassName]);
+  }, [updateError, validateOnInput, scrollToError, setFieldTouched]);
 
   const setIsSubmitting = useCallback((isSubmitting) => {
     dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
@@ -331,7 +339,7 @@ export const useForm = ({
     const _formElements = getFormElements(formRef.current);
 
     if (shouldTouchField === true) {
-      _formElements.forEach(element => setFieldTouchedClassName(element));
+      _formElements.forEach(element => setFieldTouched(element));
     }
 
     const errorsArray = await Promise.all<Obj>(_formElements.map(element => updateError({
@@ -343,7 +351,7 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.SET_ERRORS, payload: { errors } });
 
     return errors;
-  }, [getFormElements, setFieldTouchedClassName, updateError, scrollToError]);
+  }, [getFormElements, setFieldTouched, updateError, scrollToError]);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
     event.persist();
@@ -442,7 +450,7 @@ export const useForm = ({
   useEffect(() => {
     _validatePlugins();
     if (validateOnMount) {
-      validateForm({ shouldSetErrorClassName: false });
+      validateForm({ shouldSetErrorClassName: false, shouldTouchField: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validateOnMount]);
@@ -473,5 +481,7 @@ export const useForm = ({
     errors: state.errors,
     bindUseForm,
     setIsSubmitting,
+    touched: touchedRef.current,
+    isTouched,
   };
 };
