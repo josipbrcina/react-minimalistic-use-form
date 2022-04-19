@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, Form, IonSubmitResponse } from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
