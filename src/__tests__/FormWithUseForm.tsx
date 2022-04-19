@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonSubmitResponse, useForm } from '../lib';
-import { renderFieldErrors } from '../lib/renderFieldErrors';
+import { renderFieldErrors } from '../stories/renderFieldErrors';
 import { noop } from '../utils/noop';
 import { IFormComponentProps } from './FormComponent';
 

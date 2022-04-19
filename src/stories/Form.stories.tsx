@@ -1,31 +1,31 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { useForm, IonSubmitResponse } from './index';
+import { useForm, Form, IonSubmitResponse } from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'useForm hook',
+  title: 'Form component',
 };
 
-export const useFormHook: React.FC = () => {
+export const FormComponent: React.FC = () => {
   const {
-    values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
-  } = useForm({ initialValues: { email: '', date: '1986-12-28', tel: '491761110093' } });
+    errors, isFormValid, onSubmit, bindUseForm, resetForm,
+  } = useForm({ initialValues: { email: '' } });
 
   const submitValues = ({
-    event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
+    event, errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid,
   }: IonSubmitResponse) => {
     event.preventDefault();
     // eslint-disable-next-line no-console
-    console.log({ errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid });
+    console.log({ errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid });
   };
 
   return (
-    <form onSubmit={onSubmit(submitValues)} noValidate ref={formRef} className="d-flex flex-col form">
+    <Form onSubmit={onSubmit(submitValues)} noValidate bindUseForm={bindUseForm} className="d-flex flex-col form">
       <div className="d-flex flex-col mb-10">
         <label htmlFor="email">Email</label>
-        <input className="input" type="email" id="email" name="email" value={values.email} onChange={onChange} onBlur={onBlur} />
+        <input className="input" type="email" id="email" name="email" />
         {renderFieldErrors(errors.email)}
       </div>
 
@@ -34,7 +34,7 @@ export const useFormHook: React.FC = () => {
           Password
           <sup>*</sup>
         </label>
-        <input className="input" type="password" id="password" name="password" value={values.password} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="password" id="password" name="password" required />
         {renderFieldErrors(errors.password)}
       </div>
 
@@ -43,7 +43,7 @@ export const useFormHook: React.FC = () => {
           Text
           <sup>*</sup>
         </label>
-        <input className="input" type="text" id="text" name="text" value={values.text} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="text" id="text" name="text" required />
         {renderFieldErrors(errors.text)}
       </div>
 
@@ -52,7 +52,7 @@ export const useFormHook: React.FC = () => {
           Search
           <sup>*</sup>
         </label>
-        <input className="input" type="search" id="search" name="search" value={values.search} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="search" id="search" name="search" required />
         {renderFieldErrors(errors.search)}
       </div>
 
@@ -61,7 +61,7 @@ export const useFormHook: React.FC = () => {
           Url
           <sup>*</sup>
         </label>
-        <input className="input" type="url" id="url" name="url" value={values.url} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="url" id="url" name="url" required />
         {renderFieldErrors(errors.url)}
       </div>
 
@@ -70,7 +70,7 @@ export const useFormHook: React.FC = () => {
           Number
           <sup>*</sup>
         </label>
-        <input className="input" type="number" id="number" name="number" value={values.number} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="number" id="number" name="number" required />
         {renderFieldErrors(errors.number)}
       </div>
 
@@ -79,13 +79,13 @@ export const useFormHook: React.FC = () => {
           Text Area
           <sup>*</sup>
         </label>
-        <textarea className="input" id="text_area" name="text_area" value={values.text_area} onChange={onChange} onBlur={onBlur} required />
+        <textarea className="input" id="text_area" name="text_area" required />
         {renderFieldErrors(errors.text_area)}
       </div>
 
       <div className="d-flex flex-col mb-10">
         <label htmlFor="checkbox" className="d-flex flex-align-center">
-          <input className="input" type="checkbox" id="checkbox" name="checkbox" value={values.checkbox} onChange={onChange} onBlur={onBlur} />
+          <input className="input" type="checkbox" id="checkbox" name="checkbox" />
           <span>Checkbox</span>
         </label>
       </div>
@@ -96,15 +96,15 @@ export const useFormHook: React.FC = () => {
         </label>
         <div className="d-flex flex-row">
           <label htmlFor="radio1" className="d-flex flex-align-center">
-            <input className="input" type="radio" id="radio1" name="radio" value="radio1" onChange={onChange} onBlur={onBlur} />
+            <input className="input" type="radio" id="radio1" name="radio" value="radio1" />
             <span>Radio 1</span>
           </label>
           <label htmlFor="radio2" className="d-flex flex-align-center">
-            <input className="input" type="radio" id="radio2" name="radio" value="radio2" onChange={onChange} onBlur={onBlur} />
+            <input className="input" type="radio" id="radio2" name="radio" value="radio2" />
             <span>Radio 2</span>
           </label>
           <label htmlFor="radio3" className="d-flex flex-align-center">
-            <input className="input" type="radio" id="radio3" name="radio" value="radio3" onChange={onChange} onBlur={onBlur} />
+            <input className="input" type="radio" id="radio3" name="radio" value="radio3" />
             <span>Radio 3</span>
           </label>
         </div>
@@ -114,7 +114,7 @@ export const useFormHook: React.FC = () => {
         <label htmlFor="select">
           Select
         </label>
-        <select className="input" id="select" name="select" value={values.select} onChange={onChange} onBlur={onBlur}>
+        <select className="input" id="select" name="select">
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
         </select>
@@ -125,7 +125,7 @@ export const useFormHook: React.FC = () => {
           Date
           <sup>*</sup>
         </label>
-        <input className="input" type="date" id="date" name="date" value={values.date} onChange={onChange} onBlur={onBlur} required />
+        <input className="input" type="date" id="date" name="date" required />
         {renderFieldErrors(errors.date)}
       </div>
 
@@ -134,7 +134,7 @@ export const useFormHook: React.FC = () => {
           Tel
           <sup>*</sup>
         </label>
-        <input className="input" type="tel" id="tel" name="tel" value={values.tel} onChange={onChange} onBlur={onBlur} required minLength={6} />
+        <input className="input" type="tel" id="tel" name="tel" required minLength={6} />
         {renderFieldErrors(errors.tel)}
       </div>
 
@@ -143,7 +143,7 @@ export const useFormHook: React.FC = () => {
           Color
           <sup>*</sup>
         </label>
-        <input className="input" type="color" id="color" name="color" value={values.color} onChange={onChange} onBlur={onBlur} required minLength={6} />
+        <input className="input" type="color" id="color" name="color" required minLength={6} />
         {renderFieldErrors(errors.color)}
       </div>
 
@@ -151,6 +151,6 @@ export const useFormHook: React.FC = () => {
         <button className="button" type="button" onClick={resetForm}>Clear</button>
         <button className="button mt-5" type="submit" disabled={isFormValid === false}>Submit</button>
       </div>
-    </form>
+    </Form>
   );
 };

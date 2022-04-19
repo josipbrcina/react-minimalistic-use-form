@@ -1,17 +1,29 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
-import React from 'react';
-import { useForm, Form, IonSubmitResponse } from './index';
+import React, { useState } from 'react';
+import {
+  useForm, Form, IonSubmitResponse, Obj,
+} from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'Form component',
+  title: 'Form component with custom controlled Input',
+};
+
+const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
+  if (name === 'password_confirm' && value !== values.password) {
+    return ({ passwordMismatch: 'Passwords do not match!' });
+  }
+
+  return undefined;
 };
 
 export const FormComponent: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm,
-  } = useForm({ initialValues: { email: '' } });
+  } = useForm({ initialValues: { email: '' }, plugins: { validator }, debounceValidation: true });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const submitValues = ({
     event, errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid,
@@ -25,7 +37,7 @@ export const FormComponent: React.FC = () => {
     <Form onSubmit={onSubmit(submitValues)} noValidate bindUseForm={bindUseForm} className="d-flex flex-col form">
       <div className="d-flex flex-col mb-10">
         <label htmlFor="email">Email</label>
-        <input className="input" type="email" id="email" name="email" />
+        <input className="input" type="email" id="email" name="email" value={email} onChange={({ target }) => setEmail(target.value)} />
         {renderFieldErrors(errors.email)}
       </div>
 
@@ -34,7 +46,7 @@ export const FormComponent: React.FC = () => {
           Password
           <sup>*</sup>
         </label>
-        <input className="input" type="password" id="password" name="password" required />
+        <input className="input" type="password" id="password" name="password" required value={password} onChange={({ target }) => setPassword(target.value)} />
         {renderFieldErrors(errors.password)}
       </div>
 

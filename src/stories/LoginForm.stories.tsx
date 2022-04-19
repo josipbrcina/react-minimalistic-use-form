@@ -2,7 +2,7 @@
 import React from 'react';
 import {
   useForm, Form, IonSubmitResponse, Obj,
-} from './index';
+} from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 

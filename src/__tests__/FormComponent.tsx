@@ -4,7 +4,7 @@ import {
   Form, useForm, IPluginsObject,
 } from '../lib';
 
-import { renderFieldErrors } from '../lib/renderFieldErrors';
+import { renderFieldErrors } from '../stories/renderFieldErrors';
 import { noop } from '../utils/noop';
 
 export interface IFormComponentProps {
