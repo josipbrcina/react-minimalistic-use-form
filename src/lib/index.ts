@@ -30,6 +30,7 @@ export interface IUseForm {
     plugins?: IPluginsObject
     debounceValidation?: boolean;
     debounceTime?: number;
+    validateOnMount?: boolean;
 }
 
 export interface ISetNativeValue {
@@ -131,6 +132,10 @@ export interface ISetIsFormValidAction extends Action {
 
 export interface ISetFieldErrorsAction extends Action {
     payload: { name: string, errors: Obj };
+}
+
+export interface ISetErrorsAction extends Action {
+    payload: { errors: Obj }
 }
 
 export interface ISetOverriddenInitialValuesAction extends Action {

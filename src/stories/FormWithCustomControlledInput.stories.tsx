@@ -7,23 +7,25 @@ import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'Form component with custom controlled Input',
+  title: 'Form',
 };
 
-const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj | undefined> => {
+const validator = async ({ name, value, values } : { name: string, value: string | number | boolean, values: Obj}) : Promise<Obj> => {
   if (name === 'password_confirm' && value !== values.password) {
     return ({ passwordMismatch: 'Passwords do not match!' });
   }
 
-  return undefined;
+  return {};
 };
 
-export const FormComponent: React.FC = () => {
+export const FormWithCustomControlledInput: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm,
   } = useForm({ initialValues: { email: '' }, plugins: { validator }, debounceValidation: true });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  console.log({ errors, isFormValid });
 
   const submitValues = ({
     event, errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid,

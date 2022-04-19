@@ -95,6 +95,7 @@ export const useForm = ({
   scrollToErrorOptions,
   validateOnInput = true,
   validateOnSubmit = false,
+  validateOnMount = false,
   debounceValidation = false,
   debounceTime = 300,
   plugins = {},
@@ -145,28 +146,34 @@ export const useForm = ({
     elementToScrollInto.scrollIntoView(scrollToErrorOptions);
   }, [plugins, scrollToErrorOptions]);
 
+  const setFieldErrorClassName = useCallback(({ classList }) => {
+    classList.add(errorClassName);
+  }, [errorClassName]);
+
+  const unsetFieldErrorClassName = useCallback(({ classList }) => {
+    classList.remove(errorClassName);
+  }, [errorClassName]);
+
   /**
    * Set error class name and update the state
    */
-  const setFieldErrors = useCallback(({ element, errors }: { element: HTMLInputElement, errors: Obj}): Obj => {
-    const { classList, name } = element;
-    classList.add(errorClassName);
-    dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors } });
+  const setFieldErrors = useCallback(({ element, errors }: { element: HTMLInputElement, errors: Obj }): void => {
+    const { name } = element;
 
-    return { [name]: errors };
-  }, [errorClassName]);
+    dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors } });
+  }, []);
 
   /**
    * Unset error classname and update the state
    */
-  const unsetFieldErrors = useCallback((element: HTMLInputElement): Obj => {
-    const { classList, name } = element;
-    classList.remove(errorClassName);
+  const unsetFieldErrors = useCallback((element: HTMLInputElement): void => {
+    const { name } = element;
     dispatch({ type: STATE_ACTIONS.SET_FIELD_ERRORS, payload: { name, errors: {} } });
+  }, []);
 
-    return { [name]: {} };
-  }, [errorClassName]);
-
+  /**
+   * Check element html validity and return an object with errors
+   */
   const getFieldValidityErrors = useCallback((element: HTMLInputElement) => {
     const elementErrors: Obj = {};
 
@@ -182,7 +189,9 @@ export const useForm = ({
     return elementErrors;
   }, []);
 
-  const updateError = useCallback(async ({ element, shouldScrollToError } : { element: HTMLInputElement, shouldScrollToError: boolean }) => {
+  const updateError = useCallback(async ({
+    element, shouldScrollToError, shouldSetErrorClassName = true, shouldSetFieldError = true,
+  } : { element: HTMLInputElement, shouldScrollToError: boolean, shouldSetErrorClassName?: boolean, shouldSetFieldError?: boolean }) => {
     const { name, value } = element;
     const { validator } = plugins;
 
@@ -192,6 +201,7 @@ export const useForm = ({
       const { [name]: elementValidatorErrors, ...otherFieldsErrors } = await validator({
         name, value, values: state.values, target: element,
       });
+
       elementErrors = {
         ...elementValidatorErrors,
         ...elementErrors,
@@ -208,20 +218,37 @@ export const useForm = ({
           ...fieldErrors,
         };
 
-        setFieldErrors({ element: formElement, errors: fieldCombinedErrors });
+        if (shouldSetErrorClassName) {
+          setFieldErrorClassName(formElement);
+        }
+
+        if (shouldSetFieldError) {
+          setFieldErrors({ element: formElement, errors: fieldCombinedErrors });
+        }
       });
     }
 
-    if (Object.keys(elementErrors).length === 0) {
-      return unsetFieldErrors(element);
+    if (Object.keys(elementErrors).length === 0 && shouldSetFieldError) {
+      unsetFieldErrorClassName(element);
+      unsetFieldErrors(element);
+
+      return { [name]: {} };
     }
 
     if (shouldScrollToError) {
       _scrollToError(element);
     }
 
-    return setFieldErrors({ element, errors: elementErrors });
-  }, [_scrollToError, state.values, plugins, getFieldValidityErrors, setFieldErrors, unsetFieldErrors, getFormElements]);
+    if (shouldSetErrorClassName) {
+      setFieldErrorClassName(element);
+    }
+
+    if (shouldSetFieldError) {
+      setFieldErrors({ element, errors: elementErrors });
+    }
+
+    return { [name]: elementErrors };
+  }, [_scrollToError, state.values, plugins, getFieldValidityErrors, setFieldErrors, unsetFieldErrors, getFormElements, setFieldErrorClassName, unsetFieldErrorClassName]);
 
   const resetForm = () => {
     const { current: form } = formRef;
@@ -300,17 +327,23 @@ export const useForm = ({
     dispatch({ type: STATE_ACTIONS.SET_IS_SUBMITTING, payload: { isSubmitting } });
   }, []);
 
-  const validateForm = useCallback(async ({ shouldTouchField = true, shouldScrollToError = false }: { shouldTouchField?: boolean, shouldScrollToError?: boolean } = {}) => {
+  const validateForm = useCallback(async ({ shouldTouchField = true, shouldSetErrorClassName = true, shouldScrollToError = scrollToError }: { shouldTouchField?: boolean, shouldSetErrorClassName?: boolean, shouldScrollToError?: boolean } = {}) => {
     const _formElements = getFormElements(formRef.current);
 
     if (shouldTouchField === true) {
       _formElements.forEach(element => setFieldTouchedClassName(element));
     }
 
-    const errors = await Promise.all<Obj>(_formElements.map(element => updateError({ element, shouldScrollToError })));
+    const errorsArray = await Promise.all<Obj>(_formElements.map(element => updateError({
+      element, shouldScrollToError, shouldSetErrorClassName, shouldSetFieldError: false,
+    })));
 
-    return errors.reduce((acc, fieldErrors) => ({ ...acc, ...fieldErrors }), {});
-  }, [getFormElements, setFieldTouchedClassName, updateError]);
+    const errors = errorsArray.reduce((acc, fieldErrors) => ({ ...acc, ...fieldErrors }), {});
+
+    dispatch({ type: STATE_ACTIONS.SET_ERRORS, payload: { errors } });
+
+    return errors;
+  }, [getFormElements, setFieldTouchedClassName, updateError, scrollToError]);
 
   const onSubmit = (callbackFn: IOnSubmitCallbackFn) => async (event: React.FormEvent) => {
     event.persist();
@@ -321,7 +354,7 @@ export const useForm = ({
 
     if (validateOnSubmit === true) {
       const _formElements = getFormElements(formRef.current);
-      _errors = await validateForm();
+      _errors = await validateForm({ shouldScrollToError: scrollToError });
       _isFormValid = Object.values(_errors).every(fieldErrors => Object.keys(fieldErrors).length === 0);
 
       if (!_isFormValid && scrollToError === true) {
@@ -406,7 +439,13 @@ export const useForm = ({
 
   const _validatePlugins = useCallback(() => validatePlugins(plugins), [plugins]);
 
-  useEffect(_validatePlugins, []);
+  useEffect(() => {
+    _validatePlugins();
+    if (validateOnMount) {
+      validateForm({ shouldSetErrorClassName: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validateOnMount]);
 
   useIsUpdated(() => {
     updateIsFormValid();

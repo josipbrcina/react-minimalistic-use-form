@@ -7,7 +7,7 @@ import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'Login Form component',
+  title: 'Form',
 };
 
 const validator = async ({
@@ -24,10 +24,12 @@ const validator = async ({
   return errors;
 };
 
-export const FormComponent: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const {
     errors, isFormValid, onSubmit, bindUseForm, resetForm, values,
   } = useForm({ initialValues: { email: '' }, plugins: { validator }, debounceValidation: true });
+
+  console.log({ errors, isFormValid });
 
   const submitValues = ({
     event, errors: onSubmitErrors, values: _values, isFormValid: onSubmitIsFormValid,

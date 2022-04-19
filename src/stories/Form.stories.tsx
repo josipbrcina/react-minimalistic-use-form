@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Form, IonSubmitResponse } from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'Form component',
+  title: 'Form',
 };
 
 export const FormComponent: React.FC = () => {
   const {
-    errors, isFormValid, onSubmit, bindUseForm, resetForm,
+    errors, isFormValid, onSubmit, bindUseForm, resetForm, validateForm,
   } = useForm({ initialValues: { email: '' } });
 
   const submitValues = ({
@@ -20,6 +20,8 @@ export const FormComponent: React.FC = () => {
     // eslint-disable-next-line no-console
     console.log({ errors: onSubmitErrors, values, isFormValid: onSubmitIsFormValid });
   };
+
+  console.log({ errors, isFormValid });
 
   return (
     <Form onSubmit={onSubmit(submitValues)} noValidate bindUseForm={bindUseForm} className="d-flex flex-col form">

@@ -7,7 +7,9 @@ import {
   ISetFieldValueAction,
   ISetIsFormValidAction,
   ISetFieldErrorsAction,
-  IResetFormAction, ISetOverriddenInitialValuesAction,
+  ISetErrorsAction,
+  IResetFormAction,
+  ISetOverriddenInitialValuesAction,
   ISetIsSubmittingAction,
 } from './index';
 
@@ -53,6 +55,10 @@ function isSetIsSubmittingAction(action: Action): action is ISetIsSubmittingActi
   return action.type === STATE_ACTIONS.SET_IS_SUBMITTING;
 }
 
+function isSetErrorsAction(action: Action): action is ISetErrorsAction {
+  return action.type === STATE_ACTIONS.SET_ERRORS;
+}
+
 export const reducer: React.Reducer<IState, Action> = (state, action): IState => {
   if (isSetFieldValueAction(action)) {
     const {
@@ -78,12 +84,22 @@ export const reducer: React.Reducer<IState, Action> = (state, action): IState =>
 
   if (isSetFieldErrorsAction(action)) {
     const { name, errors } = action.payload;
+    console.log('SETTING FIELD errORS', { name, errors });
     return {
       ...state,
       errors: {
         ...state.errors,
         [name]: errors,
       },
+    };
+  }
+
+  if (isSetErrorsAction(action)) {
+    const { errors } = action.payload;
+
+    return {
+      ...state,
+      errors,
     };
   }
 

@@ -1,17 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control  */
 import React from 'react';
-import { useForm, IonSubmitResponse } from '../lib';
+import { useForm, IonSubmitResponse, Obj } from '../lib';
 import '../style.css';
 import { renderFieldErrors } from './renderFieldErrors';
 
 export default {
-  title: 'useForm hook',
+  title: 'useForm',
 };
 
 export const useFormHook: React.FC = () => {
   const {
     values, errors, isFormValid, onChange, onBlur, onSubmit, formRef, resetForm,
   } = useForm({ initialValues: { email: '', date: '1986-12-28', tel: '491761110093' } });
+
+  console.log({ errors, isFormValid });
 
   const submitValues = ({
     event, errors: onSubmitErrors, values: onSubmitValues, isFormValid: onSubmitIsFormValid,
