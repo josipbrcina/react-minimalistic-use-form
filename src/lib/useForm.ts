@@ -215,8 +215,8 @@ export const useForm = ({
 
         const fieldValidityErrors = getFieldValidityErrors(formElement);
         const fieldCombinedErrors = {
-          ...fieldValidityErrors,
           ...fieldErrors,
+          ...fieldValidityErrors,
         };
 
         if (shouldSetErrorClassName) {

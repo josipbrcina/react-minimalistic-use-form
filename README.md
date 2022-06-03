@@ -18,8 +18,8 @@
 
 </div>
 
-[version-badge]: https://img.shields.io/badge/version-1.4.0-blue.svg
-[version-size]: https://img.shields.io/bundlephobia/minzip/react-minimalistic-use-form/1.4.0
+[version-badge]: https://img.shields.io/badge/version-2.0.0-blue.svg
+[version-size]: https://img.shields.io/bundlephobia/minzip/react-minimalistic-use-form/2.0.0
 
 # Table of contents
 - [react-minimalistic-use-form](#minimalistic-react-hook-for-handling-forms-without-much-pain)
@@ -35,10 +35,11 @@
       - [useForm](#useform)
         - [Scroll to Error](#scroll-to-error)
         - [Plugins](#plugins)
+          - [scrollToError](#scrolltoerror)
+          - [validator](#validator)
         - [useForm in return provides](#useform-in-return-provides)
         - [Form submission](#form-submission)
       - [Form](#form)
-  * [Planned Upcoming Features](#planned-upcoming-features-and-todo)
 
 # Minimalistic react hook for handling forms without much pain.
 
@@ -48,7 +49,7 @@ It uses [Constraint Validation API](https://developer.mozilla.org/en-US/docs/Web
 validates form based on input `validity`.
 This library has just peer dependencies `"react": ">=16.13.1"`, `"react-dom": ">=16.13.1"` and absolutely **ZERO OTHER DEPENDENCIES**, it's lightweight and powerful! 
 
-It provides ability to validate form fields on user input or on form submit.
+It provides ability to validate form fields on user input AND|OR on form submit.
 It automatically adds or removes error class name to input field if field is valid or not.  
 Form can be explicitly controlled by manually attaching event handlers or implicitly by combining `useForm` hook 
 and `<Form />` component where Form component will bind values and event handlers automatically for you!
@@ -63,11 +64,12 @@ and `<Form />` component where Form component will bind values and event handler
 * Form state management
 * Native html5 form validation
 * Form validation `on input` or `on submit`
-* Automatically toggles error and "is-dirty" input class names
+* Automatically toggles error and "is-touched" input class names
 * Scroll to error
-* Very lightweight with no dependencies
+* Very **lightweight** with no dependencies
 * Typescript support
-* Opt-in via plugins
+* Built-in validation debounce with auto cancellation for stale validations
+* Opt-in via plugins to add `custom validator` or custom scroll to error functionality
 
 #### Current supported form fields
 + input
@@ -86,7 +88,7 @@ and `<Form />` component where Form component will bind values and event handler
   * color
 
 
-### Supported validation rules
+### Supported validation rules - built in Form validation 
 + valid – Is `true` when the field passes validation.
 + valueMissing – Is `true` when the field is empty but `required`.
 + typeMismatch – Is `true` when the field type is `email` or `url` but the entered value is `not` the `correct type`.
@@ -97,6 +99,9 @@ and `<Form />` component where Form component will bind values and event handler
 + stepMismatch – Is `true` when the field has a `step attribute` and the entered value `does not adhere to the step values`.
 + rangeOverflow – Is `true` when the field has a `max attribute` and the entered number value is `greater than the max`.
 + rangeUnderflow – Is `true` when the field has a `min attribute` and the entered number value is `lower than the min`.
+
+**For custom validation see** [Plugins - validator](#validator).
+
 ---
 
 ### Example usage
@@ -220,7 +225,7 @@ for you. Optionally `validateOnInput (boolean)` or `validateOnSubmit (boolean)` 
 
 In first case, on user input, useForm will automatically validate that field, update `errors` object properly and
 it will toggle error className to input field. To provide the best user experience once input field is blurred,
-useForm onBlur eventHandler will set className `is-dirty` (default value can be configured) and it will
+useForm onBlur eventHandler will set className `is-touched` (default value can be configured) and it will
 trigger input validation. If field has validity: `false` an error className `has-error` (default value, can be configured) 
 will be attached to input field. As soon as field validity is valid, error class is removed from the field.
 
@@ -331,16 +336,19 @@ return (
 #### useForm
 useForm accepts configuration object with following options:
 
-| property  	        |  description 	                                |   type  | default     |   	
-|---	                |---	                                        |---	  |---	        |	
-|`initialValues`        | Form initial values                           | object  | {}   	    |   	
-|`errorClassName`       | Input field error class name                  | string  | "has-error" |   	
-|`isFieldDirtyClassName`| Input field "touched" class name              | string  | "is-dirty"  |   	
-|`scrollToError`  	    | Scroll to form input field that has an error. | boolean | false   	|   	
-|`scrollToErrorOptions` | Scroll to error options                       | object  | undefined   |  	
-|`validateOnInput`  	| Validate form on user input.  	            | boolean | true   	    |   	
-|`validateOnSubmit`  	| Validate form on submit.   	                | boolean | false   	|
-|`plugins`  	        | Plugins to opt-in with custom logic.          | object  | {}   	    |
+| property  	             | description 	                                          |   type  | default      |   	
+|-------------------------|--------------------------------------------------------|---	  |--------------|	
+| `initialValues`         | Form initial values                                    | object  | {}   	       |   	
+| `errorClassName`        | Input field error class name                           | string  | "has-error"  |   	
+| `touchedClassName`      | Input field "touched" class name                       | string  | "is-touched" |   	
+| `scrollToError`  	      | Scroll to form input field that has an error.          | boolean | false   	    |   	
+| `scrollToErrorOptions`  | Scroll to error options                                | object  | undefined    |  	
+| `validateOnInput`  	    | Validate form on user input.  	                        | boolean | true   	     |   	
+| `validateOnSubmit`  	   | Validate form on submit.   	                           | boolean | false   	    |
+| `validateOnMount`  	    | Validate form on mount.   	                            | boolean | false   	    |
+| `debounceValidation`  	 | Debounce input validation.   	                         | boolean | false   	    |
+| `debounceTime`  	       | Debounce input validation timeout in milliseconds.   	 | boolean | 300   	      |
+| `plugins`  	            | Plugins to opt-in with custom logic.                   | object  | {}   	       |
 
 ##### Scroll to Error
 - scrollToError - If enabled useForm will scroll to element in case input has an error.
@@ -356,9 +364,41 @@ documentation on [MDN - Element.ScrollIntoView()](https://developer.mozilla.org/
 
 Use Form offers possibility to opt-in via `plugins` prop and change default useForm capabilities.
 Currently supported plugins:
+###### scrollToError 
 - `scrollToError` - scrolltoError plugin is a function that will be called on input field error.
 useForm calls a scrollToError plugin function with one argument, the DOM label element (if one found) or input element itself.
- If scrollToError plugin is provided the default `Element.ScrollIntoView()` is overridden and hence ignored.  
+ If scrollToError plugin is provided the default `Element.ScrollIntoView()` is overridden and hence ignored.
+
+###### validator
+- `validator` - validator plugin is a function that will be called upon onChange event.
+- function will be called with object `{name, value, values, target}` where name is the name of the current input field, 
+`value` is the value of the current field, `values` is an object with all form field values and `target` is the input DOM element.
+
+- validator function should return an object with errors in format:
+
+```javascript
+{
+  fieldName: {
+    errorKey: 'Error message',
+    anotherErrorKey: 'Another Error message'  
+  }
+}
+```
+
+Example: 
+```typescript
+const validator = ({name, value, values }) => {
+  const errors = {};
+
+  if ((name === 'password_confirm' && value !== values.password) || (name === 'password' && value !== values.password_confirm)) {
+    errors.password_confirm = {
+      passwordMismatch: 'Passwords do not match!',
+    };
+  }
+
+  return errors;
+};
+```
 
 ##### useForm in return provides:
 + resetForm - `function` - resets form to initial state.
@@ -375,10 +415,11 @@ It returns an object with `{ event, errors, values, isFormValid }`
 + isSubmitting - `boolean` - Boolean flag describing is form being in submission state
 + setIsSubmitting - `function` - Function to Toggle `isSubmitting` state
 
-NOTE: `isFormValid` initial value === `validateOnSubmit`. By `default` validateOnSubmit value is `false` which means 
-form initial `isFormValid` state is false as well. You can choose how to handle initial isFormValid state by combining 
-`validateOnInput` and manually triggering `validateForm` once your component is mounted, by just validating on submit
-or by turning ON both validations. 
+NOTE: `isFormValid` onMount will be checked only against native html validation, input validity. 
+You can choose how to handle initial isFormValid state:
++ by combining `validateOnInput` and manually triggering `validateForm` once your component is mounted
++ by just validating on submit
++ by passing `validateOnMount` which will check native html validation + it will call custom validator if provided
 
 ##### Form Submission
 1. UseForm will set `isSubmitting` to `true` when form is submitted. 
@@ -392,7 +433,3 @@ Form accepts all html5 form attributes along with one required:
 | property  	        |  description 	                              |   type            |    	
 |---	                |---	                                      |---	              |	
 |`bindUseForm`          | Object - contains formRef and eventHandlers | object *required  |
-
-#### Planned upcoming features and TODO
-+ FormComponent - Display errors next to input fields out-of-the-box
-+ Support for validator plugin
