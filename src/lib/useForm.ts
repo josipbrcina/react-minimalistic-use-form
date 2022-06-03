@@ -299,7 +299,7 @@ export const useForm = ({
     }
 
     await updateError({ element: event.target, shouldScrollToError: scrollToError });
-  }, [debounceValidation, debounceTime, touchedClassName, scrollToError, updateError, validateOnInput, isTouched]);
+  }, [debounceValidation, debounceTime, scrollToError, updateError, validateOnInput, isTouched]);
 
   const onChange = useCallback(async (event) : Promise<void> => {
     const {
