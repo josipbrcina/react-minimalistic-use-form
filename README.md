@@ -40,6 +40,7 @@
         - [useForm in return provides](#useform-in-return-provides)
         - [Form submission](#form-submission)
       - [Form](#form)
+  * [Contribution](#contribution)
 
 # Minimalistic react hook for handling forms without much pain.
 
@@ -433,3 +434,6 @@ Form accepts all html5 form attributes along with one required:
 | property  	        |  description 	                              |   type            |    	
 |---	                |---	                                      |---	              |	
 |`bindUseForm`          | Object - contains formRef and eventHandlers | object *required  |
+
+#### Contribution 
+- If you find any issues/bugs or have a suggestions for improvements please report to the GitHub repo! **Many thanks** !!!
